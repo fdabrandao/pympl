@@ -20,5 +20,5 @@
 BASEDIR=`dirname $0`
 cd $BASEDIR
 
-sudo pip install -r requirements.txt
-sudo pip install . --upgrade
+sudo -H pip install -r requirements.txt
+sudo -H pip install . --upgrade
