@@ -1,0 +1,11 @@
+*~
+*.log
+*.out
+*.pyc
+*.pyo
+*.svg
+*.egg-info
+/build/
+/git_push.sh
+/git_fetch.sh
+/workspace_private
