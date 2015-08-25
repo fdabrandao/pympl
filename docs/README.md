@@ -1,18 +1,31 @@
-# Home
+## Mathematical Modelling Toolbox PyMPL
 
-PyMPL is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL includes, among others, procedures for modelling piecewise linear functions, arc-flow graphs for vector packing, and sub-tour elimination constraints for TSP.
+Copyright (C) 2013-2015, Filipe Brandão  
+Faculdade de Ciencias, Universidade do Porto  
+Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
-## Table of Contents
-
-  * [Useful links](#useful-links)
-  * [Examples](#examples)
-  * [PyMPL Parser](#pympl-parser)
-  * [PyMPL Statements](STMTS)
+---
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL includes, among others, procedures for modelling piecewise linear functions, arc-flow graphs for vector packing, and sub-tour elimination constraints for TSP.
 
 ## Useful links
 
+* PyMPL documentation: <https://github.com/fdabrandao/pympl/wiki>
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
+
+## Setup
+
+Install from the repository:
+```bash
+$ sudo pip install pympl
+```
+
+Or build and install locally:
+```
+$ sudo pip install -r requirements.txt
+$ sudo pip install . --upgrade
+$ bash test.sh test_install
+```
 
 ## Examples
 
@@ -56,53 +69,6 @@ s.t. demand{i in I}: x[i] >= instance1_b[i]; # demand constraints
 
 solve;
 display Z;
-end;
-```
-
-``variable_size_bin_packing.mod``:
-
-```ampl
-# Evaluate python code:
-$EXEC{
-# Bin capacities:
-W1 = [100]
-W2 = [120]
-W3 = [150]
-
-# Bin costs:
-Costs = [100, 120, 150]
-
-# Item weights:
-ws = [[10], [14], [17], [19], [24], [29], [32], [33], [36],
-      [38], [40], [50], [54], [55], [63], [66], [71], [77],
-      [79], [83], [92], [95], [99]]
-
-# Item demands:
-b = [1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1]
-};
-
-# Generate a parameter 'b' for the demand:
-$PARAM[b{I}]{b, i0=1};
-
-# Generate a parameter 'C' for the cost:
-$PARAM[C{T}]{Costs, i0=1};
-
-# Feedback arcs for each graph:
-var Z{T}, integer, >= 0;
-# Assignment variables:
-var x{T, I}, integer, >= 0;
-# Generate an arc-flow graph for each bin type:
-$VBP_FLOW[^Z[1]]{W1, ws, ["x[1, %d]"%i for i in _sets['I']]};
-$VBP_FLOW[^Z[2]]{W2, ws, ["x[2, %d]"%i for i in _sets['I']]};
-$VBP_FLOW[^Z[3]]{W3, ws, ["x[3, %d]"%i for i in _sets['I']]};
-# Note: the ^prefix is used to avoid the redefinition of Z
-
-minimize obj: sum{t in T} C[t] * Z[t];
-s.t. demand{i in I}: sum{t in T} x[t, i] >= b[i];
-
-solve;
-display{t in T} Z[t]; # number of bins of type t used
-display sum{t in T} C[t] * Z[t]; # cost
 end;
 ```
 
