@@ -1,23 +1,23 @@
 #!/usr/bin/env python
 """
-This code is part of the Mathematical Modelling Toolbox PyMPL.
+PyMPL
+-----
+PyMPL is a python extension to the AMPL modelling language that adds
+new statements for evaluating python code within AMPL models.
 
-Copyright (C) 2015-2015, Filipe Brandao
-Faculdade de Ciencias, Universidade do Porto
-Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
+Setup
+`````
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+.. code:: bash
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    $ pip install pympl
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+Links
+`````
+
+* `PyMPL documentation <https://github.com/fdabrandao/pympl/wiki>`_
+* `GiHub repository <https://github.com/fdabrandao/pympl>`_
+* `BitBucket repository <https://bitbucket.org/fdabrandao/pympl>`_
 """
 
 import os
@@ -49,17 +49,18 @@ def ls_dir(base_dir):
 
 setup(
     name="PyMPL",
-    version="0.1.0",
+    version="0.2.0",
     license="GPLv3+",
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
     url="https://github.com/fdabrandao/pympl",
     description="Python extension to the AMPL modelling language",
-    long_description=open("README.md").read(),
+    long_description=__doc__,
     packages=["pympl"],
     package_data={"": ls_dir("pympl/")},
     include_package_data=True,
     scripts=[os.path.join("scripts", f) for f in ls_dir("scripts/")],
+    platforms='any',
     install_requires=[],
     classifiers=[
         "Development Status :: 1 - Planning",
