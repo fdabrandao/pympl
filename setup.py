@@ -49,7 +49,7 @@ def ls_dir(base_dir):
 
 setup(
     name="PyMPL",
-    version="0.2.0-dev",
+    version="0.1.0",
     license="GPLv3+",
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
