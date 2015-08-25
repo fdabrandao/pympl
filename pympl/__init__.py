@@ -25,3 +25,4 @@ from .pympl import PyMPL
 from .model import Model
 from . import glpkutils
 from .solver import Solver
+script_wsol = Solver.script_wsol

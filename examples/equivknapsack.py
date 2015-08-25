@@ -30,13 +30,13 @@ if __name__ == "__main__":
     if "test_install" in sys.argv:
         sys.argv.remove("test_install")
     else:
-        project_dir = "../../"
+        project_dir = "../"
         sys.path.insert(0, project_dir)
-        os.environ["PATH"] = "{0}/scripts:{0}/bin:{1}".format(
+        os.environ["PATH"] = "{0}/scripts:{1}".format(
             project_dir, os.environ["PATH"]
         )
 
-from pyvpsolver import VPSolver, PyMPL, glpkutils
+from pympl import PyMPL, glpkutils, script_wsol
 
 
 def equivknapsack(a, a0, bounds=None):
@@ -69,8 +69,8 @@ def equivknapsack(a, a0, bounds=None):
     glpkutils.mod2lp(mod_out, lp_out)
     # exit_code = os.system("glpsol --math {0}".format(mod_out))
     # assert exit_code == 0
-    out, varvalues = VPSolver.script_wsol(
-        "vpsolver_glpk.sh", lp_out, verbose=True
+    out, varvalues = script_wsol(
+        "glpk_wrapper.sh", lp_out, verbose=True
     )
 
     b = [varvalues.get("pi({0})".format(i+1), 0) for i in xrange(len(a))]

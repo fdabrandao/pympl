@@ -118,17 +118,12 @@ class Solver(object):
     def script_wsol(script_name, model, options=None, verbose=None):
         """Calls solver scripts and returns the solutions."""
         cmd = script_name
-        if isinstance(model, MPS):
-            cmd += " --mps {0}".format(model.mps_file)
-        elif isinstance(model, LP):
-            cmd += " --lp {0}".format(model.lp_file)
-        elif isinstance(model, str):
-            if model.endswith(".mps"):
-                cmd += " --mps {0}".format(model)
-            elif model.endswith(".lp"):
-                cmd += " --lp {0}".format(model)
-            else:
-                raise Exception("Invalid file extension!")
+        if model.endswith(".mps"):
+            cmd += " --mps {0}".format(model)
+        elif model.endswith(".lp"):
+            cmd += " --lp {0}".format(model)
+        else:
+            raise Exception("Invalid file extension!")
         if options is not None:
             cmd += " --options \"{0}\"".format(options)
         out_file = Solver.new_tmp_file()

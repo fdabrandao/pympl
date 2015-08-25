@@ -30,13 +30,13 @@ if __name__ == "__main__":
     if "test_install" in sys.argv:
         sys.argv.remove("test_install")
     else:
-        project_dir = "../../"
+        project_dir = "../"
         sys.path.insert(0, project_dir)
-        os.environ["PATH"] = "{0}/scripts:{0}/bin:{1}".format(
+        os.environ["PATH"] = "{0}/scripts:{1}".format(
             project_dir, os.environ["PATH"]
         )
 
-from pyvpsolver import VPSolver, PyMPL, glpkutils
+from pympl import PyMPL, glpkutils, script_wsol
 
 
 def read_tsp(fname):
