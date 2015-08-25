@@ -1,5 +1,4 @@
-"""
-This code is part of the Mathematical Modelling Toolbox PyMPL.
+Mathematical Modelling Toolbox PyMPL.
 
 Copyright (C) 2015-2015, Filipe Brandao
 Faculdade de Ciencias, Universidade do Porto
@@ -17,9 +16,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-"""
-
-from .writelp import write_lp
-from .writemps import write_mps
-from .writemod import write_mod
-from .model import Model
