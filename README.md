@@ -116,12 +116,12 @@ os.system("glpsol --math ampl_model.mod")
 os.system("ampl ampl_model.mod")
 ```
 
-[[Folder with examples](https://github.com/fdabrandao/vpsolver/blob/master/examples/pympl/)]
+[[Folder with examples](https://github.com/fdabrandao/pympl/tree/master/examples)]
 
 Advanced features:
 * Given a function `f(varname)` that given a variable name returns its value:
 
-  * If any command used implements solution extraction you can use `parser[command_name].extract(f)`;
+  * If any command used implements solution extraction you can use `parser[command_name].extract(f)` to extract the solution;
   * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ## PyMPL statements
