@@ -19,9 +19,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-__version__ = "v0.1.0-alpha"
-
-from .pympl import PyMPL
-from .model import Model
-from . import glpkutils
+import os
 from .solver import Solver
+
+
+def mod2lp(fname_mod, fname_lp, verbose=None):
+    """Converts a GMPL file into an LP file using GLPK."""
+    Solver.run(
+        "glpsol --math {0} --check --wlp {1}".format(
+            fname_mod, fname_lp
+        ),
+        grepv="Generating _",
+        verbose=verbose
+    )
+
+
+def mod2mps(fname_mod, fname_mps, verbose=None):
+    """Converts a GMPL file into an MPS file using GLPK."""
+    Solver.run(
+        "glpsol --math {0} --check --wmps {1}".format(
+            fname_mod, fname_mps
+        ),
+        grepv="Generating _",
+        verbose=verbose
+    )
