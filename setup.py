@@ -54,7 +54,7 @@ setup(
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
     url="https://github.com/fdabrandao/pympl",
-    description="Python extension the the AMPL modelling language",
+    description="Python extension to the AMPL modelling language",
     long_description=open("README.md").read(),
     packages=["pympl"],
     package_data={"": ls_dir("pympl/")},
