@@ -36,58 +36,41 @@ if __name__ == "__main__":
             project_dir, os.environ["PATH"]
         )
 
-import equivknapsack01
-import equivknapsack
-import wolsey
-import instance
-import tsp
-import tsp_gurobi
-import sos
-import pwl
-import twostage
-import clb
-import bike
+from pympl import PyMPL, glpkutils, script_wsol
+
+
+def read_demand(fname, NI, NT):
+    with open(fname) as f:
+        text = f.read().replace(",", "")
+        lst = map(float, text.split())
+        demand = {}
+        for i in xrange(NI):
+            for t in xrange(NT):
+                demand[i+1, t+1] = lst.pop(0)
+        assert lst == []
+        return demand
 
 
 def main():
-    """Runs all PyMPL examples."""
+    """Parses 'clb.mod'"""
 
-    print "equivknapsack:"
-    equivknapsack.main()
+    mod_in = "clb.mod"
+    mod_out = "tmp/clb.out.mod"
+    parser = PyMPL(locals_=locals(), globals_=globals())
+    parser.parse(mod_in, mod_out)
 
-    print "equivknapsack01:"
-    equivknapsack01.main()
+    lp_out = "tmp/clb.lp"
+    glpkutils.mod2lp(mod_out, lp_out, True)
+    try:
+        out, varvalues = script_wsol(
+            "gurobi_wrapper.sh", lp_out,
+            options="Threads=1 Heuristics=0.25 MIPGap=0", verbose=True
+        )
+    except Exception as e:
+        print repr(e)
 
-    print "wolsey:"
-    wolsey.main()
+    #print "varvalues:", [(k, v) for k, v in sorted(varvalues.items())]
 
-    print "instance:"
-    instance.main()
-
-    print "sos:"
-    sos.main()
-
-    print "pwl:"
-    pwl.main()
-
-    print "twostage:"
-    twostage.main()
-
-    print "bike:"
-    clb.main()
-
-    if "quick_test" not in sys.argv:
-        print "tsp:"
-        tsp.main()
-
-        print "tsp_gurobi:"
-        try:
-            tsp_gurobi.main()
-        except ImportError as e:
-            print repr(e)
-
-        print "clb:"
-        clb.main()
 
 if __name__ == "__main__":
     main()
