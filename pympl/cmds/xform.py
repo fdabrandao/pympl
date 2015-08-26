@@ -21,17 +21,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .base import SubmodBase
 from ..model import Model, writemod
-from .xformutils import ww_u
-from .xformutils import ww_u_b
-from .xformutils import ww_u_sc
-from .xformutils import ww_u_sc_b
-from .xformutils import ww_u_lb
-from .xformutils import ww_cc
-from .xformutils import ww_cc_b_aux
-from .xformutils import ww_cc_b
+from .xformutils import mrange
+from .xformutils import XFormWWU
+from .xformutils import XFormWWUB
+from .xformutils import XFormWWUSC
+from .xformutils import XFormWWUSCB
+from .xformutils import XFormWWULB
+from .xformutils import XFormWWCC
+from .xformutils import XFormWWCCB
+from .xformutils import XFormLSU1
+from .xformutils import XFormLSU2
+from .xformutils import XFormLSU
+from .xformutils import XFormLSUB
 
 
-class SubmodWW_U(SubmodBase):
+class SubmodWWU(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -42,7 +46,7 @@ class SubmodWW_U(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwu{0}_".format(self._cnt)
+        prefix = "_wwu_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -64,14 +68,14 @@ class SubmodWW_U(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_u(model, s, y, d, NT, Tk, prefix)
+        XFormWWU(model, s, y, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_U_B(SubmodBase):
+class SubmodWWUB(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -82,7 +86,7 @@ class SubmodWW_U_B(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwub{0}_".format(self._cnt)
+        prefix = "_wwub_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -106,14 +110,14 @@ class SubmodWW_U_B(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_u_b(model, s, r, y, d, NT, Tk, prefix)
+        XFormWWUB(model, s, r, y, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_U_SC(SubmodBase):
+class SubmodWWUSC(SubmodBase):
     """Command for creating WW-U-SC extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -124,7 +128,7 @@ class SubmodWW_U_SC(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwusc{0}_".format(self._cnt)
+        prefix = "_wwusc_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -148,14 +152,14 @@ class SubmodWW_U_SC(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_u_sc(model, s, y, z, d, NT, Tk, prefix)
+        XFormWWUSC(model, s, y, z, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_U_SCB(SubmodBase):
+class SubmodWWUSCB(SubmodBase):
     """Command for creating WW-U-SC,B extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -166,7 +170,7 @@ class SubmodWW_U_SCB(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwuscb{0}_".format(self._cnt)
+        prefix = "_wwuscb_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -194,14 +198,14 @@ class SubmodWW_U_SCB(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_u_sc_b(model, s, r, y, z, w, d, NT, Tk, prefix)
+        XFormWWUSCB(model, s, r, y, z, w, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_U_LB(SubmodBase):
+class SubmodWWULB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -212,7 +216,7 @@ class SubmodWW_U_LB(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwulb{0}_".format(self._cnt)
+        prefix = "_wwulb_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -234,14 +238,14 @@ class SubmodWW_U_LB(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_u_lb(model, s, y, d, L, NT, Tk, prefix)
+        XFormWWULB(model, s, y, d, L, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_CC(SubmodBase):
+class SubmodWWCC(SubmodBase):
     """Command for creating WW-CC extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -252,7 +256,7 @@ class SubmodWW_CC(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwcc{0}_".format(self._cnt)
+        prefix = "_wwcc_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -274,14 +278,14 @@ class SubmodWW_CC(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_cc(model, s, y, d, C, NT, Tk, prefix)
+        XFormWWCC(model, s, y, d, C, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodWW_CC_B(SubmodBase):
+class SubmodWWCCB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
@@ -292,7 +296,7 @@ class SubmodWW_CC_B(SubmodBase):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
-        prefix = "_wwccb{0}_".format(self._cnt)
+        prefix = "_wwccb_{0}_".format(self._cnt)
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -316,7 +320,177 @@ class SubmodWW_CC_B(SubmodBase):
         model = Model()
         for var in varl:
             model.add_var(name=var)
-        ww_cc_b(model, s, r, y, d, C, NT, Tk, prefix)
+        XFormWWCCB(model, s, r, y, d, C, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodLSU1(SubmodBase):
+    """Command for creating LS-U1 extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_lsu1_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) in (NT, NT+1)
+        assert isinstance(x, list) and len(x) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + x + y
+
+        if len(s) == NT:
+            s = {i+1: s[i] for i in xrange(NT)}
+            s[0] = 0
+        else:
+            s = {i: s[i] for i in mrange(0, NT)}
+        x = {i+1: x[i] for i in xrange(NT)}
+        y = {i+1: y[i] for i in xrange(NT)}
+        d = {i+1: d[i] for i in xrange(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+        XFormLSU1(model, s, x, y, d, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodLSU2(SubmodBase):
+    """Command for creating LS-U1 extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_lsu2_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) in (NT, NT+1)
+        assert isinstance(x, list) and len(x) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + x + y
+
+        if len(s) == NT:
+            s = {i+1: s[i] for i in xrange(NT)}
+            s[0] = 0
+        else:
+            s = {i: s[i] for i in mrange(0, NT)}
+        x = {i+1: x[i] for i in xrange(NT)}
+        y = {i+1: y[i] for i in xrange(NT)}
+        d = {i+1: d[i] for i in xrange(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+        XFormLSU2(model, s, x, y, d, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodLSU(SubmodBase):
+    """Command for creating LS-U extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_lsu_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) in (NT, NT+1)
+        assert isinstance(x, list) and len(x) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + x + y
+
+        if len(s) == NT:
+            s = {i+1: s[i] for i in xrange(NT)}
+            s[0] = 0
+        else:
+            s = {i: s[i] for i in mrange(0, NT)}
+        x = {i+1: x[i] for i in xrange(NT)}
+        y = {i+1: y[i] for i in xrange(NT)}
+        d = {i+1: d[i] for i in xrange(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+        XFormLSU(model, s, x, y, d, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodLSUB(SubmodBase):
+    """Command for creating LS-U-B extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, r, x, y, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_lsub_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) in (NT, NT+1)
+        assert isinstance(r, list) and len(r) == NT
+        assert isinstance(x, list) and len(x) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + r + x + y
+
+        if len(s) == NT:
+            s = {i+1: s[i] for i in xrange(NT)}
+            s[0] = 0
+        else:
+            s = {i: s[i] for i in mrange(0, NT)}
+        r = {i+1: r[i] for i in xrange(NT)}
+        x = {i+1: x[i] for i in xrange(NT)}
+        y = {i+1: y[i] for i in xrange(NT)}
+        d = {i+1: d[i] for i in xrange(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+        XFormLSUB(model, s, r, x, y, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)

@@ -29,7 +29,7 @@ from .atsputils import add_mcf_constraints
 from .atsputils import tsp_cut_generator
 
 
-class SubmodATSP_MTZ(SubmodBase):
+class SubmodATSPMTZ(SubmodBase):
     """Command for creating MTZ constraints for TSP."""
 
     def __init__(self, *args, **kwargs):
@@ -69,7 +69,7 @@ class SubmodATSP_MTZ(SubmodBase):
         return cuts
 
 
-class SubmodATSP_SCF(SubmodBase):
+class SubmodATSPSCF(SubmodBase):
     """Command for creating Single-Commodity Flow Model models for TSP."""
 
     def __init__(self, *args, **kwargs):
@@ -109,7 +109,7 @@ class SubmodATSP_SCF(SubmodBase):
         return cuts
 
 
-class SubmodATSP_MCF(SubmodBase):
+class SubmodATSPMCF(SubmodBase):
     """Command for creating Multi-Commodity Flow Model models for TSP."""
 
     def __init__(self, *args, **kwargs):

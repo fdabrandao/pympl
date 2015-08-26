@@ -21,15 +21,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
 import sys
-from copy import deepcopy
-from .cmds import CmdBase, SubmodBase
+from .cmds import SubmodBase
 from .cmds import CmdSet, CmdParam, CmdVar, CmdCon, CmdStmt
 from .cmds import SubmodVBPFlow, CmdVBPGraph, CmdVBPLoad
-from .cmds import SubmodATSP_MTZ, SubmodATSP_SCF, SubmodATSP_MCF
+from .cmds import SubmodATSPMTZ, SubmodATSPSCF, SubmodATSPMCF
 from .cmds import SubmodSOS1, SubmodSOS2, SubmodPWL
-from .cmds import SubmodWW_U, SubmodWW_U_B
-from .cmds import SubmodWW_U_SC, SubmodWW_U_SCB, SubmodWW_U_LB
-from .cmds import SubmodWW_CC, SubmodWW_CC_B
+from .cmds import SubmodWWU, SubmodWWUB
+from .cmds import SubmodWWUSC, SubmodWWUSCB, SubmodWWULB
+from .cmds import SubmodWWCC, SubmodWWCCB
+from .cmds import SubmodLSU, SubmodLSU1, SubmodLSU2, SubmodLSUB
 
 
 class PyMPL(object):
@@ -57,22 +57,26 @@ class PyMPL(object):
         "VAR": CmdVar,
         "CON": CmdCon,
         "STMT": CmdStmt,
-        "ATSP_MTZ": SubmodATSP_MTZ,
-        "ATSP_SCF": SubmodATSP_SCF,
-        "ATSP_MCF": SubmodATSP_MCF,
+        "ATSP_MTZ": SubmodATSPMTZ,
+        "ATSP_SCF": SubmodATSPSCF,
+        "ATSP_MCF": SubmodATSPMCF,
         "VBP_LOAD": CmdVBPLoad,
         "VBP_FLOW": SubmodVBPFlow,
         "VBP_GRAPH": CmdVBPGraph,
         "SOS1": SubmodSOS1,
         "SOS2": SubmodSOS2,
         "PWL": SubmodPWL,
-        "WW_U": SubmodWW_U,
-        "WW_U_B": SubmodWW_U_B,
-        "WW_U_SC": SubmodWW_U_SC,
-        "WW_U_SCB": SubmodWW_U_SCB,
-        "WW_U_LB": SubmodWW_U_LB,
-        "WW_CC": SubmodWW_CC,
-        "WW_CC_B": SubmodWW_CC_B,
+        "WW_U": SubmodWWU,
+        "WW_U_B": SubmodWWUB,
+        "WW_U_SC": SubmodWWUSC,
+        "WW_U_SCB": SubmodWWUSCB,
+        "WW_U_LB": SubmodWWULB,
+        "WW_CC": SubmodWWCC,
+        "WW_CC_B": SubmodWWCCB,
+        "LS_U": SubmodLSU,
+        "LS_U1": SubmodLSU1,
+        "LS_U2": SubmodLSU2,
+        "LS_U_B": SubmodLSUB,
     }
 
     def __init__(self, locals_=None, globals_=None):
