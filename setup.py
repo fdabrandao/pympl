@@ -4,9 +4,9 @@ PyMPL
 -----
 PyMPL is a python extension to the AMPL modelling language that adds
 new statements for evaluating python code within AMPL models.
-PyMPL includes, among others, procedures for modelling piecewise linear
-functions, arc-flow graphs for vector packing, and sub-tour elimination
-constraints for TSP.
+PyMPL also includes, among others, procedures for modelling piecewise
+linear functions, compressed arc-flow graphs for vector packing, and
+sub-tour elimination constraints for TSP.
 
 Setup
 `````
