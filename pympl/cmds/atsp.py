@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from .base import SubModelBase
+from .base import SubmodBase
 from ..model import Model, writemod
 from ..utils.common import UnionFind
 
@@ -227,11 +227,11 @@ def tsp_cut_generator(graph, cutvars, get_var_value):
     return cuts
 
 
-class SubATSPModelMTZ(SubModelBase):
+class SubmodATSP_MTZ(SubmodBase):
     """Command for creating MTZ constraints for TSP."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []
@@ -267,11 +267,11 @@ class SubATSPModelMTZ(SubModelBase):
         return cuts
 
 
-class SubATSPModelSCF(SubModelBase):
+class SubmodATSP_SCF(SubmodBase):
     """Command for creating Single-Commodity Flow Model models for TSP."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []
@@ -307,11 +307,11 @@ class SubATSPModelSCF(SubModelBase):
         return cuts
 
 
-class SubATSPModelMCF(SubModelBase):
+class SubmodATSP_MCF(SubmodBase):
     """Command for creating Multi-Commodity Flow Model models for TSP."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []

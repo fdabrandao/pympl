@@ -22,14 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import re
 import sys
 from copy import deepcopy
-from .cmds import CmdBase, SubModelBase
+from .cmds import CmdBase, SubmodBase
 from .cmds import CmdSet, CmdParam, CmdVar, CmdCon, CmdStmt
-from .cmds import SubVBPModelFlow, CmdVBPGraph, CmdVBPLoad
-from .cmds import SubATSPModelMTZ, SubATSPModelSCF, SubATSPModelMCF
-from .cmds import SubSOS1Model, SubSOS2Model, SubPWLModel
-from .cmds import SubWW_U_Model, SubWW_U_B_Model
-from .cmds import SubWW_U_SC_Model, SubWW_U_SCB_Model, SubWW_U_LB_Model
-from .cmds import SubWW_CC_Model, SubWW_CC_B_Model
+from .cmds import SubmodVBPFlow, CmdVBPGraph, CmdVBPLoad
+from .cmds import SubmodATSP_MTZ, SubmodATSP_SCF, SubmodATSP_MCF
+from .cmds import SubmodSOS1, SubmodSOS2, SubmodPWL
+from .cmds import SubmodWW_U, SubmodWW_U_B
+from .cmds import SubmodWW_U_SC, SubmodWW_U_SCB, SubmodWW_U_LB
+from .cmds import SubmodWW_CC, SubmodWW_CC_B
 
 
 class PyMPL(object):
@@ -57,22 +57,22 @@ class PyMPL(object):
         "VAR": CmdVar,
         "CON": CmdCon,
         "STMT": CmdStmt,
-        "ATSP_MTZ": SubATSPModelMTZ,
-        "ATSP_SCF": SubATSPModelSCF,
-        "ATSP_MCF": SubATSPModelMCF,
+        "ATSP_MTZ": SubmodATSP_MTZ,
+        "ATSP_SCF": SubmodATSP_SCF,
+        "ATSP_MCF": SubmodATSP_MCF,
         "VBP_LOAD": CmdVBPLoad,
-        "VBP_FLOW": SubVBPModelFlow,
+        "VBP_FLOW": SubmodVBPFlow,
         "VBP_GRAPH": CmdVBPGraph,
-        "SOS1": SubSOS1Model,
-        "SOS2": SubSOS2Model,
-        "PWL": SubPWLModel,
-        "WW_U": SubWW_U_Model,
-        "WW_U_B": SubWW_U_B_Model,
-        "WW_U_SC": SubWW_U_SC_Model,
-        "WW_U_SCB": SubWW_U_SCB_Model,
-        "WW_U_LB": SubWW_U_LB_Model,
-        "WW_CC": SubWW_CC_Model,
-        "WW_CC_B": SubWW_CC_B_Model,
+        "SOS1": SubmodSOS1,
+        "SOS2": SubmodSOS2,
+        "PWL": SubmodPWL,
+        "WW_U": SubmodWW_U,
+        "WW_U_B": SubmodWW_U_B,
+        "WW_U_SC": SubmodWW_U_SC,
+        "WW_U_SCB": SubmodWW_U_SCB,
+        "WW_U_LB": SubmodWW_U_LB,
+        "WW_CC": SubmodWW_CC,
+        "WW_CC_B": SubmodWW_CC_B,
     }
 
     def __init__(self, locals_=None, globals_=None):
@@ -144,7 +144,7 @@ class PyMPL(object):
                     res = str(self._locals["_model"])
                 else:
                     if call in self._locals:
-                        if issubclass(type(self._locals[call]), SubModelBase):
+                        if issubclass(type(self._locals[call]), SubmodBase):
                             self._submodels.add(call)
                     if args1 is not None:
                         args1 = "'''{0}'''".format(args1[1:-1])

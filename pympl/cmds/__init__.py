@@ -19,11 +19,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from .base import CmdBase, SubModelBase
+from .base import CmdBase, SubmodBase
 from .default import CmdSet, CmdParam, CmdVar, CmdCon, CmdStmt
-from .vbp import CmdVBPLoad, SubVBPModelFlow, CmdVBPGraph
-from .atsp import SubATSPModelSCF, SubATSPModelMCF, SubATSPModelMTZ
-from .sos import SubSOS1Model, SubSOS2Model, SubPWLModel
-from .xform import SubWW_U_Model, SubWW_U_B_Model
-from .xform import SubWW_U_SC_Model, SubWW_U_SCB_Model, SubWW_U_LB_Model
-from .xform import SubWW_CC_Model, SubWW_CC_B_Model
+from .vbp import CmdVBPLoad, SubmodVBPFlow, CmdVBPGraph
+from .atsp import SubmodATSP_SCF, SubmodATSP_MCF, SubmodATSP_MTZ
+from .sos import SubmodSOS1, SubmodSOS2, SubmodPWL
+from .xform import SubmodWW_U, SubmodWW_U_B
+from .xform import SubmodWW_U_SC, SubmodWW_U_SCB, SubmodWW_U_LB
+from .xform import SubmodWW_CC, SubmodWW_CC_B

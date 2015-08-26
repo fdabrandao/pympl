@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from math import floor, ceil
-from .base import SubModelBase
+from .base import SubmodBase
 from ..model import Model, writemod
 
 """
@@ -781,11 +781,11 @@ def ww_cc_b(model, s, r, y, d, C, NT, Tk, prefix=""):
                 break
 
 
-class SubWW_U_Model(SubModelBase):
+class SubmodWW_U(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, y, d, NT, Tk=None):
@@ -821,11 +821,11 @@ class SubWW_U_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_U_B_Model(SubModelBase):
+class SubmodWW_U_B(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, r, y, d, NT, Tk=None):
@@ -863,11 +863,11 @@ class SubWW_U_B_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_U_SC_Model(SubModelBase):
+class SubmodWW_U_SC(SubmodBase):
     """Command for creating WW-U-SC extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, y, z, d, NT, Tk=None):
@@ -905,11 +905,11 @@ class SubWW_U_SC_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_U_SCB_Model(SubModelBase):
+class SubmodWW_U_SCB(SubmodBase):
     """Command for creating WW-U-SC,B extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, r, y, z, w, d, NT, Tk=None):
@@ -951,11 +951,11 @@ class SubWW_U_SCB_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_U_LB_Model(SubModelBase):
+class SubmodWW_U_LB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, y, d, L, NT, Tk=None):
@@ -991,11 +991,11 @@ class SubWW_U_LB_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_CC_Model(SubModelBase):
+class SubmodWW_CC(SubmodBase):
     """Command for creating WW-CC extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, y, d, C, NT, Tk=None):
@@ -1031,11 +1031,11 @@ class SubWW_CC_Model(SubModelBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubWW_CC_B_Model(SubModelBase):
+class SubmodWW_CC_B(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def __init__(self, *args, **kwargs):
-        SubModelBase.__init__(self, *args, **kwargs)
+        SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
     def _evalcmd(self, arg1, s, r, y, d, C, NT, Tk=None):
