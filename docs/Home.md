@@ -1,20 +1,20 @@
-# Home
+## Home
 
-PyMPL is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL includes, among others, procedures for modelling piecewise linear functions, arc-flow graphs for vector packing, and sub-tour elimination constraints for TSP.
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, lot-sizing reformulations, and sub-tour elimination constraints for TSP.
 
-## Table of Contents
+### Table of Contents
 
   * [Useful links](#useful-links)
   * [Examples](#examples)
   * [PyMPL Parser](#pympl-parser)
   * [PyMPL Statements](STMTS)
 
-## Useful links
+### Useful links
 
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
 
-## Examples
+### Examples
 
 ``piecewise_linear.mod``
 
@@ -106,7 +106,7 @@ display sum{t in T} C[t] * Z[t]; # cost
 end;
 ```
 
-## PyMPL Parser
+### PyMPL Parser
 
 ```python
 import os

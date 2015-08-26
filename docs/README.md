@@ -1,19 +1,19 @@
-## Mathematical Modelling Toolbox PyMPL
+## PyMPL Mathematical Modelling Toolbox
 
-Copyright (C) 2013-2015, Filipe Brandão  
+Copyright (C) 2015-2015, Filipe Brandão  
 Faculdade de Ciencias, Universidade do Porto  
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
-[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL includes, among others, procedures for modelling piecewise linear functions, arc-flow graphs for vector packing, and sub-tour elimination constraints for TSP.
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, lot-sizing reformulations, and sub-tour elimination constraints for TSP.
 
-## Useful links
+### Useful links
 
 * PyMPL documentation: <https://github.com/fdabrandao/pympl/wiki>
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
 
-## Setup
+### Setup
 
 Install from the repository:
 ```bash
@@ -27,7 +27,7 @@ $ sudo pip install . --upgrade
 $ bash test.sh test_install
 ```
 
-## Examples
+### Examples
 
 ``piecewise_linear.mod``
 
@@ -72,7 +72,7 @@ display Z;
 end;
 ```
 
-## PyMPL Parser
+### PyMPL Parser
 
 ```python
 import os

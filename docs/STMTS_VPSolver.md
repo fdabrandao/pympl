@@ -10,6 +10,8 @@ Usage: `$VBP_LOAD[name]{fname, i0=0, d0=0};`
 
 Description: loads vector packing instances.
 
+Requirements: [VPSolver](https://github.com/fdabrandao/vpsolver)
+
 Parameters:
 
   * AMPL:
@@ -74,7 +76,9 @@ param instance_w{I,D}; # item weights
 #### VBP_FLOW
 Usage: `$VBP_FLOW[zvar_name]{W, w, b, bounds=None};`
 
-Description: generates arc-flow models for vector packing instances.
+Description: generates arc-flow models with graph compression for vector packing instances.
+
+Requirements: [VPSolver](https://github.com/fdabrandao/vpsolver)
 
 Parameters:
 
@@ -89,7 +93,7 @@ Parameters:
 Creates:
 
   * AMPL:
-    * an arc-flow model for the vector packing instance (variables and constraints);
+    * an arc-flow model with graph compression for the vector packing instance (variables and constraints);
     * a variable `'zvar_name'` for the amount of flow in the feedback arc.
   * Python:
     * stores information for solution extraction.
@@ -112,7 +116,7 @@ is replaced by:
 
 ```ampl
 var x{I}, >= 0;  
-/* arc-flow model for instance.vbp */
+/* arc-flow model with graph compression for instance.vbp */
 /* Z is the amount of flow on the feedback arc */
 /* x[i] = amount of flow on arcs associated with item i */
 minimize obj: Z;
@@ -125,7 +129,9 @@ end;
 #### VBP_GRAPH
 Usage: `$VBP_GRAPH[V_name, A_name]{W, w, labels, bounds=None};`
 
-Description: generates arc-flow graphs for vector packing instances.  
+Requirements: [VPSolver](https://github.com/fdabrandao/vpsolver)
+
+Description: generates compressed arc-flow graphs for vector packing instances.  
 
 Parameters:
 
