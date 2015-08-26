@@ -85,7 +85,7 @@ class PyMPL(object):
         self._params = {}
         self._locals = {}
         for var in locals_:
-           self._locals[var] = locals_[var]
+            self._locals[var] = locals_[var]
         for var in globals_:
             if var not in self._locals:
                 self._locals[var] = globals_[var]
