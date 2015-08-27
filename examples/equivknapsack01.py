@@ -20,6 +20,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from __future__ import division
+from builtins import range
 
 import os
 import sys
@@ -46,7 +48,7 @@ def equivknapsack01(a, a0):
     using 'equivknapsack01.mod'
     """
     aS = abs(2*a0+1-sum(a))
-    if a0 < (sum(a)-1)/2:
+    if a0 < (sum(a)-1)//2:
         a0 += aS
         fix_as = 1
     else:
@@ -69,7 +71,7 @@ def equivknapsack01(a, a0):
         "glpk_wrapper.sh", lp_out, verbose=False
     )
 
-    b = [varvalues.get("pi({0})".format(i+1), 0) for i in xrange(len(a))]
+    b = [varvalues.get("pi({0})".format(i+1), 0) for i in range(len(a))]
     b0 = varvalues.get("pi(0)", 0)
 
     if fix_as == 1:
@@ -106,12 +108,12 @@ def main():
     print("Original knapsack inequalities:")
     for a, a0 in sorted(kp_cons, key=lambda x: (x[1], x[0])):
         print(" + ".join(
-            "{0:2g} x{1:d}".format(a[i], i+1) for i in xrange(len(a))
+            "{0:2g} x{1:d}".format(a[i], i+1) for i in range(len(a))
         ), "<=", a0)
     print("Minimal equivalent knapsack inequalities:")
     for b, b0 in sorted(cons, key=lambda x: (x[1], x[0])):
         print(" + ".join(
-            "{0:2g} x{1:d}".format(b[i], i+1) for i in xrange(len(b))
+            "{0:2g} x{1:d}".format(b[i], i+1) for i in range(len(b))
         ), "<=", b0)
 
 if __name__ == "__main__":

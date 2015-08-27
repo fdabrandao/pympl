@@ -20,6 +20,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from builtins import map
+from builtins import range
 
 import os
 import sys
@@ -43,10 +45,10 @@ from pympl import PyMPL, glpkutils, script_wsol
 def read_demand(fname, NI, NT):
     with open(fname) as f:
         text = f.read().replace(",", "")
-        lst = map(float, text.split())
+        lst = list(map(float, text.split()))
         demand = {}
-        for i in xrange(NI):
-            for t in xrange(NT):
+        for i in range(NI):
+            for t in range(NT):
                 demand[i+1, t+1] = lst.pop(0)
         assert lst == []
         return demand

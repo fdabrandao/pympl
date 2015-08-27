@@ -19,6 +19,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from builtins import range
+from builtins import object
 
 import os
 import sys
@@ -142,7 +144,7 @@ class Solver(object):
                 sol = f.read().split()
                 values = {}
                 assert len(sol) % 2 == 0
-                for i in xrange(0, len(sol), 2):
+                for i in range(0, len(sol), 2):
                     var, value = sol[i], float(sol[i+1])
                     if int(value) == value:
                         value = int(value)

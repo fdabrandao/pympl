@@ -20,6 +20,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from builtins import map
+from builtins import range
 
 import os
 import sys
@@ -44,9 +46,9 @@ def read_tsp(fname):
     """Loads TSP instances."""
     xs, ys = [], []
     with open(fname) as f:
-        lst = map(float, f.read().split())
+        lst = list(map(float, f.read().split()))
         n = int(lst.pop(0))
-        for i in xrange(n):
+        for i in range(n):
             xs.append(lst.pop(0))
             ys.append(lst.pop(0))
     return n, xs, ys
