@@ -1,2 +1,3 @@
+include CHANGES COPYING LICENSE requirements.txt
 recursive-include pympl *
 recursive-exclude pympl *~

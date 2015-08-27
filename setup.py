@@ -22,7 +22,8 @@ Links
 * `GiHub repository <https://github.com/fdabrandao/pympl>`_
 * `BitBucket repository <https://bitbucket.org/fdabrandao/pympl>`_
 """
-
+import re
+import ast
 import os
 from setuptools import setup
 from setuptools.command.install import install
@@ -49,10 +50,14 @@ def ls_dir(base_dir):
         )
     ]
 
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
+with open("pympl/__init__.py", "rb") as f:
+    version = str(ast.literal_eval(_version_re.search(
+        f.read().decode("utf-8")).group(1)))
 
 setup(
     name="PyMPL",
-    version="0.4.0",
+    version=version,
     license="GPLv3+",
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
@@ -63,14 +68,15 @@ setup(
     package_data={"": ls_dir("pympl/")},
     include_package_data=True,
     scripts=[os.path.join("scripts", f) for f in ls_dir("scripts/")],
-    platforms='any',
-    install_requires=[],
+    platforms="any",
+    install_requires=open("requirements.txt").read().split("\n"),
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Topic :: Scientific/Engineering"
     ],
     cmdclass={"install": CustomInstallCommand},
-    use_2to3=True
 )
