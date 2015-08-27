@@ -1,7 +1,7 @@
-## PyMPL Mathematical Modelling Toolbox
+## PyMPL: A Mathematical Programming Toolbox
 
-Copyright (C) 2015-2015, Filipe Brandão  
-Faculdade de Ciencias, Universidade do Porto  
+Copyright (C) 2015-2015, Filipe Brandão
+Faculdade de Ciencias, Universidade do Porto
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
@@ -95,11 +95,11 @@ os.system("ampl ampl_model.mod")
 
 Advanced features:
 
-* Given a function `f(varname)` that given a variable name returns its value:
+* Given a function `f(varname)` that takes a variable name returns its value:
 
   * If any command used implements solution extraction you can use `parser[command_name].extract(f)` to extract the solution;
   * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
-Copyright © Filipe Brandão. All rights reserved.  
+Copyright © Filipe Brandão. All rights reserved.
 E-mail: <fdabrandao@dcc.fc.up.pt>. [[Homepage](http://www.dcc.fc.up.pt/~fdabrandao/)]
