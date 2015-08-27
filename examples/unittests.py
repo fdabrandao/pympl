@@ -75,7 +75,7 @@ class TestPyMPL(unittest.TestCase):
         parser.input = """
         $PARAM[NAME]{"name"};
         $PARAM[VALUE]{10};
-        $PARAM[D{I}]{{'a': 1, 'b': 2}};
+        $PARAM[D{I}]{{'a': 1}};
         $PARAM[L0]{[1,2,3], i0=0};
         $PARAM[L1]{[1,2,3], i0=1};
         $PARAM[^NAME2]{"something"};
@@ -83,8 +83,8 @@ class TestPyMPL(unittest.TestCase):
         parser.parse(comment_cmds=False)
         self.assertIn("param NAME := 'name';", parser.output)
         self.assertIn("param VALUE := 10;", parser.output)
-        self.assertIn("param D := ['a']1['b']2;", parser.output)
-        self.assertIn("set I := {'a','b'};", parser.output)
+        self.assertIn("param D := ['a']1;", parser.output)
+        self.assertIn("set I := {'a'};", parser.output)
         self.assertIn("param L0 := [0]1[1]2[2]3;", parser.output)
         self.assertIn("param L1 := [1]1[2]2[3]3;", parser.output)
         self.assertNotIn("param NAME2 := 'something';", parser.output)
@@ -96,7 +96,7 @@ class TestPyMPL(unittest.TestCase):
         parser.input = """
         $VAR[x]{"integer", 0, 10};
         $VAR[y]{"binary"};
-        $VAR[z]{ub=abs((2**7)/5-135)};
+        $VAR[z]{ub=abs((2**7)//5-135)};
         $VAR[^z]{"integer", 0, 10};
         $VAR[xs{I}]{"integer", index_set=range(3)};
         $EXEC{VAR['y']("binary")};
@@ -138,7 +138,7 @@ class TestPyMPL(unittest.TestCase):
         """Tests $STMT{stmt} calls"""
         parser = PyMPL()
         parser.input = """
-        $STMT{"s.t. con1: x + y <= {0} * z;".format(abs((2**7)/5-135))};
+        $STMT{"s.t. con1: x + y <= {0} * z;".format(abs((2**7)//5-135))};
         $EXEC{stmt = "s.t. {0}: x >= 10;".format("test")};
         $STMT{stmt};
         """
@@ -150,7 +150,7 @@ class TestPyMPL(unittest.TestCase):
         """Tests ${expression}$ calls"""
         parser = PyMPL()
         parser.input = """
-        s.t. con1: x + y <= ${abs((2**7)/5-135)}$ * z;
+        s.t. con1: x + y <= ${abs((2**7)//5-135)}$ * z;
         var x1, >= ${2+6}$, <= ${10*5}$;
         """
         parser.parse(comment_cmds=False)

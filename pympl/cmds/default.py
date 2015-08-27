@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from builtins import str
 
 from .base import CmdBase
 from .. import utils
@@ -66,7 +67,7 @@ class CmdParam(CmdBase):
             if index is None:
                 index = "{0}_I".format(name)
             self._pyvars["_defs"] += utils.ampl_set(
-                index, values.keys(), self._sets, self._params
+                index, list(values.keys()), self._sets, self._params
             )[0]
 
         pdefs, pdata = utils.ampl_param(

@@ -214,7 +214,7 @@ def tsp_cut_generator(graph, cutvars, get_var_value):
         for group in groups:
             if len(group) <= 2:
                 continue
-            grp = set(map(lambda id_: V[id_], group))
+            grp = set([V[id_] for id_ in group])
             cuts.append((
                 [
                    (cutvars[u, v], 1)

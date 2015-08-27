@@ -6,7 +6,7 @@ if graph_size == "small":
 else:
     n, xs, ys = read_tsp("data/tsp_51_1.txt")
 
-points = zip(xs, ys)
+points = list(zip(xs, ys))
 
 def length(point1, point2):
     from math import sqrt

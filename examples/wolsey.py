@@ -108,4 +108,7 @@ def main():
     assert exit_code == 0
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ImportError as e:
+        print(repr(e))

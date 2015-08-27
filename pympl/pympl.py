@@ -164,15 +164,16 @@ class PyMPL(object):
                     res = str(self._locals["_model"])
                 res += self._locals["_defs"]
                 self._add_data(self._locals["_data"])
-            except:
-                exctype, value, traceback = sys.exc_info()
-                msg = str(value)+"\n\t"
-                msg += "(while evaluating {0} at line {1:d} col {2:d})".format(
-                    "$"+call+("[...]" if args1 is not None else "")+"{...}",
+            except Exception as e:
+                msg = "Exception occurred while evaluating {0}".format(
+                    "$"+call+("[...]" if args1 is not None else "")+"{...}"
+                )
+                msg += " at line {0:d} col {1:d}".format(
                     self.input[:match.start()].count("\n")+1,
                     match.start()-self.input[:match.start()].rfind("\n"),
                 )
-                raise exctype, msg, traceback
+                e.args += (msg,)
+                raise
 
             if comment_cmds:
                 res = "/*EVALUATED:{0}*/{1}".format(

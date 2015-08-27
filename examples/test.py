@@ -53,26 +53,41 @@ import bike
 def main():
     """Runs all PyMPL examples."""
 
-    print("equivknapsack:")
-    equivknapsack.main()
+    try:
+        print("equivknapsack:")
+        equivknapsack.main()
+    except ImportError as e:
+        print(repr(e))
 
-    print("equivknapsack01:")
-    equivknapsack01.main()
+    try:
+        print("equivknapsack01:")
+        equivknapsack01.main()
+    except ImportError as e:
+        print(repr(e))
 
-    print("wolsey:")
-    wolsey.main()
+    try:
+        print("wolsey:")
+        wolsey.main()
+    except ImportError as e:
+        print(repr(e))
 
-    print("instance:")
-    instance.main()
+    try:
+        print("instance:")
+        instance.main()
+    except ImportError as e:
+        print(repr(e))
+
+    try:
+        print("twostage:")
+        twostage.main()
+    except ImportError as e:
+        print(repr(e))
 
     print("sos:")
     sos.main()
 
     print("pwl:")
     pwl.main()
-
-    print("twostage:")
-    twostage.main()
 
     print("bike:")
     clb.main()

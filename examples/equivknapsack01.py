@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from __future__ import division
 from builtins import range
+from builtins import str
 
 import os
 import sys
@@ -117,4 +118,7 @@ def main():
         ), "<=", b0)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ImportError as e:
+        print(repr(e))

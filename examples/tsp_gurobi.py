@@ -113,4 +113,7 @@ def main():
     print("Objective:", m.ObjVal)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ImportError as e:
+        print(repr(e))

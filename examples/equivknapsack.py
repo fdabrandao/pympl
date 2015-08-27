@@ -114,4 +114,7 @@ def main():
         ), "<=", b0, bounds[:-1])
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ImportError as e:
+        print(repr(e))
