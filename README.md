@@ -1,7 +1,7 @@
 ## PyMPL: A Mathematical Programming Toolbox
 
-Copyright (C) 2015-2015, Filipe Brandão
-Faculdade de Ciencias, Universidade do Porto
+Copyright (C) 2015-2015, Filipe Brandão  
+Faculdade de Ciencias, Universidade do Porto  
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
@@ -101,5 +101,5 @@ Advanced features:
   * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
-Copyright © Filipe Brandão. All rights reserved.
+Copyright © Filipe Brandão. All rights reserved.  
 E-mail: <fdabrandao@dcc.fc.up.pt>. [[Homepage](http://www.dcc.fc.up.pt/~fdabrandao/)]
