@@ -15,7 +15,7 @@
   * [$LS_U or LS_U1{...};](#ls_u-or-ls_u1)
   * [$LS_U2{...};](#ls_u2)
   * [$LS_U_B{...};](#ls_u_b)
-  * [Return to the index](STMTS)
+* [Return to the index](STMTS)
 
 ### Introduction
 
