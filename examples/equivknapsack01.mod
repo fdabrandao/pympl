@@ -3,9 +3,9 @@ $PARAM[m]{len(a)};
 $EXEC{
 m = len(a)
 W = [a0]+[1]*len(a)
-w = [[a[i]]+[1 if j == i else 0 for j in xrange(m)] for i in xrange(m)]
-b = [1 for i in xrange(m)]
-labels = [i+1 for i in xrange(m)]
+w = [[a[i]]+[1 if j == i else 0 for j in range(m)] for i in range(m)]
+b = [1 for i in range(m)]
+labels = [i+1 for i in range(m)]
 };
 
 $VBP_GRAPH[V,A]{W, w, labels, b};

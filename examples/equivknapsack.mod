@@ -1,12 +1,12 @@
 $PARAM[m]{len(a)};
-$PARAM[bounds]{bounds,1};
+$PARAM[bounds]{bounds, 1};
 
 $EXEC{
 m = len(a)
 W = [a0]+bounds
-w = [[a[i]]+[1 if j == i else 0 for j in xrange(m)] for i in xrange(m)]
+w = [[a[i]]+[1 if j == i else 0 for j in range(m)] for i in range(m)]
 b = bounds
-labels = range(1,m+1)
+labels = range(1, m+1)
 };
 
 $VBP_GRAPH[V,A]{W, w, labels, b};

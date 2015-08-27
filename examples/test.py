@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -52,41 +53,41 @@ import bike
 def main():
     """Runs all PyMPL examples."""
 
-    print "equivknapsack:"
+    print("equivknapsack:")
     equivknapsack.main()
 
-    print "equivknapsack01:"
+    print("equivknapsack01:")
     equivknapsack01.main()
 
-    print "wolsey:"
+    print("wolsey:")
     wolsey.main()
 
-    print "instance:"
+    print("instance:")
     instance.main()
 
-    print "sos:"
+    print("sos:")
     sos.main()
 
-    print "pwl:"
+    print("pwl:")
     pwl.main()
 
-    print "twostage:"
+    print("twostage:")
     twostage.main()
 
-    print "bike:"
+    print("bike:")
     clb.main()
 
     if "quick_test" not in sys.argv:
-        print "tsp:"
+        print("tsp:")
         tsp.main()
 
-        print "tsp_gurobi:"
+        print("tsp_gurobi:")
         try:
             tsp_gurobi.main()
         except ImportError as e:
-            print repr(e)
+            print(repr(e))
 
-        print "clb:"
+        print("clb:")
         clb.main()
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ def length(point1, point2):
 
 dist = {
     (i+1,j+1): length(points[i], points[j])
-    for i in xrange(n) for j in xrange(n)
+    for i in range(n) for j in range(n)
     if i != j
 }
 

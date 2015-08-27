@@ -179,7 +179,7 @@ class TestPyMPL(unittest.TestCase):
     def test_exceptions(self):
         """Tests if exceptions are thrown correctly"""
         parser = PyMPL()
-        parser.input = """$EXEC{print 1/0};"""
+        parser.input = """$EXEC{print(1/0)};"""
         with self.assertRaises(ZeroDivisionError):
             parser.parse(comment_cmds=False)
         parser.input = """$SET[X]{0};"""

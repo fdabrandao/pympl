@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -71,9 +72,6 @@ def equivknapsack01(a, a0):
     b = [varvalues.get("pi({0})".format(i+1), 0) for i in xrange(len(a))]
     b0 = varvalues.get("pi(0)", 0)
 
-    # print a, a0
-    # print b, b0
-
     if fix_as == 1:
         b0 -= b[-1]
         b = b[:-1]
@@ -105,18 +103,16 @@ def main():
         if sum(b) != 0:
             cons.add((tuple(b), b0))
 
-    print "Original knapsack inequalities:"
+    print("Original knapsack inequalities:")
     for a, a0 in sorted(kp_cons, key=lambda x: (x[1], x[0])):
-        # print a, a0
-        print " + ".join(
+        print(" + ".join(
             "{0:2g} x{1:d}".format(a[i], i+1) for i in xrange(len(a))
-        ), "<=", a0
-    print "Minimal equivalent knapsack inequalities:"
+        ), "<=", a0)
+    print("Minimal equivalent knapsack inequalities:")
     for b, b0 in sorted(cons, key=lambda x: (x[1], x[0])):
-        # print b, b0
-        print " + ".join(
+        print(" + ".join(
             "{0:2g} x{1:d}".format(b[i], i+1) for i in xrange(len(b))
-        ), "<=", b0
+        ), "<=", b0)
 
 if __name__ == "__main__":
     main()

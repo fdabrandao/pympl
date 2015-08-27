@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import re
 import sys
@@ -127,7 +128,9 @@ class PyMPL(object):
             clean_strmatch = strmatch.strip("/*# ")
 
             if PyMPL.DEBUG:
-                print "\n---\n{0}\n{1}\n---\n".format(strmatch, match.groups())
+                print(
+                    "\n---\n{0}\n{1}\n---\n".format(strmatch, match.groups())
+                )
 
             if comment is not None:
                 if comment_cmds and comment.startswith("/*"):
@@ -204,7 +207,7 @@ class PyMPL(object):
     def write(self, mod_out):
         """Writes the output to a file."""
         with open(mod_out, "w") as fout:
-            print >>fout, self.output
+            print(self.output, file=fout)
 
     def submodels(self):
         """Returns the names of submodels used."""

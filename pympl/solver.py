@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -71,7 +72,7 @@ class Solver(object):
         if verbose is None:
             verbose = Solver.VERBOSE
         if verbose:
-            print msg
+            print(msg)
 
     @staticmethod
     def run(cmd, tee=None, grep=None, grepv=None, verbose=None):
@@ -155,7 +156,7 @@ class Solver(object):
 
 def signal_handler(signal_, frame):
     """Signal handler for a cleaner exit."""
-    print "signal received: {0}".format(signal_)
+    print("signal received: {0}".format(signal_))
     Solver.clear()
     sys.exit(0)
 

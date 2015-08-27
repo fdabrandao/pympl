@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -54,10 +55,9 @@ def main():
             "glpk_wrapper.sh", lp_out, verbose=True
         )
     except Exception as e:
-        print repr(e)
+        print(repr(e))
 
-    #print "varvalues:", [(k, v) for k, v in sorted(varvalues.items())]
-
+    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
 
 if __name__ == "__main__":
     main()

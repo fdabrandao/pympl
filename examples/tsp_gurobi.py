@@ -19,6 +19,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 import os
 import sys
@@ -87,9 +88,9 @@ def main():
 
             # add the cuts to the model
             if len(cuts) > 0:
-                print "add {0} {1}".format(
+                print("add {0} {1}".format(
                     len(cuts), "cuts" if len(cuts) > 1 else "cut"
-                )
+                ))
             for cut in cuts:
                 lincomb, sign, rhs = cut
                 expr = LinExpr([
@@ -107,7 +108,7 @@ def main():
     m._lastrun = float("-inf")
     m.optimize(sep_callback)
 
-    print "Objective:", m.ObjVal
+    print("Objective:", m.ObjVal)
 
 if __name__ == "__main__":
     main()

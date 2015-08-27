@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 
 # MPS format
 #
@@ -46,12 +47,12 @@ def mps_row(lst):
 def write_mps(model, filename):
     """Writes models to files in MPS format."""
     fout = open(filename, "w")
-    print >>fout, "NAME          MODEL"
+    print("NAME          MODEL", file=fout)
 
     # Constraints:
 
-    print >>fout, "ROWS"
-    print >>fout, mps_row([(1, "N"), (2, "OBJ")])
+    print("ROWS", file=fout)
+    print(mps_row([(1, "N"), (2, "OBJ")]), file=fout)
 
     for cname in model.cons_list:
         lincomb, sign, rhs = model.cons[cname]
@@ -61,7 +62,7 @@ def write_mps(model, filename):
             s = "L"
         else:
             s = "E"
-        print >>fout, mps_row([(1, s), (2, cname)])
+        print(mps_row([(1, s), (2, cname)]), file=fout)
 
     # A-matrix:
 
@@ -77,52 +78,52 @@ def write_mps(model, filename):
     Cvars = [v for v in model.vars_list if model.vars[v]["vtype"] != "I"]
 
     if len(Ivars) != 0:
-        print >>fout, "COLUMNS"
-        print >>fout, mps_row(
-            [(2, "MARKER"), (3, "\'MARKER\'"), (5, "\'INTORG\'")]
+        print("COLUMNS", file=fout)
+        print(
+            mps_row([(2, "MARKER"), (3, "\'MARKER\'"), (5, "\'INTORG\'")]),
+            file=fout
         )
 
         for vname in Ivars:
             for con, coef in columns[vname]:
-                print >>fout, mps_row([(2, vname), (3, con), (4, coef)])
+                print(mps_row([(2, vname), (3, con), (4, coef)]), file=fout)
 
-        print >>fout, mps_row(
-            [(2, "MARKER"), (3, "\'MARKER\'"), (5, "\'INTEND\'")]
+        print(
+            mps_row([(2, "MARKER"), (3, "\'MARKER\'"), (5, "\'INTEND\'")]),
+            file=fout
         )
 
     if len(Cvars) != 0:
         for vname in Cvars:
             for con, coef in columns[vname]:
-                print >>fout, mps_row([(2, vname), (3, con), (4, coef)])
+                print(mps_row([(2, vname), (3, con), (4, coef)]), file=fout)
 
     # Right-hand-side vector:
 
-    print >>fout, "RHS"
+    print("RHS", file=fout)
     for cname in model.cons_list:
         lincomb, sign, rhs = model.cons[cname]
-        print >>fout, mps_row([(2, "RHS1"), (3, cname), (4, rhs)])
+        print(mps_row([(2, "RHS1"), (3, cname), (4, rhs)]), file=fout)
 
     # Bounds:
 
-    print >>fout, "BOUNDS"
+    print("BOUNDS", file=fout)
 
     for vname in model.vars_list:
         lb = model.vars[vname]["lb"]
         ub = model.vars[vname]["ub"]
         if lb is not None:
-            print >>fout, mps_row(
-                [(1, "LO"), (2, "BND1"), (3, vname), (4, lb)]
+            print(
+                mps_row([(1, "LO"), (2, "BND1"), (3, vname), (4, lb)]),
+                file=fout
             )
-        # else:
-        #     print >>fout, mps_row([(1, "MI"), (2, "BND1"), (3, vname)])
 
         if ub is not None:
-            print >>fout, mps_row(
-                [(1, "UP"), (2, "BND1"), (3, vname), (4, ub)]
+            print(
+                mps_row([(1, "UP"), (2, "BND1"), (3, vname), (4, ub)]),
+                file=fout
             )
-        # else:
-        #     print >>fout, mps_row([(1, "PL"), (2, "BND1"), (3, vname)])
 
-    print >>fout, "ENDATA"
+    print("ENDATA", file=fout)
 
     fout.close()
