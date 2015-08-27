@@ -129,7 +129,7 @@ os.system("ampl ampl_model.mod")
 
 Advanced features:
 
-* Given a function `f(varname)` that takes a variable name returns its value:
+* Given a function `f(varname)` that takes a variable name and returns its value:
 
   * If any command used implements solution extraction you can use `parser[command_name].extract(f)` to extract the solution;
   * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.

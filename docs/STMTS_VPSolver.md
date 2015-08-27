@@ -1,4 +1,4 @@
-## VPSolver
+## VPSolver: Vector Packing Solver
 
 * [$VBP_LOAD[...]{...};](#vbp_load)
 * [$VBP_FLOW[...]{...};](#vbp_flow)

@@ -1,4 +1,4 @@
-## Library of reformulations for Lot-sizing problems (LS-LIB)
+## LS-LIB: Library of reformulations for Lot-sizing problems
 
 * [Introduction](#introduction)
 * [Examples](#examples)

@@ -1,4 +1,4 @@
-## General PyMPL statements
+## General PyMPL Statements
 
 * [${...}$](#eval)
 * [$EXEC{...};](#exec)
