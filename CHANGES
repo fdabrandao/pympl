@@ -1,0 +1,46 @@
+PyMPL Changelog
+===============
+
+Here you can see the full list of changes between each PyMPL release.
+
+Version 1.0
+-----------
+
+(release date to be announced, codename to be selected)
+
+
+Version 0.4.0
+-------------
+
+Released on August 27th 2015, codename Covert Rain
+
+- Various bugfixes.
+- Various improvements.
+- Added documentation.
+- Added an initial version of LS-LIB.
+
+Version 0.3.0
+-------------
+
+Released on August 25th 2015, codename Amber Mare
+
+- Various bugfixes.
+- Various improvements.
+- Added documentation.
+- Added a Dockerfile for testing.
+
+Version 0.2.0
+-------------
+
+Released on August 25th 2015, codename Space Storm
+
+- Various bugfixes.
+- Various improvements.
+- Added setup scripts.
+
+Version 0.1.0
+-------------
+
+Released on August 25th 2015, codename Sapphire Robot
+
+- First public preview release.
