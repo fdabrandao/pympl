@@ -5,8 +5,8 @@ PyMPL
 PyMPL is a python extension to the AMPL modelling language that adds
 new statements for evaluating python code within AMPL models.
 PyMPL also includes, among others, procedures for modelling piecewise
-linear functions, compressed arc-flow graphs for vector packing, and
-sub-tour elimination constraints for TSP.
+linear functions, compressed arc-flow graphs for vector packing,
+lot-sizing reformulations, and sub-tour elimination constraints for TSP.
 
 Setup
 `````
@@ -52,7 +52,7 @@ def ls_dir(base_dir):
 
 setup(
     name="PyMPL",
-    version="0.3.0",
+    version="0.4.0",
     license="GPLv3+",
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
@@ -66,7 +66,7 @@ setup(
     platforms='any',
     install_requires=[],
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 3 - Alpha",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Topic :: Scientific/Engineering"
