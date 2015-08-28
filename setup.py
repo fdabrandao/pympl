@@ -33,7 +33,6 @@ class CustomInstallCommand(install):
     """Custom Install Command."""
 
     def run(self):
-        os.system("/bin/cp " + self.install_scripts)
         install.run(self)
 
 
