@@ -178,56 +178,56 @@ end;
 * `d`- list of size `NT` with the demand for each period;
 * `L`- production lower-bound;
 * `C`- production capacity;
-* `Tk`- approximation parameter.
+* `Tk`- approximation parameter (default: `NT`).
 
 For more details please refer to the book Production Planning by Mixed Integer Programming.
 
 ### Wagner-Whitin models
 
 #### WW_U
-Usage: `$WW_U{s, y, d, NT, Tk};`
+Usage: `$WW_U{s, y, d, NT, Tk=None};`
 
 Description: Basic Wagner-Whitin.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_U_B
-Usage: `$WW_U_B{s, r, y, d, NT, Tk};`
+Usage: `$WW_U_B{s, r, y, d, NT, Tk=None};`
 
 Description: Wagner-Whitin and Backlogging.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_U_SC
-Usage: `$WW_U_SC{s, y, z, d, NT, Tk};`
+Usage: `$WW_U_SC{s, y, z, d, NT, Tk=None};`
 
 Description: Wagner-Whitin and Start-up.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_U_SCB
-Usage: `$WW_U_SCB{s, r, y, z, w, d, NT, Tk};`
+Usage: `$WW_U_SCB{s, r, y, z, w, d, NT, Tk=None};`
 
 Description: Wagner-Whitin, Backlogging and Start-up.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_U_LB
-Usage: `$WW_U_LB{s, y, d, L, NT, Tk};`
+Usage: `$WW_U_LB{s, y, d, L, NT, Tk=None};`
 
 Description: Wagner-Whitin, Constant Lower Bound.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_CC
-Usage: `$WW_CC{s, y, d, C, NT, Tk};`
+Usage: `$WW_CC{s, y, d, C, NT, Tk=None};`
 
 Description: Wagner-Whitin, Constant Capacity.
 
 Parameters: see [parameter description](#parameters).
 
 #### WW_CC_B
-Usage: `$WW_CC_B{s, r, y, d, C, NT, Tk};`
+Usage: `$WW_CC_B{s, r, y, d, C, NT, Tk=None};`
 
 Description: Wagner-Whitin, Constant Capacity and Backlogging.
 
@@ -236,21 +236,21 @@ Parameters: see [parameter description](#parameters).
 ### Lot-sizing models
 
 #### LS_U or LS_U1
-Usage: `$LS_U{s, x, y, d, NT, Tk};` or `LS_U1{s, x, y, d, NT, Tk};`
+Usage: `$LS_U{s, x, y, d, NT, Tk=None};` or `LS_U1{s, x, y, d, NT, Tk=None};`
 
 Description: Multi-commodity formulation for LS-U.
 
 Parameters: see [parameter description](#parameters).
 
 #### LS_U2
-Usage: `$LS_U2{s, x, y, d, NT, Tk};`
+Usage: `$LS_U2{s, x, y, d, NT, Tk=None};`
 
 Description: Shortest path formulation for LS-U.
 
 Parameters: see [parameter description](#parameters).
 
 #### LS_U_B
-Usage: `$LS_U_B{s, r, x, y, d, NT, Tk};`
+Usage: `$LS_U_B{s, r, x, y, d, NT, Tk=None};`
 
 Description: Multi-commodity formulation for LS-U-B.
 
