@@ -127,7 +127,7 @@ class PyMPL(object):
             comment, call, args1, args2, args3 = match.groups()
             assert call in self._cmds
             strmatch = self.input[match.start():match.end()]
-            clean_strmatch = strmatch.strip("/*# ")
+            clean_strmatch = strmatch.strip("/*#$; ")
 
             if PyMPL.DEBUG:
                 print(
