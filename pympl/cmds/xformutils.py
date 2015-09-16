@@ -48,10 +48,10 @@ The implementations are a direct translation from the LS-LIB's xform.mos file.
 !    LS-U-B      **DONE!** (XFormLSUB)
 
 !Added 30/9/2005
-!    DLSI-CC
-!    DLSI-CC-B
-!    DLS-CC-B    !!TODO!!!
-!    DLS-CC-SC
+!    DLSI-CC     **DONE!** (XFormDLSICC) has no effect on clb.mod!
+!    DLSI-CC-B   **DONE!** (XFormDLSICCB) seems to be ok!
+!    DLS-CC-B    **DONE!** (XFormDLSCCB) seems to be ok!
+!    DLS-CC-SC   **DONE!** (XFormDLSCCSC) wrong solution on clb.mod!
 
 ! Added 30/9/05 (not in Xformsimple)
 !    WW-U-LB     **DONE!** (XFormWWULB) has no effect on clb.mod!
@@ -71,7 +71,7 @@ def mrange(a, b):
     return range(a, b+1)
 
 
-def CumulDemand(d, NT):
+def CumulDemand(d, D, NT):
     """
     procedure CumulDemand(
         d : array (range) of real,
@@ -82,7 +82,6 @@ def CumulDemand(d, NT):
         forall (k in 1..NT,l in 1..k-1) D(k,l):=0
     end-procedure
     """
-    D = {}
     for k in mrange(1, NT):
         D[k, k] = d[k]
     for k in mrange(1, NT):
@@ -91,7 +90,21 @@ def CumulDemand(d, NT):
     for k in mrange(1, NT):
         for l in mrange(1, k-1):
             D[k, l] = 0
-    return D
+
+
+def CumulDemand0(d, D, NT):
+    """
+    procedure CumulDemand0(
+        d : array (range) of real,
+        D : array (range) of real,
+        NT : integer)
+        D(1):=d(1)
+        forall (l in 2..NT) D(l):=D(l-1)+d(l)
+    end-procedure
+    """
+    D[1] = d[1]
+    for l in mrange(2, NT):
+        D[l] = D[l-1]+d[l]
 
 
 def XFormWWU(model, s, y, d, NT, Tk, prefix=""):
@@ -121,7 +134,8 @@ def XFormWWU(model, s, y, d, NT, Tk, prefix=""):
     end-procedure
     """
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
 
     # forall (k in 1..NT,l in k..minlist(NT,k+Tk-1)| D(l,l)>0) XWW(k,l) :=
     # s(k-1) >= D(k,l) - sum (i in k..l) D(i,l)*y(i)
@@ -172,7 +186,8 @@ def XFormWWUB(model, s, r, y, d, NT, Tk, prefix=""):
     end-procedure
     """
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
 
     def avar(i):
         return prefix+"a_{0}".format(i)
@@ -247,7 +262,8 @@ def XFormWWUSC(model, s, y, z, d, NT, Tk, prefix=""):
     end-procedure
     """
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
 
     # forall (k in 1..NT,l in k..minlist(NT,k+Tk-1)| D(l,l)>0) XWW(k,l) :=
     # s(k-1) >= D(k,l) - D(k,l)*y(k) - sum (i in k+1..l) D(i,l)*z(i)
@@ -409,7 +425,8 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
         return prefix+"ds_{0}".format(i)
 
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
 
     gs = {}
     # forall(k in Ts0,t in k+1..minlist(NT,k+Tk))
@@ -560,7 +577,8 @@ def XFormWWCC(model, s, y, d, C, NT, Tk, prefix=""):
     # CumulDemand(d,D,NT)
     # forall(k in 1..NT,t in k..minlist(NT,k+Tk-1))
     # gs(k-1,t):=D(k,t)-C*floor(D(k,t)/C)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
     gs = {}
     for k in mrange(1, NT):
         for t in mrange(k, min(NT, k+Tk-1)):
@@ -780,7 +798,8 @@ def XFormWWCCB(model, s, r, y, d, C, NT, Tk, prefix=""):
     end-procedure
     """
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
     if 2 <= Tk <= NT:
         t1 = 2-Tk
         while True:
@@ -915,7 +934,8 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
     end-procedure
     """
     # CumulDemand(d,D,NT)
-    D = CumulDemand(d, NT)
+    D = {}
+    CumulDemand(d, D, NT)
 
     def v1var(i):
         return prefix+"v1_{0}".format(i)
@@ -1162,3 +1182,329 @@ def XFormLSUB(model, s, r, x, y, d, NT, Tk, prefix=""):
     end-procedure
     """
     XFormLSUBMC(model, s, r, x, y, d, NT, Tk, prefix)
+
+
+def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
+    """
+    DLSI-CC
+
+    procedure XFormDLSICC(
+        s : linctr,
+        y : array (range) of linctr,
+        d : array (range) of real,
+        C : real,
+        NT : integer,
+        Tk : integer,
+        MC : integer)
+
+        declarations
+            ws: array(range) of mpvar
+            gs: array(range) of real
+            ds: mpvar
+            XS,XW: linctr
+            XKT:array (1..NT) of linctr
+            D : array (range) of real
+        end-declarations
+
+        CumulDemand0(d,D,NT)
+
+        forall(t in 1..minlist(NT,Tk)) create(ws(t))
+
+        forall(t in 1..minlist(NT,Tk)) do
+            gs(t):=D(t)-C*floor(D(t)/C)
+        end-do
+
+        XS:=s>=C*ds+sum(i in 1..minlist(NT,Tk))gs(i)*ws(i)
+        XW:=sum(i in 1..minlist(NT,Tk)) ws(i)<=1
+        forall (t in 1..minlist(NT,Tk))
+            XKT(t):= ds+sum(i in 1..t)y(i)+
+                       sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >=
+                       ceil(D(t)/C)
+    end-procedure
+    """
+    def wsvar(i):
+        return prefix+"ws_{0}".format(i)
+
+    def dsvar():
+        return prefix+"ds"
+
+    # CumulDemand0(d,D,NT)
+    D = {}
+    CumulDemand0(d, D, NT)
+
+    # forall(t in 1..minlist(NT,Tk)) create(ws(t))
+    for t in mrange(1, min(NT, Tk)):
+        model.add_var(name=wsvar(t), lb=0)
+
+    # forall(t in 1..minlist(NT,Tk)) do
+    #    gs(t):=D(t)-C*floor(D(t)/C)
+    # end-do
+    gs = {}
+    for t in mrange(1, min(NT, Tk)):
+        gs[t] = D[t] - C*floor(D[t]/C)
+
+    # XS:=s>=C*ds+sum(i in 1..minlist(NT,Tk))gs(i)*ws(i)
+    model.add_con(s, ">=", [(gs[i], wsvar(i)) for i in mrange(1, min(NT, Tk))])
+
+    # XW:=sum(i in 1..minlist(NT,Tk)) ws(i)<=1
+    model.add_con([wsvar(i) for i in mrange(1, min(NT, Tk))], "<=", 1)
+
+    # forall (t in 1..minlist(NT,Tk)) XKT(t) :=
+    #   ds+sum(i in 1..t)y(i)+
+    #   sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >= ceil(D(t)/C)
+    model.add_var(name=dsvar(), lb=0)
+    for t in mrange(1, min(NT, Tk)):
+        lhs = [dsvar()]
+        lhs += [y[i] for i in mrange(1, t)]
+        lhs += [wsvar(i) for i in mrange(1, min(NT, Tk)) if gs[i] >= gs[t]]
+        model.add_con(lhs, ">=", ceil(D[t]/C))
+
+
+def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
+    """
+    DLSI-CC-B
+
+    procedure XFormDLSICCB(
+        s : linctr,
+        r : array (range) of linctr,
+        y : array (range) of linctr,
+        d : array (range) of real,
+        C : real,
+        NT : integer,
+        Tk : integer,
+        MC : integer)
+
+        declarations
+        Tkk: integer
+        end-declarations
+        Tkk:=minlist(NT,Tk)
+
+
+        declarations
+            a: array(0..Tkk) of mpvar
+            z: array(0..Tkk) of linctr
+            f: array(0..Tkk,0..Tkk) of real
+            X1,X2:array(0..Tkk,0..Tkk) of linctr
+            X3,X4:array(1..Tkk) of linctr
+            D : array (1..Tkk) of real
+        end-declarations
+
+        CumulDemand0(d,D,Tkk)
+        f(0,0):=0
+        forall(j in 1..Tkk) f(j,0):=D(j)/C-floor(D(j)/C)
+        forall(j in 1..Tkk,l in 0..Tkk|j<>l)
+            f(j,l):=f(j,0)-f(l,0)+if(f(j,0)<f(l,0),1,0)
+
+        forall(j in 1..Tkk) z(j):=sum(i in 1..j) y(i) - floor(D(j)/C)
+
+        forall (j in 1..Tkk,l in 0..Tkk|f(l,0)>f(j,0))
+            X1(j,l):= s+r(j)+C*f(j,l)*z(j) >= C*f(l,0)+a(j)-a(l)
+        forall (j in 1..Tkk,l in 0..Tkk|f(l,0)<f(j,0))
+            X2(j,l):= r(j)+C*f(j,l)*z(j) >= a(j)-a(l)
+        forall (l in 1..Tkk)
+            X3(l):= s >= C*f(l,0)+a(0)-a(l)
+        forall (j in 1..Tkk)
+            X4(j):= s+r(j)+C*z(j) >= C*f(j,0)
+
+    end-procedure
+    """
+    def zvar(i):
+        return prefix+"z_{0}".format(i)
+
+    def avar(i):
+        return prefix+"a_{0}".format(i)
+
+    # CumulDemand0(d,D,NT)
+    D = {}
+    CumulDemand0(d, D, NT)
+
+    # Tkk:=minlist(NT,Tk)
+    Tkk = min(NT, Tk)
+
+    # f(0,0):=0
+    # forall(j in 1..Tkk) f(j,0):=D(j)/C-floor(D(j)/C)
+    # forall(j in 1..Tkk,l in 0..Tkk|j<>l)
+    #   f(j,l):=f(j,0)-f(l,0)+if(f(j,0)<f(l,0),1,0)
+    f = {}
+    f[0, 0] = 0
+    for j in mrange(1, Tkk):
+        f[j, 0] = D[j]/C-floor(D[j]/C)
+    for j in mrange(1, Tkk):
+        for l in mrange(0, Tkk):
+            if j != l:
+                f[j, l] = f[j, 0]-f[l, 0]+(1 if f[j, 0] < f[l, 0] else 0)
+
+    # forall(j in 1..Tkk) z(j):=sum(i in 1..j) y(i) - floor(D(j)/C)
+    for j in mrange(1, Tkk):
+        model.add_var(name=zvar(j), lb=0)
+        rhs = [y[i] for i in mrange(1, j)]+[-floor(D[j]/C)]
+        model.add_con(zvar(j), "=", rhs)
+
+    # a: array(0..Tkk) of mpvar
+    for i in mrange(0, Tkk):
+        model.add_var(name=avar(i), lb=0)
+
+    # forall (j in 1..Tkk,l in 0..Tkk|f(l,0)>f(j,0)) X1(j,l) :=
+    # s+r(j)+C*f(j,l)*z(j) >= C*f(l,0)+a(j)-a(l)
+    for j in mrange(1, Tkk):
+        for l in mrange(0, Tkk):
+            if f[l, 0] > f[j, 0]:
+                lhs = [s, r[j], (C*f[j, l], zvar(j))]
+                rhs = [C*f[l, 0], (1, avar(j)), (-1, avar(l))]
+                model.add_con(lhs, ">=", rhs)
+
+    # forall (j in 1..Tkk,l in 0..Tkk|f(l,0)<f(j,0)) X2(j,l) :=
+    # r(j)+C*f(j,l)*z(j) >= a(j)-a(l)
+    for j in mrange(1, Tkk):
+        for l in mrange(0, Tkk):
+            if f[l, 0] < f[j, 0]:
+                lhs = [r[j], (C*f[j, l], zvar(j))]
+                rhs = [(1, avar(j)), (-1, avar(l))]
+                model.add_con(lhs, ">=", rhs)
+
+    # forall (l in 1..Tkk) X3(l) :=
+    # s >= C*f(l,0)+a(0)-a(l)
+    for l in mrange(1, Tkk):
+        model.add_con(s, ">=", [C*f[l,0], (1, avar(0)), (-1, avar(l))])
+
+    # forall (j in 1..Tkk) X4(j) :=
+    # s+r(j)+C*z(j) >= C*f(j,0)
+    for j in mrange(1, Tkk):
+        model.add_con([s, r[j], (C, zvar(j))], ">=", C*f[j, 0])
+
+
+def XFormDLSCCB(model, r, y, d, C, NT, Tk, prefix=""):
+    """
+    DLS-CC-B
+
+    procedure XFormDLSCCB(
+        r : array (range) of linctr,
+        y : array (range) of linctr,
+        d : array (range) of real,
+        C : real,
+        NT : integer,
+        Tk : integer,
+        MC : integer)
+
+        declarations
+
+            eta: array(1..NT) of integer
+            rr: array(1..NT) of real
+            Aee:array (1..NT) of linctr
+            D : array (range,range) of real
+        end-declarations
+
+        CumulDemand(d,D,NT)
+
+        forall(t in 1..NT) do
+            eta(t):= ceil(D(1,t)/C)
+            rr(t):= D(1,t)-C*floor(D(1,t)/C)
+        end-do
+
+        if(Tk>0) then
+          forall(t in 1..Tk| D(1,t)>0 and rr(t)<> 0)
+          Aee(t):= r(t) +SUM(v in 1..t)rr(t)*y(v)>= rr(t)*eta(t)
+        end-if
+
+        if (MC >0 and Tk > 0) then
+        forall(t in 1..Tk| D(1,t)>0 and rr(t)<> 0)
+        setmodcut(Aee(t))
+    end-if
+    end-procedure
+    """
+    # CumulDemand(d,D,NT)
+    D = {}
+    CumulDemand(d, D, NT)
+
+    # forall(t in 1..NT) do
+    #   eta(t):= ceil(D(1,t)/C)
+    #   rr(t):= D(1,t)-C*floor(D(1,t)/C)
+    # end-do
+    eta = {}
+    rr = {}
+    for t in mrange(1, NT):
+        eta[t] = ceil(D[1, t]/C)
+        rr[t] = D[1, t]-C*floor(D[1, t]/C)
+
+    # if(Tk>0) then
+    #   forall(t in 1..Tk| D(1,t)>0 and rr(t)<> 0)
+    #   Aee(t):= r(t) +SUM(v in 1..t)rr(t)*y(v)>= rr(t)*eta(t)
+    # end-if
+    if Tk > 0:
+        for t in mrange(1, Tk):
+            if D[1, t] > 0 and rr[t] != 0:
+                lhs = [r[t]]+[(rr[t], y[v]) for v in mrange(1, t)]
+                model.add_con(lhs, ">=", rr[t]*eta[t])
+
+
+def XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix=""):
+    """
+    DLS-CC-SC
+
+    procedure XFormDLSCCSC(
+        s : array (range) of linctr,
+        y : array (range) of linctr,
+        z : array (range) of linctr,
+        d : array (range) of real,
+        NT : integer,
+        Tk : integer,
+        MC: integer)
+        ! Modification 4-10-2009
+        !Valid for more general integer demands
+        !Need to have demands in 0,1
+
+        declarations
+            XWW: array (1..NT,range) of linctr
+            D : array (range,range) of real
+            ! Added 2/10/05
+            BA: array(range,range,range) of linctr
+        end-declarations
+
+        CumulDemand(d,D,NT)
+
+        ! Changed 4-10-2009
+        !forall(t in 1..NT,l in t..NT,p1 in 1..Tk|
+        !    t>= l-Tk and d(l)>0 and floor(D(t,l))= p1 and t<= NT+1-p1)
+        forall(t in 1..NT,l in t..NT,p1 in 1..minlist(Tk,l-t)|
+            t>= l-Tk and d(l)>0 and floor(D(t,l))= p1 and t<= NT+1-p1)
+            BA(t,l,p1):=
+                IF(t> 1,s(t-1),0)>= D(t,l)-
+                SUM(u in t..t+p1-1)y(u)-
+                SUM(u in t+1..t+p1-1)(D(u,l)-p1+u-t)*z(u) -
+                SUM(u in t+p1..l|t+p1<= l)(D(u,l))*z(u)
+
+        if MC >0 then
+            forall(t in 1..NT,l in t..NT,p1 in 1..Tk|
+                t>= l-Tk and d(l)>0 and floor(D(t,l))= p1 and t<= NT+1-p1)
+                setmodcut(BA(t,l,p1))
+        end-if
+
+    end-procedure
+    """
+    # CumulDemand(d,D,NT)
+    D = {}
+    CumulDemand(d, D, NT)
+
+    # forall(t in 1..NT,l in t..NT,p1 in 1..minlist(Tk,l-t)|
+    #   t>= l-Tk and d(l)>0 and floor(D(t,l))= p1 and t<= NT+1-p1) BA(t,l,p1):=
+    #     IF(t> 1,s(t-1),0)>= D(t,l)-
+    #     SUM(u in t..t+p1-1)y(u)-
+    #     SUM(u in t+1..t+p1-1)(D(u,l)-p1+u-t)*z(u) -
+    #     SUM(u in t+p1..l|t+p1<= l)(D(u,l))*z(u)
+    for t in mrange(1, NT):
+        for l in mrange(t, NT):
+            for p1 in mrange(1, min(Tk, l-t)):
+                if (t >= l-Tk and d[l] > 0 and
+                        floor(D[t, l]) == p1 and t <= NT+1-p1):
+                    lhs = s[t-1] if t > 1 else 0
+                    rhs = [D[t, l]]
+                    rhs += [(-1, y[u]) for u in mrange(t, t+p1-1)]
+                    rhs += [
+                        (-1*(D[u, l]-p1+u-t), z[u])
+                        for u in mrange(t+1, t+p1-1)
+                    ]
+                    rhs += [
+                        (-D[u, l], z[u])
+                        for u in mrange(t+p1, l)
+                    ]
+                    model.add_con(lhs, ">=", rhs)

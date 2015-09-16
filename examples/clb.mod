@@ -3,7 +3,8 @@ $EXEC{
 def mrange(a, b):
     return range(a, b+1)
 
-BACKLOG = False
+BACKLOG = True
+DISCRETE = True
 };
 
 $PARAM[NI]{4}; # number of items
@@ -56,8 +57,10 @@ minimize cost:
 s.t. dem_sat{i in 1..NI, t in 1..NT}:
     (if t > 1 then s[i, t-1] - r[i, t-1]) + x[i, t] = d[i, t] + s[i, t] - r[i, t];
 
-s.t. upper_bound{i in 1..NI, t in 1..NT}: x[i, t] <= C*y[i, t];
-s.t. lower_bound{i in 1..NI, t in 1..NT}: x[i, t] >= L*y[i, t];
+s.t. upper_bound{i in 1..NI, t in 1..NT}:
+    x[i, t] ${"==" if DISCRETE else "<="}$ C*y[i, t];
+s.t. lower_bound{i in 1..NI, t in 1..NT}:
+    x[i, t] >= L*y[i, t];
 
 s.t. setups1{i in 1..NI, t in 1..NT}:
     z[i, t] - (if t > 1 then w[i, t-1]) = y[i, t] - (if t > 1 then y[i, t-1]);
@@ -72,24 +75,41 @@ NT = _params["NT"]
 L = _params["L"]
 C = _params["C"]
 demand = _params["d"]
-for i in mrange(1, NI):
-    s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    x = ["x[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    d = [demand[i, t] for t in mrange(1, NT)]
-    if BACKLOG is False:
-        WW_U(s, y, d, NT)
-        WW_U_SC(s, y, z, d, NT)
-        WW_CC(s, y, d, C, NT)
-    else:
-        r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        #WW_U_B(s, r, y, d, NT)
-        LS_U_B(s, r, x, y, d, NT)
-        #WW_U_SCB(s, r, y, z, w, d, NT, Tk=5)
-        #WW_CC_B(s, r, y, d, C, NT, Tk=5)
-    #WW_U_LB(s, y, d, L, NT, Tk=5)
+if DISCRETE is False:
+    for i in mrange(1, NI):
+        s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        x = ["x[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        d = [demand[i, t] for t in mrange(1, NT)]
+        if BACKLOG is False:
+            WW_U(s, y, d, NT)
+            WW_U_SC(s, y, z, d, NT)
+            WW_CC(s, y, d, C, NT)
+        else:
+            r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
+            w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
+            #WW_U_B(s, r, y, d, NT)
+            LS_U_B(s, r, x, y, d, NT)
+            #WW_U_SCB(s, r, y, z, w, d, NT, Tk=5)
+            #WW_CC_B(s, r, y, d, C, NT, Tk=5)
+        #WW_U_LB(s, y, d, L, NT, Tk=5)
+else:
+   for i in mrange(1, NI):
+        s0 = 0
+        s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        d = [demand[i, t] for t in mrange(1, NT)]
+        if BACKLOG is False:
+            DLSI_CC(s0, y, d, C, NT)
+            #DLS_CC_SC(s, y, z, d, NT)
+            pass
+        else:
+            r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
+            DLSI_CC_B(s0, r, y, d, C, NT)
+            #DLS_CC_B(r, y, d, C, NT)
+            pass
 };
 
 solve;

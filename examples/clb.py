@@ -67,7 +67,7 @@ def main():
     try:
         out, varvalues = script_wsol(
             "gurobi_wrapper.sh", lp_out,
-            options="Threads=1 Heuristics=0.25 MIPGap=0", verbose=True
+            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
         )
     except Exception as e:
         print(repr(e))

@@ -34,6 +34,10 @@ from .xformutils import XFormLSU1
 from .xformutils import XFormLSU2
 from .xformutils import XFormLSU
 from .xformutils import XFormLSUB
+from .xformutils import XFormDLSICC
+from .xformutils import XFormDLSICCB
+from .xformutils import XFormDLSCCB
+from .xformutils import XFormDLSCCSC
 
 
 class SubmodWWU(SubmodBase):
@@ -492,6 +496,154 @@ class SubmodLSUB(SubmodBase):
         for var in varl:
             model.add_var(name=var)
         XFormLSUB(model, s, r, x, y, d, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodDLSICC(SubmodBase):
+    """Command for creating DLSI-CC extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s0, y, d, C, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_dlsicc_{0}_".format(self._cnt)
+
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = [s0] + y
+
+        y = {i+1: y[i] for i in range(NT)}
+        d = {i+1: d[i] for i in range(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+
+        XFormDLSICC(model, s0, y, d, C, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodDLSICCB(SubmodBase):
+    """Command for creating DLSI-CC-B extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s0, r, y, d, C, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_dlsiccb_{0}_".format(self._cnt)
+
+        assert isinstance(r, list) and len(r) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = [s0] + r + y
+
+        r = {i+1: r[i] for i in range(NT)}
+        y = {i+1: y[i] for i in range(NT)}
+        d = {i+1: d[i] for i in range(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+
+        XFormDLSICCB(model, s0, r, y, d, C, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodDLSCCB(SubmodBase):
+    """Command for creating DLS-CC-B extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, r, y, d, C, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_dlsccb_{0}_".format(self._cnt)
+
+        assert isinstance(r, list) and len(r) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = r + y
+
+        r = {i+1: r[i] for i in range(NT)}
+        y = {i+1: y[i] for i in range(NT)}
+        d = {i+1: d[i] for i in range(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+
+        XFormDLSCCB(model, r, y, d, C, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
+class SubmodDLSCCSC(SubmodBase):
+    """Command for creating DLS-CC-SC extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, y, z, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_dlsccsc_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(z, list) and len(z) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + y + z
+
+        s = {i+1: s[i] for i in range(NT)}
+        y = {i+1: y[i] for i in range(NT)}
+        z = {i+1: z[i] for i in range(NT)}
+        d = {i+1: d[i] for i in range(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+
+        XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)

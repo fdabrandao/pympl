@@ -174,7 +174,7 @@ class TestPyMPL(unittest.TestCase):
         self.assertNotIn("param VALUE2 := 10;", parser.output)
         self.assertIn("param Y := 10;", parser.output)
         self.assertIn("# $PARAM[VALUE]{10};", parser.output)
-        self.assertIn("/*EVALUATED:$PARAM[Y]{10};*/", parser.output)
+        self.assertIn("/*EVALUATED:PARAM[Y]{10}*/", parser.output)
 
     def test_exceptions(self):
         """Tests if exceptions are thrown correctly"""
