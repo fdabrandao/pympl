@@ -45,31 +45,39 @@ class CmdParam(CmdBase):
         """Evalutates CMD[arg1](*args)."""
         match = utils.parse_indexed(arg1, "{}")
         assert match is not None
-        name, index = match
+        name, index_list = match
 
         if isinstance(values, list):
             if i0 is None:
                 i0 = 0
             values = utils.list2dict(values, i0)
-            if index is not None:
-                assert len(index) == 1
-                index = index[0]
+            if index_list is not None:
+                assert len(index_list) == 1
         elif isinstance(values, dict):
             assert i0 is None
-            if index is not None:
-                assert len(index) == 1
-                index = index[0]
         else:
             assert i0 is None
-            assert index is None
+            assert index_list is None
 
         if isinstance(values, dict):
-            if index is None:
-                index = "{0}_I".format(name)
-            self._pyvars["_defs"] += utils.ampl_set(
-                index, list(values.keys()), self._sets, self._params
-            )[0]
+            if index_list is None:
+                index_list = ["{0}_I".format(name)]
+            if len(index_list) == 1:
+                index = index_list[0]
+                self._pyvars["_defs"] += utils.ampl_set(
+                    index, list(values.keys()), self._sets, self._params
+                )[0]
+            else:
+                for i, index in enumerate(index_list):
+                    keys = [k[i] for k in values.keys()]
+                    self._pyvars["_defs"] += utils.ampl_set(
+                        index, keys, self._sets, self._params
+                    )[0]
 
+        if index_list is None:
+            index = None
+        else:
+            index = ",".join([index.replace("^", "") for index in index_list])
         pdefs, pdata = utils.ampl_param(
             name, index, values, self._sets, self._params
         )

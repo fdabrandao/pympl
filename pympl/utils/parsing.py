@@ -21,7 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import re
 
-t_SYMBNAME = r'\^?[a-zA-Z_][a-zA-Z0-9_]*'
+t_SYMBNAME1 = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_SYMBNAME2 = r'\^[^,\[\]\{\}]*'
+t_SYMBNAME = r'(?:'+t_SYMBNAME1+r'|'+t_SYMBNAME2+r')'
 t_INDEX1 = r'(?:\s*\[[^\]]*\])?' # [] index
 t_INDEX2 = r'(?:\s*{[^}]*})?' # {} index
 t_SYMBNAME_INDEX1 = t_SYMBNAME + t_INDEX1
