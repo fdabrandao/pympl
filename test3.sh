@@ -20,5 +20,6 @@
 BASEDIR=`dirname $0`
 cd $BASEDIR
 
-python3 examples/test.py $*      || exit 1
-python3 examples/unittests.py $* || exit 1
+python3 examples/test.py $*         || exit 1
+python3 examples/test_ppbymip.py $* || exit 1
+python3 examples/unittests.py $*    || exit 1
