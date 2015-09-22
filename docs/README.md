@@ -1,4 +1,4 @@
-## PyMPL: Mathematical Programming Toolbox
+## PyMPL: A Mathematical Programming Toolbox
 
 Copyright (C) 2015-2015, Filipe Brandão  
 Faculdade de Ciencias, Universidade do Porto  

@@ -93,14 +93,14 @@
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 <span class="pl-k">var</span> x1, <span class="pl-k">&gt;=</span> ${<span class="pl-c1">2</span><span class="pl-k">+</span><span class="pl-c1">6</span>}$, <span class="pl-k">&lt;=</span> ${<span class="pl-c1">10</span><span class="pl-k">*</span><span class="pl-c1">5</span>}$;
 s.t. con1<span class="pl-k">:</span> x <span class="pl-k">+</span> y <span class="pl-k">&lt;=</span> ${<span class="pl-k">abs</span>((<span class="pl-c1">2</span><span class="pl-k">**</span><span class="pl-c1">7</span>)<span class="pl-k">/</span><span class="pl-c1">5</span><span class="pl-k">-</span><span class="pl-c1">135</span>)}$ <span class="pl-k">*</span> z;
 <span class="pl-k">..</span>.</pre></div>
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 <span class="pl-k">var</span> x1, <span class="pl-k">&gt;=</span> <span class="pl-c1">8</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">50</span>;
 s.t. con1<span class="pl-k">:</span> x <span class="pl-k">+</span> y <span class="pl-k">&lt;=</span> <span class="pl-c1">110</span> <span class="pl-k">*</span> z;
 <span class="pl-k">..</span>.</pre></div>
@@ -142,7 +142,7 @@ s.t. con1<span class="pl-k">:</span> x <span class="pl-k">+</span> y <span class
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $EXEC{
 <span class="pl-k">for</span> i <span class="pl-k">in</span> range(<span class="pl-c1">3</span>)<span class="pl-k">:</span>
     STMT(<span class="pl-s"><span class="pl-pds">"</span>var x{0}, integer, &gt;= 0, &lt;= {1};<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, i<span class="pl-k">+</span><span class="pl-c1">1</span>))
@@ -151,7 +151,7 @@ $EXEC{
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">var</span> x0, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">1</span>;
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">var</span> x0, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">1</span>;
 <span class="pl-k">var</span> x1, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">2</span>;
 <span class="pl-k">var</span> x2, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">3</span>;</pre></div>
 
@@ -195,7 +195,7 @@ $EXEC{
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $STMT{<span class="pl-s"><span class="pl-pds">"</span>s.t. con1: x + y &lt;= {0} * z;<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(<span class="pl-k">abs</span>((<span class="pl-c1">2</span><span class="pl-k">**</span><span class="pl-c1">7</span>)<span class="pl-k">/</span><span class="pl-c1">5</span><span class="pl-k">-</span><span class="pl-c1">135</span>))};
 $EXEC{stmt <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>s.t. {0}: x &gt;= 10;<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(<span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>)};
 $STMT{stmt};
@@ -203,7 +203,7 @@ $STMT{stmt};
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 s.t. con1<span class="pl-k">:</span> x <span class="pl-k">+</span> y <span class="pl-k">&lt;=</span> <span class="pl-c1">110</span> <span class="pl-k">*</span> z;
 s.t. test<span class="pl-k">:</span> x <span class="pl-k">&gt;=</span> <span class="pl-c1">10</span>;
 <span class="pl-k">..</span>.</pre></div>
@@ -256,14 +256,14 @@ s.t. test<span class="pl-k">:</span> x <span class="pl-k">&gt;=</span> <span cla
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $<span class="pl-k">SET</span>[A]{range(<span class="pl-c1">5</span>)};
 $<span class="pl-k">SET</span>[B]{zip(range(<span class="pl-c1">5</span>),range(<span class="pl-c1">5</span>))};
 <span class="pl-k">..</span>.</pre></div>
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">set</span> A <span class="pl-k">:=</span> {<span class="pl-c1">0</span>,<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>};
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">set</span> A <span class="pl-k">:=</span> {<span class="pl-c1">0</span>,<span class="pl-c1">1</span>,<span class="pl-c1">2</span>,<span class="pl-c1">3</span>,<span class="pl-c1">4</span>};
 <span class="pl-k">set</span> B <span class="pl-k">:=</span> {(<span class="pl-c1">0</span>,<span class="pl-c1">0</span>),(<span class="pl-c1">1</span>,<span class="pl-c1">1</span>),(<span class="pl-c1">2</span>,<span class="pl-c1">2</span>),(<span class="pl-c1">3</span>,<span class="pl-c1">3</span>),(<span class="pl-c1">4</span>,<span class="pl-c1">4</span>)};</pre></div>
 
 <p>Note: Is is possible to call external functions (i.e., <code>$SET[X]{some_function(...)}</code>) that return the set.</p>
@@ -317,7 +317,7 @@ $<span class="pl-k">SET</span>[B]{zip(range(<span class="pl-c1">5</span>),range(
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $<span class="pl-k">PARAM</span>[NAME]{<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>}; 
 $<span class="pl-k">PARAM</span>[VALUE]{<span class="pl-c1">10</span>};
 $<span class="pl-k">PARAM</span>[D{I}]{{<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-c1">2</span>}};
@@ -327,7 +327,7 @@ $<span class="pl-k">PARAM</span>[L1]{[<span class="pl-c1">1</span>,<span class="
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">param</span> NAME <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>;
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">param</span> NAME <span class="pl-k">:=</span> <span class="pl-s"><span class="pl-pds">'</span>name<span class="pl-pds">'</span></span>;
 <span class="pl-k">param</span> VALUE <span class="pl-k">:=</span> <span class="pl-c1">10</span>;
 <span class="pl-k">param</span> D <span class="pl-k">:=</span> [<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>]<span class="pl-c1">1</span>[<span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>]<span class="pl-c1">2</span>;
 <span class="pl-k">set</span> I <span class="pl-k">:=</span> {<span class="pl-s"><span class="pl-pds">'</span>a<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>};
@@ -381,7 +381,7 @@ $<span class="pl-k">PARAM</span>[L1]{[<span class="pl-c1">1</span>,<span class="
 
 <p>Examples:  </p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $<span class="pl-k">VAR</span>[x]{<span class="pl-s"><span class="pl-pds">"</span>integer<span class="pl-pds">"</span></span>, <span class="pl-c1">0</span>, <span class="pl-c1">10</span>};
 $<span class="pl-k">VAR</span>[y]{<span class="pl-s"><span class="pl-pds">"</span>binary<span class="pl-pds">"</span></span>};
 $<span class="pl-k">VAR</span>[z]{ub<span class="pl-k">=abs</span>((<span class="pl-c1">2</span><span class="pl-k">**</span><span class="pl-c1">7</span>)<span class="pl-k">/</span><span class="pl-c1">5</span><span class="pl-k">-</span><span class="pl-c1">135</span>)};
@@ -390,7 +390,7 @@ $<span class="pl-k">VAR</span>[xs{I}]{<span class="pl-s"><span class="pl-pds">"<
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">var</span> x, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">10</span>;
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">var</span> x, <span class="pl-k">integer</span>, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>, <span class="pl-k">&lt;=</span> <span class="pl-c1">10</span>;
 <span class="pl-k">var</span> y, <span class="pl-k">binary</span>; 
 <span class="pl-k">var</span> z, <span class="pl-k">&lt;=</span> <span class="pl-c1">110</span>;
 <span class="pl-k">set</span> I <span class="pl-k">:=</span> {<span class="pl-c1">0</span>,<span class="pl-c1">1</span>,<span class="pl-c1">2</span>};
@@ -439,7 +439,7 @@ $<span class="pl-k">VAR</span>[xs{I}]{<span class="pl-s"><span class="pl-pds">"<
 
 <p>Examples:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-k">..</span>.
+<div class="highlight highlight-source-ampl"><pre><span class="pl-k">..</span>.
 $CON[con1]{[(<span class="pl-s"><span class="pl-pds">"</span>x1<span class="pl-pds">"</span></span>,<span class="pl-c1">5</span>),(<span class="pl-s"><span class="pl-pds">"</span>x2<span class="pl-pds">"</span></span>,<span class="pl-c1">15</span>),(<span class="pl-s"><span class="pl-pds">"</span>x3<span class="pl-pds">"</span></span>,<span class="pl-c1">10</span>)],<span class="pl-s"><span class="pl-pds">"</span>&gt;=<span class="pl-pds">"</span></span>,<span class="pl-c1">20</span>};
 $CON[con2]{[(<span class="pl-s"><span class="pl-pds">"</span>x1<span class="pl-pds">"</span></span>,<span class="pl-c1">5</span>),(<span class="pl-s"><span class="pl-pds">"</span>x2<span class="pl-pds">"</span></span>,<span class="pl-c1">15</span>),<span class="pl-k">-</span><span class="pl-c1">20</span>],<span class="pl-s"><span class="pl-pds">"</span>&gt;=<span class="pl-pds">"</span></span>,(<span class="pl-s"><span class="pl-pds">"</span>x3<span class="pl-pds">"</span></span>,<span class="pl-k">-</span><span class="pl-c1">10</span>)};
 $CON[con3]{[(<span class="pl-s"><span class="pl-pds">"</span>x1<span class="pl-pds">"</span></span>,<span class="pl-c1">5</span>)],<span class="pl-s"><span class="pl-pds">"</span>&gt;=<span class="pl-pds">"</span></span>,[(<span class="pl-s"><span class="pl-pds">"</span>x2<span class="pl-pds">"</span></span>,<span class="pl-k">-</span><span class="pl-c1">15</span>),(<span class="pl-s"><span class="pl-pds">"</span>x3<span class="pl-pds">"</span></span>,<span class="pl-k">-</span><span class="pl-c1">10</span>),<span class="pl-c1">20</span>]};
@@ -451,7 +451,7 @@ $CON[con7]{<span class="pl-s"><span class="pl-pds">"</span>x1<span class="pl-pds
 
 <p>is replaced by:</p>
 
-<div class="highlight highlight-ampl"><pre>s.t. con1<span class="pl-k">:</span> <span class="pl-k">+</span><span class="pl-c1">5</span><span class="pl-k">*</span>x1<span class="pl-k">+</span><span class="pl-c1">15</span><span class="pl-k">*</span>x2<span class="pl-k">+</span><span class="pl-c1">10</span><span class="pl-k">*</span>x3 <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span>;
+<div class="highlight highlight-source-ampl"><pre>s.t. con1<span class="pl-k">:</span> <span class="pl-k">+</span><span class="pl-c1">5</span><span class="pl-k">*</span>x1<span class="pl-k">+</span><span class="pl-c1">15</span><span class="pl-k">*</span>x2<span class="pl-k">+</span><span class="pl-c1">10</span><span class="pl-k">*</span>x3 <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span>;
 s.t. con2<span class="pl-k">:</span> <span class="pl-k">+</span><span class="pl-c1">5</span><span class="pl-k">*</span>x1<span class="pl-k">+</span><span class="pl-c1">15</span><span class="pl-k">*</span>x2<span class="pl-k">+</span><span class="pl-c1">10</span><span class="pl-k">*</span>x3 <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span>;
 s.t. con3<span class="pl-k">:</span> <span class="pl-k">+</span><span class="pl-c1">5</span><span class="pl-k">*</span>x1<span class="pl-k">+</span><span class="pl-c1">15</span><span class="pl-k">*</span>x2<span class="pl-k">+</span><span class="pl-c1">10</span><span class="pl-k">*</span>x3 <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span>;
 s.t. con4<span class="pl-k">:</span> <span class="pl-k">+</span><span class="pl-c1">5</span><span class="pl-k">*</span>x1<span class="pl-k">+</span><span class="pl-c1">15</span><span class="pl-k">*</span>x2<span class="pl-k">+</span><span class="pl-c1">10</span><span class="pl-k">*</span>x3 <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span>;

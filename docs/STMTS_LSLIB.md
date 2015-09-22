@@ -12,9 +12,15 @@
   * [$WW_CC{...};](#ww_cc)
   * [$WW_CC_B{...};](#ww_cc_b)
 * [Lot-sizing models](#lot-sizing-models)
-  * [$LS_U or LS_U1{...};](#ls_u-or-ls_u1)
+  * [$LS_U{...}; or LS_U1{...};](#ls_u-or-ls_u1)
   * [$LS_U2{...};](#ls_u2)
   * [$LS_U_B{...};](#ls_u_b)
+  * [$LS_U_SC{...};](#ls_u_sc)
+* [Discrete lot-sizing models](#discrete-lot-sizing-models)
+  * [$DLSI_CC{...};](#dlsi_cc)
+  * [$DLSI_CC_B{...};](#dlsi_cc_b)
+  * [$DLS_CC_B{...};](#dls_cc_b)
+  * [$DLS_CC_SC{...};](#dls_cc_sc)
 * [Return to the index](STMTS)
 
 ### Introduction
@@ -178,6 +184,7 @@ end;
 * `d`- list of size `NT` with the demand for each period;
 * `L`- production lower-bound;
 * `C`- production capacity;
+* `s0`- initial stock;
 * `Tk`- approximation parameter (default: `NT`).
 
 For more details please refer to the book Production Planning by Mixed Integer Programming.
@@ -253,6 +260,43 @@ Parameters: see [parameter description](#parameters).
 Usage: `$LS_U_B{s, r, x, y, d, NT, Tk=None};`
 
 Description: Multi-commodity formulation for LS-U-B.
+
+Parameters: see [parameter description](#parameters).
+
+#### LS_U_SC
+Usage: `$LS_U_SC{s, r, x, y, z, d, NT, Tk=None};`
+
+Description: Extended formulation for LS-U-SC.
+
+Parameters: see [parameter description](#parameters).
+
+### Discrete lot-sizing models
+
+#### DLSI_CC
+Usage: `$DLSI_CC{s0, y, d, C, NT, Tk=None};`
+
+Description: Discrete lot-sizing with variable initial stock.
+
+Parameters: see [parameter description](#parameters).
+
+#### DLSI_CC_B
+Usage: `$DLSI_CC_B{s0, r, y, d, C, NT, Tk=None};`
+
+Description: Discrete lot-sizing with variable initial stock and backlogging.
+
+Parameters: see [parameter description](#parameters).
+
+#### DLS_CC_B
+Usage: `$DLS_CC_B{r, y, d, C, NT, Tk=None};`
+
+Description: Discrete lot-sizing (without initial stock) with backlogging.
+
+Parameters: see [parameter description](#parameters).
+
+#### DLS_CC_SC
+Usage: `$DLS_CC_SC{s, y, z, d, C, NT, Tk=None};`
+
+Description: Discrete lot-sizing (without initial stock) with start-up costs.
 
 Parameters: see [parameter description](#parameters).
 

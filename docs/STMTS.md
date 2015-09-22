@@ -42,6 +42,7 @@ Additional statements:
 
   * [Wagner-Whitin models](STMTS_LSLIB#wagner-whitin-models): `$WW_*{...};`
   * [Lot-sizing models](STMTS_LSLIB#lot-sizing-models): `$LS_*{...};`
+  * [Discrete lot-sizing models](STMTS_LSLIB#discrete-lot-sizing-models): `$DLSI_*{...};` and `$DLS_*{...};`
 
 **Note**: The values between `[]` are usually used to name new AMPL variables, constraints, sets, or parameters. Names starting with a `^` indicate that the corresponding AMPL element should not be defined by the command. This prefix is useful when the corresponding AMPL element was declared before and we do not want to declared it again.
 

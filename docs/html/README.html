@@ -49,7 +49,7 @@
               
               <div class="markdown-body entry-content">
                 <h2>
-<a id="user-content-pympl-mathematical-programming-toolbox" class="anchor" href="#pympl-mathematical-programming-toolbox" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyMPL: Mathematical Programming Toolbox</h2>
+<a id="user-content-pympl-a-mathematical-programming-toolbox" class="anchor" href="#pympl-a-mathematical-programming-toolbox" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyMPL: A Mathematical Programming Toolbox</h2>
 
 <p>Copyright (C) 2015-2015, Filipe Brandão<br>
 Faculdade de Ciencias, Universidade do Porto<br>
@@ -76,7 +76,7 @@ Porto, Portugal. All rights reserved. E-mail: <a href="mailto:fdabrandao@dcc.fc.
 
 <p>Install from the repository:</p>
 
-<div class="highlight highlight-bash"><pre>$ sudo pip install pympl</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ sudo pip install pympl</pre></div>
 
 <p>Or build and install locally:</p>
 
@@ -90,7 +90,7 @@ $ bash test.sh test_install
 
 <p><code>piecewise_linear.mod</code></p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-c"># Evaluate python code:</span>
+<div class="highlight highlight-source-ampl"><pre><span class="pl-c"># Evaluate python code:</span>
 $EXEC{
 <span class="pl-k">xval</span>ues <span class="pl-k">=</span> [<span class="pl-c1">0</span>, <span class="pl-c1">10</span>, <span class="pl-c1">15</span>, <span class="pl-c1">25</span>, <span class="pl-c1">30</span>, <span class="pl-c1">35</span>, <span class="pl-c1">40</span>, <span class="pl-c1">45</span>, <span class="pl-c1">50</span>, <span class="pl-c1">55</span>, <span class="pl-c1">60</span>, <span class="pl-c1">70</span>]
 <span class="pl-k">yval</span>ues <span class="pl-k">=</span> [<span class="pl-c1">0</span>, <span class="pl-c1">20</span>, <span class="pl-c1">15</span>, <span class="pl-c1">10</span>, <span class="pl-c1">0</span>, <span class="pl-c1">50</span>, <span class="pl-c1">18</span>, <span class="pl-c1">0</span>, <span class="pl-c1">15</span>, <span class="pl-c1">24</span>, <span class="pl-c1">10</span>, <span class="pl-c1">15</span>]
@@ -111,7 +111,7 @@ s.t. B<span class="pl-k">:</span> <span class="pl-c1">7</span><span class="pl-k"
 
 <p><code>vector_packing.mod</code>:</p>
 
-<div class="highlight highlight-ampl"><pre><span class="pl-c"># Load a vector packing instance from a file:</span>
+<div class="highlight highlight-source-ampl"><pre><span class="pl-c"># Load a vector packing instance from a file:</span>
 $VBP_LOAD[instance1{I,D}]{<span class="pl-s"><span class="pl-pds">"</span>instance1.vbp<span class="pl-pds">"</span></span>, i0<span class="pl-k">=</span><span class="pl-c1">1</span>};
 
 <span class="pl-k">var</span> x{I}, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>;
@@ -130,7 +130,7 @@ s.t. demand{i <span class="pl-k">in</span> I}<span class="pl-k">:</span> x[i] <s
 <h3>
 <a id="user-content-pympl-parser" class="anchor" href="#pympl-parser" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyMPL Parser</h3>
 
-<div class="highlight highlight-python"><pre><span class="pl-k">import</span> os
+<div class="highlight highlight-source-python"><pre><span class="pl-k">import</span> os
 <span class="pl-k">from</span> pympl <span class="pl-k">import</span> PyMPL  <span class="pl-c"># import the parser</span>
 
 <span class="pl-c"># Create a parser and pass local and global variables to the model:</span>
