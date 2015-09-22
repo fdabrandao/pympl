@@ -214,6 +214,7 @@ class SubmodVBPFlow(SubmodBase):
 
         prefix = "_{0}_".format(zvar.lstrip("^"))
         prefix = prefix.replace("[", "_").replace("]", "_")
+        prefix = prefix.replace(",", "").replace(" ", "")
 
         graph, model, declared_vars = self._generate_model(
             zvar, W, w, b, bounds, prefix
