@@ -20,6 +20,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from builtins import map
+from builtins import range
 
 import os
 import sys
@@ -37,66 +39,46 @@ if __name__ == "__main__":
             project_dir, os.environ["PATH"]
         )
 
-import equivknapsack01
-import equivknapsack
-import wolsey
-import instance
-import tsp
-import tsp_gurobi
-import sos
-import pwl
-import twostage
+from pympl import PyMPL, glpkutils, script_wsol
+
+
+def read_table(fname, index1, index2, transpose=False):
+    """Reads a table from a file."""
+    if transpose:
+        index1, index2 = index2, index1
+    with open(fname) as f:
+        text = f.read().replace(",", "")
+        lst = list(map(float, text.split()))
+        demand = {}
+        for i1 in index1:
+            for i2 in index2:
+                if transpose:
+                    demand[i2, i1] = lst.pop(0)
+                else:
+                    demand[i1, i2] = lst.pop(0)
+        assert lst == []
+        return demand
 
 
 def main():
-    """Runs all PyMPL examples."""
+    """Parses 'ppbymip_clb.mod'"""
 
+    mod_in = "ppbymip_clb.mod"
+    mod_out = "tmp/clb.out.mod"
+    parser = PyMPL(locals_=locals(), globals_=globals())
+    parser.parse(mod_in, mod_out)
+
+    lp_out = "tmp/clb.lp"
+    glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        print("equivknapsack:")
-        equivknapsack.main()
-    except ImportError as e:
+        out, varvalues = script_wsol(
+            "gurobi_wrapper.sh", lp_out,
+            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
+        )
+    except Exception as e:
         print(repr(e))
 
-    try:
-        print("equivknapsack01:")
-        equivknapsack01.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("wolsey:")
-        wolsey.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("instance:")
-        instance.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("twostage:")
-        twostage.main()
-    except ImportError as e:
-        print(repr(e))
-
-    print("sos:")
-    sos.main()
-
-    print("pwl:")
-    pwl.main()
-
-    if "quick_test" not in sys.argv:
-        print("tsp:")
-        tsp.main()
-
-    if "quick_test" not in sys.argv:
-        print("tsp_gurobi:")
-        try:
-            tsp_gurobi.main()
-        except ImportError as e:
-            print(repr(e))
+    #print "varvalues:", [(k, v) for k, v in sorted(varvalues.items())]
 
 if __name__ == "__main__":
     main()

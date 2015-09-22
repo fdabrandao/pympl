@@ -20,6 +20,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+from builtins import map
+from builtins import range
 
 import os
 import sys
@@ -40,24 +42,43 @@ if __name__ == "__main__":
 from pympl import PyMPL, glpkutils, script_wsol
 
 
-def main():
-    """Parses 'bike.mod'"""
+def read_table(fname, index1, index2, transpose=False):
+    """Reads a table from a file."""
+    if transpose:
+        index1, index2 = index2, index1
+    with open(fname) as f:
+        text = f.read().replace(",", "")
+        lst = list(map(float, text.split()))
+        demand = {}
+        for i1 in index1:
+            for i2 in index2:
+                if transpose:
+                    demand[i2, i1] = lst.pop(0)
+                else:
+                    demand[i1, i2] = lst.pop(0)
+        assert lst == []
+        return demand
 
-    mod_in = "bike.mod"
-    mod_out = "tmp/bike.out.mod"
+
+def main():
+    """Parses 'ppbymip_cgp.mod'"""
+
+    mod_in = "ppbymip_cgp.mod"
+    mod_out = "tmp/cgp.out.mod"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/bike.lp"
+    lp_out = "tmp/cgp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
         out, varvalues = script_wsol(
-            "glpk_wrapper.sh", lp_out, verbose=True
+            "gurobi_wrapper.sh", lp_out,
+            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
         )
     except Exception as e:
         print(repr(e))
 
-    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    #print "varvalues:", [(k, v) for k, v in sorted(varvalues.items())]
 
 if __name__ == "__main__":
     main()

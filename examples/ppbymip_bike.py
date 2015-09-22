@@ -37,66 +37,27 @@ if __name__ == "__main__":
             project_dir, os.environ["PATH"]
         )
 
-import equivknapsack01
-import equivknapsack
-import wolsey
-import instance
-import tsp
-import tsp_gurobi
-import sos
-import pwl
-import twostage
+from pympl import PyMPL, glpkutils, script_wsol
 
 
 def main():
-    """Runs all PyMPL examples."""
+    """Parses 'ppbymip_bike.mod'"""
 
+    mod_in = "ppbymip_bike.mod"
+    mod_out = "tmp/bike.out.mod"
+    parser = PyMPL(locals_=locals(), globals_=globals())
+    parser.parse(mod_in, mod_out)
+
+    lp_out = "tmp/bike.lp"
+    glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        print("equivknapsack:")
-        equivknapsack.main()
-    except ImportError as e:
+        out, varvalues = script_wsol(
+            "gurobi_wrapper.sh", lp_out, verbose=True
+        )
+    except Exception as e:
         print(repr(e))
 
-    try:
-        print("equivknapsack01:")
-        equivknapsack01.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("wolsey:")
-        wolsey.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("instance:")
-        instance.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("twostage:")
-        twostage.main()
-    except ImportError as e:
-        print(repr(e))
-
-    print("sos:")
-    sos.main()
-
-    print("pwl:")
-    pwl.main()
-
-    if "quick_test" not in sys.argv:
-        print("tsp:")
-        tsp.main()
-
-    if "quick_test" not in sys.argv:
-        print("tsp_gurobi:")
-        try:
-            tsp_gurobi.main()
-        except ImportError as e:
-            print(repr(e))
+    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
 
 if __name__ == "__main__":
     main()

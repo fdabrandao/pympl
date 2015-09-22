@@ -37,66 +37,38 @@ if __name__ == "__main__":
             project_dir, os.environ["PATH"]
         )
 
-import equivknapsack01
-import equivknapsack
-import wolsey
-import instance
-import tsp
-import tsp_gurobi
-import sos
-import pwl
-import twostage
+import ppbymip_bike as bike
+import ppbymip_cgp as cgp
+import ppbymip_clb as clb
+import ppbymip_mp as mp
+import ppbymip_ps as ps
 
 
 def main():
     """Runs all PyMPL examples."""
 
-    try:
-        print("equivknapsack:")
-        equivknapsack.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("equivknapsack01:")
-        equivknapsack01.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("wolsey:")
-        wolsey.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("instance:")
-        instance.main()
-    except ImportError as e:
-        print(repr(e))
-
-    try:
-        print("twostage:")
-        twostage.main()
-    except ImportError as e:
-        print(repr(e))
-
-    print("sos:")
-    sos.main()
-
-    print("pwl:")
-    pwl.main()
+    print("bike:")
+    bike.main()
 
     if "quick_test" not in sys.argv:
-        print("tsp:")
-        tsp.main()
+        print("cgp:")
+        cgp.main()
 
     if "quick_test" not in sys.argv:
-        print("tsp_gurobi:")
-        try:
-            tsp_gurobi.main()
-        except ImportError as e:
-            print(repr(e))
+        print("clb:")
+        clb.main()
+
+    if "quick_test" not in sys.argv:
+        print("clb:")
+        clb.main()
+
+    if "quick_test" not in sys.argv:
+        print("mp:")
+        mp.main()
+
+    if "quick_test" not in sys.argv:
+        print("ps:")
+        ps.main()
 
 if __name__ == "__main__":
     main()

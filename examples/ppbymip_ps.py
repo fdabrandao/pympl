@@ -42,27 +42,33 @@ if __name__ == "__main__":
 from pympl import PyMPL, glpkutils, script_wsol
 
 
-def read_demand(fname, NI, NT):
+def read_table(fname, index1, index2, transpose=False):
+    """Reads a table from a file."""
+    if transpose:
+        index1, index2 = index2, index1
     with open(fname) as f:
         text = f.read().replace(",", "")
         lst = list(map(float, text.split()))
         demand = {}
-        for i in range(NI):
-            for t in range(NT):
-                demand[i+1, t+1] = lst.pop(0)
+        for i1 in index1:
+            for i2 in index2:
+                if transpose:
+                    demand[i2, i1] = lst.pop(0)
+                else:
+                    demand[i1, i2] = lst.pop(0)
         assert lst == []
         return demand
 
 
 def main():
-    """Parses 'clb.mod'"""
+    """Parses 'ppbymip_ps.mod'"""
 
-    mod_in = "clb.mod"
-    mod_out = "tmp/clb.out.mod"
+    mod_in = "ppbymip_ps.mod"
+    mod_out = "tmp/ps.out.mod"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/clb.lp"
+    lp_out = "tmp/ps.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
         out, varvalues = script_wsol(

@@ -1,10 +1,11 @@
-# Consumer Goods Production (pag. 195)
+# Book: Production Planning by Mixed Integer Programming
+# Cleaning Liquids Bottling Line (pag. 167)
 $EXEC{
 def mrange(a, b):
     return range(a, b+1)
 
-BACKLOG = True
-DISCRETE = True
+BACKLOG = False # False on original problem
+DISCRETE = False # False on the original problem
 };
 
 $PARAM[NI]{4}; # number of items
@@ -29,7 +30,12 @@ $PARAM[L]{7};  # production lower-bound
 $PARAM[C]{16}; # production upper-bound
 
 # demand:
-$PARAM[d]{read_demand("data/cldemand.dat", _params["NI"], _params["NT"])};
+$PARAM[d{^1..NI, ^1..NT}]{read_table(
+    "data/cldemand.dat",
+    mrange(1, _params["NI"]),
+    mrange(1, _params["NT"]),
+    transpose=False
+)};
 
 # production time:
 var x{1..NI, 1..NT}, >= 0;
@@ -55,7 +61,9 @@ minimize cost:
          q[t]*y[i, t] + g*z[i, t] + gamma*w[i, t]);
 
 s.t. dem_sat{i in 1..NI, t in 1..NT}:
-    (if t > 1 then s[i, t-1] - r[i, t-1]) + x[i, t] = d[i, t] + s[i, t] - r[i, t];
+    (if t > 1 then s[i, t-1]) + r[i, t] + x[i, t]
+    =
+    d[i, t] + (if t > 1 then r[i, t-1]) + s[i, t];
 
 s.t. upper_bound{i in 1..NI, t in 1..NT}:
     x[i, t] ${"==" if DISCRETE else "<="}$ C*y[i, t];
@@ -83,17 +91,19 @@ if DISCRETE is False:
         z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
         d = [demand[i, t] for t in mrange(1, NT)]
         if BACKLOG is False:
-            WW_U(s, y, d, NT)
+            #WW_U(s, y, d, NT)
+            #WW_CC(s, y, d, C, NT)
             WW_U_SC(s, y, z, d, NT)
-            WW_CC(s, y, d, C, NT)
+            #LS_U(s, x, y, d, NT)
+            #LS_U_SC(s, x, y, z, d, NT) # Not compatible with LB?
         else:
             r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
             w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
-            #WW_U_B(s, r, y, d, NT)
-            LS_U_B(s, r, x, y, d, NT)
-            #WW_U_SCB(s, r, y, z, w, d, NT, Tk=5)
-            #WW_CC_B(s, r, y, d, C, NT, Tk=5)
-        #WW_U_LB(s, y, d, L, NT, Tk=5)
+            WW_U_B(s, r, y, d, NT)
+            #LS_U_B(s, r, x, y, d, NT)
+            WW_U_SCB(s, r, y, z, w, d, NT, Tk=5)
+            WW_CC_B(s, r, y, d, C, NT, Tk=5)
+        #WW_U_LB(s, y, d, L, NT, Tk=15)
 else:
    for i in mrange(1, NI):
         s0 = 0
@@ -103,13 +113,11 @@ else:
         d = [demand[i, t] for t in mrange(1, NT)]
         if BACKLOG is False:
             DLSI_CC(s0, y, d, C, NT)
-            #DLS_CC_SC(s, y, z, d, NT)
-            pass
+            #DLS_CC_SC(s, y, z, d, C, NT)
         else:
             r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
-            DLSI_CC_B(s0, r, y, d, C, NT)
-            #DLS_CC_B(r, y, d, C, NT)
-            pass
+            #DLSI_CC_B(s0, r, y, d, C, NT)
+            DLS_CC_B(r, y, d, C, NT)
 };
 
 solve;
