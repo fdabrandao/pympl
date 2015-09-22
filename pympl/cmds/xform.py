@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import division
 from builtins import range
 
 from .base import SubmodBase
@@ -33,6 +34,7 @@ from .xformutils import XFormWWCCB
 from .xformutils import XFormLSU1
 from .xformutils import XFormLSU2
 from .xformutils import XFormLSU
+from .xformutils import XFormLSUSC
 from .xformutils import XFormLSUB
 from .xformutils import XFormDLSICC
 from .xformutils import XFormDLSICCB
@@ -502,6 +504,50 @@ class SubmodLSUB(SubmodBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
+class SubmodLSUSC(SubmodBase):
+    """Command for creating LS-U-SC extended formulations."""
+
+    def __init__(self, *args, **kwargs):
+        SubmodBase.__init__(self, *args, **kwargs)
+        self._cnt = 0
+
+    def _evalcmd(self, arg1, s, x, y, z, d, NT, Tk=None):
+        """Evalutates CMD[arg1](*args)."""
+        assert arg1 is None
+        self._cnt += 1
+        prefix = "_lsusc_{0}_".format(self._cnt)
+
+        assert isinstance(s, list) and len(s) in (NT, NT+1)
+        assert isinstance(x, list) and len(x) == NT
+        assert isinstance(y, list) and len(y) == NT
+        assert isinstance(z, list) and len(z) == NT
+        assert isinstance(d, list) and len(d) == NT
+
+        varl = s + x + y + z
+
+        if len(s) == NT:
+            s = {i+1: s[i] for i in range(NT)}
+            s[0] = 0
+        else:
+            s = {i: s[i] for i in mrange(0, NT)}
+        x = {i+1: x[i] for i in range(NT)}
+        y = {i+1: y[i] for i in range(NT)}
+        z = {i+1: z[i] for i in range(NT)}
+        d = {i+1: d[i] for i in range(NT)}
+
+        if Tk is None:
+            Tk = NT
+
+        model = Model()
+        for var in varl:
+            model.add_var(name=var)
+        XFormLSUSC(model, s, x, y, z, d, NT, Tk, prefix)
+        model.rename_cons(lambda name: prefix+name)
+
+        declared_vars = set(varl)
+        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
+
+
 class SubmodDLSICC(SubmodBase):
     """Command for creating DLSI-CC extended formulations."""
 
@@ -618,7 +664,7 @@ class SubmodDLSCCSC(SubmodBase):
         SubmodBase.__init__(self, *args, **kwargs)
         self._cnt = 0
 
-    def _evalcmd(self, arg1, s, y, z, d, NT, Tk=None):
+    def _evalcmd(self, arg1, s, y, z, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
         self._cnt += 1
@@ -634,7 +680,7 @@ class SubmodDLSCCSC(SubmodBase):
         s = {i+1: s[i] for i in range(NT)}
         y = {i+1: y[i] for i in range(NT)}
         z = {i+1: z[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
+        d = {i+1: d[i]/C for i in range(NT)}
 
         if Tk is None:
             Tk = NT

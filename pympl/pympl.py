@@ -32,7 +32,7 @@ from .cmds import SubmodSOS1, SubmodSOS2, SubmodPWL
 from .cmds import SubmodWWU, SubmodWWUB
 from .cmds import SubmodWWUSC, SubmodWWUSCB, SubmodWWULB
 from .cmds import SubmodWWCC, SubmodWWCCB
-from .cmds import SubmodLSU, SubmodLSU1, SubmodLSU2, SubmodLSUB
+from .cmds import SubmodLSU, SubmodLSU1, SubmodLSU2, SubmodLSUB, SubmodLSUSC
 from .cmds import SubmodDLSICC, SubmodDLSICCB, SubmodDLSCCB, SubmodDLSCCSC
 
 
@@ -81,6 +81,7 @@ class PyMPL(object):
         "LS_U1": SubmodLSU1,
         "LS_U2": SubmodLSU2,
         "LS_U_B": SubmodLSUB,
+        "LS_U_SC": SubmodLSUSC,
         "DLSI_CC": SubmodDLSICC,
         "DLSI_CC_B": SubmodDLSICCB,
         "DLS_CC_B": SubmodDLSCCB,

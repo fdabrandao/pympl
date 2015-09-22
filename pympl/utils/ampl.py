@@ -24,6 +24,8 @@ import six
 from copy import deepcopy
 from .common import linear_constraint, lincomb2str
 
+DEBUG = False
+
 
 def tuple2str(tuple_):
     """Converts a tuple to a AMPL tuple."""
@@ -43,8 +45,9 @@ def ampl_set(name, values, sets, params):
     def format_entry(e):
         return repr(e).replace(" ", "")
 
-    defs = "set {0} := {{{1}}};\n".format(
-        name, ",".join(format_entry(e) for e in values)
+    defs = "set {0} := {{{1}}};{2}".format(
+        name, ",".join(format_entry(e) for e in values),
+        "\n" if DEBUG else ""
     )
     return defs, ""
 
@@ -60,15 +63,19 @@ def ampl_param(name, index, value, sets, params):
         params[name] = deepcopy(value)
 
     if isinstance(value, dict):
-        defs = "param {0}{{{1}}};\n".format(name, index.lstrip("^"))
+        defs = "param {0}{{{1}}};{2}".format(
+            name, index.lstrip("^"),
+            "\n" if DEBUG else ""
+        )
 
         def format_entry(k, v):
             k = repr(k).strip("()").replace(" ", "")
             v = repr(v).strip("()").replace(" ", "")
             return "[{0}]{1}".format(k, v)
 
-        data = "param {0} := {1};\n".format(
-            name, "".join(format_entry(k, v) for k, v in value.items())
+        data = "param {0} := {1};{2}".format(
+            name, "".join(format_entry(k, v) for k, v in value.items()),
+            "\n" if DEBUG else ""
         )
         return defs, data
     else:
@@ -76,7 +83,10 @@ def ampl_param(name, index, value, sets, params):
         assert isinstance(value, (six.string_types, float, int))
         if isinstance(value, six.string_types):
             value = "'{0}'".format(value)
-        defs = "param {0} := {1};\n".format(name, str(value))
+        defs = "param {0} := {1};{2}".format(
+            name, str(value),
+            "\n" if DEBUG else ""
+        )
         return defs, ""
 
 

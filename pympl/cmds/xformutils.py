@@ -37,28 +37,28 @@ The implementations are a direct translation from the LS-LIB's xform.mos file.
 
 !  Xform  9/9/2005
 !  Contains
-!    WW-U        **DONE!** (XFormWWU)
-!    WW-U-B      **DONE!** (XFormWWUB)
-!    WW-U-SC     **DONE!** (XFormWWUSC)
-!    WW-U-SC,B   **DONE!** (XFormWWUSCB) needs to be checked!
-!    WW-CC       **DONE!** (XFormWWCC)
+!    WW-U       **DONE!** (XFormWWU) seems to be ok! (bike.mod, clb.mod)
+!    WW-U-B     **DONE!** (XFormWWUB) seems to be ok! (bike.mod, clb.mod)
+!    WW-U-SC    **DONE!** (XFormWWUSC) seems to be ok! (clb.mod)
+!    WW-U-SC,B  **DONE!** (XFormWWUSCB) needs to be checked! (clb.mod)
+!    WW-CC      **DONE!** (XFormWWCC) seems to be ok! (clb.mod)
 
-!    LS-U1=(MC)  **DONE!** (XFormLSU1)
-!    LS-U2=(SP)  **DONE!** (XFormLSU2)
-!    LS-U-B      **DONE!** (XFormLSUB)
+!    LS-U1=(MC) **DONE!** (XFormLSU1) seems to be ok! (bike.mod)
+!    LS-U2=(SP) **DONE!** (XFormLSU2) seems to be ok! (bike.mod)
+!    LS-U-B     **DONE!** (XFormLSUB) seems to be ok! (bike.mod, clb.mod)
 
 !Added 30/9/2005
-!    DLSI-CC     **DONE!** (XFormDLSICC) has no effect on clb.mod!
-!    DLSI-CC-B   **DONE!** (XFormDLSICCB) seems to be ok!
-!    DLS-CC-B    **DONE!** (XFormDLSCCB) seems to be ok!
-!    DLS-CC-SC   **DONE!** (XFormDLSCCSC) wrong solution on clb.mod!
+!    DLSI-CC    **DONE!** (XFormDLSICC) has no effect on ps.mod!!
+!    DLSI-CC-B  **DONE!** (XFormDLSICCB) seems to be ok! (cgp.mod, clb.mod)
+!    DLS-CC-B   **DONE!** (XFormDLSCCB) seems to be ok! (cgp.mod, clb.mod)
+!    DLS-CC-SC  **DONE!** (XFormDLSCCSC) seems to be ok! (clb.mod)
 
 ! Added 30/9/05 (not in Xformsimple)
-!    WW-U-LB     **DONE!** (XFormWWULB) has no effect on clb.mod!
-!    WW-CC-B     **DONE!** (XFormWWCCB) wrong solution on clb.mod
+!    WW-U-LB    **DONE!** (XFormWWULB) has no effect on clb.mod!!
+!    WW-CC-B    **DONE!** (XFormWWCCB) wrong solution on clb.mod (LB?)!!
 
 !Missing 24/7/07
-!    LS-U-SC
+!    LS-U-SC    **DONE!** (XFormLSUSC) Not compatible with LB on clb.mod!!
 
 ! Added 16/12/09
 !    LT  Lasdon-Terjung
@@ -84,6 +84,8 @@ def CumulDemand(d, D, NT):
     """
     for k in mrange(1, NT):
         D[k, k] = d[k]
+    for k in mrange(1, NT):
+        D[k, 0] = 0
     for k in mrange(1, NT):
         for l in mrange(k+1, NT):
             D[k, l] = D[k, l-1]+d[l]
@@ -1052,7 +1054,7 @@ def XFormLSU(model, s, x, y, d, NT, Tk, prefix=""):
      XFormLSU1(s,x,y,d,NT,Tk,MC)
     end-procedure
     """
-    return XFormLSU1(model, s, x, y, d, NT, Tk, prefix)
+    XFormLSU1(model, s, x, y, d, NT, Tk, prefix)
 
 
 def XFormLSUBMC(model, s, r, x, y, d, NT, Tk, prefix=""):
@@ -1184,6 +1186,49 @@ def XFormLSUB(model, s, r, x, y, d, NT, Tk, prefix=""):
     XFormLSUBMC(model, s, r, x, y, d, NT, Tk, prefix)
 
 
+def XFormLSUSC(model, s, x, y, z, d, NT, Tk, prefix=""):
+    """
+    LS-U-SC
+
+    procedure XFormLSUSC(
+        s : array (range) of linctr,
+        x : array (range) of linctr,
+        y : array (range) of linctr,
+        z : array (range) of linctr,
+        d : array (range) of real,
+        NT : integer,
+        Tk : integer,
+        MC : integer)
+
+     !XFormLSU1(s,x,y,d,NT,Tk,MC) + constraints 10.13 (pag. 322)?
+     ! Not compatible with LB!
+    end-procedure
+    """
+    # From the book (pag. 322):
+    def wvar(i, j):
+        name = prefix+"w_{0}_{1}".format(i, j)
+        if name not in model.vars:
+            model.add_var(name=name, lb=0, ub=1)
+        return name
+
+    for t in mrange(1, NT):
+        model.add_con([wvar(s, t) for s in mrange(1, t)], "<=", 1)
+
+    for t in mrange(1, min(NT, Tk)):
+        for s in mrange(1, t):
+            model.add_con(wvar(s, t), "<=", y[s])
+
+    for t in mrange(1, min(NT, Tk)):
+        for k in mrange(1, t-1):
+            lhs = [wvar(i, t) for i in mrange(k, t)]
+            rhs = [y[k]]+[z[i] for i in mrange(k+1, t)]
+            model.add_con(lhs, "<=", rhs)
+
+    for u in mrange(1, min(NT, Tk)):
+        rhs = [(d[t], wvar(u, t)) for t in mrange(u, NT)]
+        model.add_con(x[u], "=", rhs)
+
+
 def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
     """
     DLSI-CC
@@ -1232,6 +1277,9 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
     D = {}
     CumulDemand0(d, D, NT)
 
+    # ds: mpvar
+    model.add_var(name=dsvar(), lb=0)
+
     # forall(t in 1..minlist(NT,Tk)) create(ws(t))
     for t in mrange(1, min(NT, Tk)):
         model.add_var(name=wsvar(t), lb=0)
@@ -1244,7 +1292,10 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
         gs[t] = D[t] - C*floor(D[t]/C)
 
     # XS:=s>=C*ds+sum(i in 1..minlist(NT,Tk))gs(i)*ws(i)
-    model.add_con(s, ">=", [(gs[i], wsvar(i)) for i in mrange(1, min(NT, Tk))])
+    model.add_con(
+        s, ">=",
+        [(C, dsvar())]+[(gs[i], wsvar(i)) for i in mrange(1, min(NT, Tk))]
+    )
 
     # XW:=sum(i in 1..minlist(NT,Tk)) ws(i)<=1
     model.add_con([wsvar(i) for i in mrange(1, min(NT, Tk))], "<=", 1)
@@ -1252,7 +1303,6 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
     # forall (t in 1..minlist(NT,Tk)) XKT(t) :=
     #   ds+sum(i in 1..t)y(i)+
     #   sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >= ceil(D(t)/C)
-    model.add_var(name=dsvar(), lb=0)
     for t in mrange(1, min(NT, Tk)):
         lhs = [dsvar()]
         lhs += [y[i] for i in mrange(1, t)]
