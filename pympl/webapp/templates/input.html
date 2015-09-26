@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>{{ app_name }}</title>
+
+    <script src="{{ url_for("static", filename="js/jquery-1.11.2.js") }}"></script>
+
+    <link href="{{ url_for("static", filename="bootstrap/css/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ url_for("static", filename="bootstrap/css/bootstrap-theme.css") }}" rel="stylesheet">
+    <link href="{{ url_for("static", filename="bootstrap/css/bootstrap-theme-readable.css") }}" rel="stylesheet">
+    <script src="{{ url_for("static", filename="bootstrap/js/bootstrap.min.js") }}"></script>
+
+    <link href="{{ url_for("static", filename="css/app.css") }}" rel="stylesheet">
+    <script src="{{ url_for("static", filename="js/app.js") }}"></script>
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">{{ app_name }}</a>
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            {% for page, description in pages %}
+              <li {% if request.path.startswith(page) %}class="active"{% endif %}>
+                <a href="{{ page }}">{{ description }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="https://github.com/fdabrandao/pympl/wiki" target="_bank">Docs</a></li>
+            <li><a href="https://github.com/fdabrandao/pympl" target="_blank">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="row">
+        <form action="{{ evaluator_url }}" method="post">
+
+        {% if examples is defined %}
+        <div class="form-group">
+          <label for="examples">Load example:</label>
+          <select class="form-control my_select" id="examples" name="examples" value="{{ request.path }}">
+            {% for url in examples_list %}
+                <option value="{{ url }}" {% if request.path == url %}selected="selected"{% endif %}>{{ examples[url][0] }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        {% endif %}
+
+        <label for="examples">Data:</label>
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title" data-toggle="collapse"
+                  data-parent="#accordion" data-target="#collapseModel">
+                <a class="accordion-toggle">
+                  PyMPL Model
+                </a>
+              </h4>
+            </div>
+            <div id="collapseModel" class="panel-collapse collapse in">
+              <div class="panel-body">
+                <textarea class="form-control" id="pympl_model" name="pympl_model"
+                          rows="20">{{ pympl_model }}</textarea>
+              </div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title"  data-toggle="collapse"
+                  data-parent="#accordion" data-target="#collapsePython">
+                <a class="accordion-toggle">
+                  Python Code
+                </a>
+              </h4>
+            </div>
+            <div id="collapsePython" class="panel-collapse collapse">
+              <div class="panel-body">
+                <textarea class="form-control" id="python_code" name="python_code"
+                          rows="20">{{ python_code }}</textarea>
+              </div>
+            </div>
+          </div>
+          {% for (ind, name, content) in files %}
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title" data-toggle="collapse"
+                  data-parent="#accordion" data-target="#collapseFile{{ ind }}">
+                <a class="accordion-toggle">
+                  Data File #{{ ind }}
+                </a>
+              </h4>
+            </div>
+            <div id="collapseFile{{ ind }}" class="panel-collapse collapse">
+              <div class="panel-body">
+                <label for="fname{{ ind }}">Path:</label>
+                <input type="text" class="form-control"
+                       id="fname{{ ind }}" name="fname{{ ind }}" value="{{ name }}">
+                <label for="content{{ ind }}">Content:</label>
+                <textarea class="form-control" id="content{{ ind }}" name="content{{ ind }}"
+                          rows="20">{{ content }}</textarea>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="row">
+          <div class="col-xs-6">
+            <button id="addfile" name="addfile" class="btn btn-lg btn-primary"
+                    type="submit" onclick="this.form.action='';return true;">Add Data File</button>
+          </div>
+          <div class="col-xs-6">
+            <span class="pull-right">
+            <button id="evaluate" name="parse" class="btn btn-lg btn-primary"
+                    type="submit" onclick="this.form.target='_blank';return true;">Evaluate</button>
+            <button id="download" name="download" class="btn btn-lg btn-primary"
+                    type="submit" onclick="this.form.target='_blank';return true;">Evaluate & Download</button>
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+    <footer id="footer" style="padding-top: 10px; padding-right: 10px;">
+    <div class="pull-right">
+      <p>
+      Copyright &copy; Filipe Brandão. All rights reserved.
+      |
+      <strong><a href="http://www.dcc.fc.up.pt/~fdabrandao/" target="_blank"><i class="fa fa-envelope-o">&nbsp;</i>Contact</a></strong>
+      </p>
+    </div>
+    </footer>
+
+    </div>
+  </body>
+</html>
