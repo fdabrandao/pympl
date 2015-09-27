@@ -14,7 +14,6 @@ RUN bash test.sh test_install quick_test
 RUN bash install3.sh
 RUN bash test3.sh test_install quick_test
 
-#CMD bash
-
 EXPOSE 5555
-CMD ifconfig eth0 && python -m pympl.webapp.app
+CMD ifconfig eth0 && \
+    python -m pympl.webapp.app 5555 `date | md5sum | head -c${1:-8}`

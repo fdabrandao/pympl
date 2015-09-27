@@ -4,3 +4,4 @@ six >= 1.5.2
 flask >= 0.10.1
 limits >= 1.0.8
 flask-limiter >= 0.8.2
+flask-basicauth >= 0.2.0

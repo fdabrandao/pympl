@@ -25,9 +25,19 @@ from builtins import object
 
 import os
 import sys
+import string
+import random
+import flask
+import signal
+from flask_limiter import Limiter
+from flask import Flask, Response
+from flask import render_template, json, request, redirect, url_for
+from flask.ext.basicauth import BasicAuth
 
 DEBUG = False
 PORT = 5555
+USERNAME = "PyMPL"
+PASSWORD = "Password"
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -39,18 +49,17 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2 and sys.argv[1].isdigit():
         PORT = int(sys.argv[1])
 
-import flask
-import signal
-from flask_limiter import Limiter
-from flask import Flask, Response
-from flask import render_template, json, request, redirect, url_for
-from multiprocessing import Process
-from pympl import PyMPL, Solver
-
+    if len(sys.argv) >= 3:
+        PASSWORD = sys.argv[2]
 
 app = Flask(__name__)
 app.debug = True
+app.config["BASIC_AUTH_USERNAME"] = USERNAME
+app.config["BASIC_AUTH_PASSWORD"] = PASSWORD
+app.config["BASIC_AUTH_FORCE"] = True
+basic_auth = BasicAuth(app)
 limiter = Limiter(app, global_limits=["50/minute", "5/second"])
+
 
 @app.context_processor
 def inject_globals():
@@ -74,6 +83,7 @@ def favicon():
 
 
 @app.route("/")
+@basic_auth.required
 def index():
     """Renders the index page."""
     return redirect(url_for("pympl"))
@@ -86,7 +96,7 @@ def load(fname):
 
 
 def request_data():
-    """Retrieves request content."""
+    """Extracts request content."""
     pympl_model = request.form["pympl_model"]
     python_code = request.form["python_code"]
     fnames = {}
@@ -119,6 +129,7 @@ def request_data():
 
 @app.route("/pympl/", defaults={"example": None}, methods=["GET", "POST"])
 @app.route("/pympl/<example>", methods=["GET", "POST"])
+@basic_auth.required
 def pympl(example):
     """Renders the input page."""
     title = "PyMPL: AMPL extension"
@@ -206,6 +217,7 @@ class StringStream:
 
 @app.route("/evaluate", methods=["POST"])
 @limiter.limit("250/hour;50/minute;3/second")
+@basic_auth.required
 def evaluate():
     """Renders the evaluation page."""
     import tempfile, shutil
@@ -253,5 +265,16 @@ def evaluate():
         raise
 
 
+def get_ip_address():
+    """Returns 'eth0' ip address."""
+    import socket
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    return s.getsockname()[0]
+
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT, threaded=False)
+    print("URL: http://{0}:{1}/".format(get_ip_address(), PORT))
+    print("USERNAME: {0}".format(USERNAME))
+    print("PASSWORD: {0}".format(PASSWORD))
+    app.run(host="0.0.0.0", port=PORT, threaded=True)
