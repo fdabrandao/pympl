@@ -14,4 +14,7 @@ RUN bash test.sh test_install quick_test
 RUN bash install3.sh
 RUN bash test3.sh test_install quick_test
 
-CMD bash
+#CMD bash
+
+EXPOSE 5555
+CMD ifconfig eth0 && python -m pympl.webapp.app

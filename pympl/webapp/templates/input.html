@@ -46,10 +46,11 @@
     </div>
 
     <div class="container">
-
       <div class="row">
         <form action="{{ evaluator_url }}" method="post">
-
+        <p><b>DISCLAIMER:</b> This demo allows arbitrary code execution and
+        should only be used locally (and ideally inside a docker container)
+        as an alternative to a local install of Python and PyMPL.</p>
         {% if examples is defined %}
         <div class="form-group">
           <label for="examples">Load example:</label>

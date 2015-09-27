@@ -1,3 +1,5 @@
+from pympl import PyMPL
+
 def read_table(fname, index1, index2, transpose=False):
     """Reads a table from a file."""
     if transpose:

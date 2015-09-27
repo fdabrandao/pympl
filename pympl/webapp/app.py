@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-This code is part of the Arc-flow Vector Packing Solver (VPSolver).
+This code is part of the Mathematical Programming Toolbox PyMPL.
 
-Copyright (C) 2013-2015, Filipe Brandao
+Copyright (C) 2015-2015, Filipe Brandao
 Faculdade de Ciencias, Universidade do Porto
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
@@ -36,20 +36,12 @@ if __name__ == "__main__":
         __file__ = os.path.basename(__file__)
         sys.argv[0] = __file__
 
-    if "test_install" in sys.argv:
-        sys.argv.remove("test_install")
-    else:
-        project_dir = "../../"
-        sys.path.insert(0, project_dir)
-        os.environ["PATH"] = "{0}/scripts:{1}".format(
-            project_dir, os.environ["PATH"]
-        )
-
     if len(sys.argv) >= 2 and sys.argv[1].isdigit():
         PORT = int(sys.argv[1])
 
 import flask
 import signal
+from flask_limiter import Limiter
 from flask import Flask, Response
 from flask import render_template, json, request, redirect, url_for
 from multiprocessing import Process
@@ -58,7 +50,7 @@ from pympl import PyMPL, Solver
 
 app = Flask(__name__)
 app.debug = True
-
+limiter = Limiter(app, global_limits=["50/minute", "5/second"])
 
 @app.context_processor
 def inject_globals():
@@ -94,7 +86,7 @@ def load(fname):
 
 
 def request_data():
-    """Retrieves request contents."""
+    """Retrieves request content."""
     pympl_model = request.form["pympl_model"]
     python_code = request.form["python_code"]
     fnames = {}
@@ -136,20 +128,42 @@ def pympl(example):
         "/pympl/": ("", "", None, []),
         "/pympl/vbp": (
             "Vector Packing",
-            ("vector_packing.mod", None, [])
+            ("vector_packing.mod", "default.py", [])
         ),
         "/pympl/vsbpp": (
             "Variable Sized Bin Packing",
-            ("variable_size_bin_packing.mod", None, [])
+            ("variable_size_bin_packing.mod", "default.py", [])
         ),
         "/pympl/pwl": (
             "Piecewise Linear Function",
-            ("piecewise_linear.mod", None, [])
+            ("piecewise_linear.mod", "default.py", [])
+        ),
+        "/pympl/ppbymip_bike": (
+            "PPbyMIP: Bike",
+            ("ppbymip_bike.mod", "ppbymip.py", [])
         ),
         "/pympl/ppbymip_cgp": (
-            "Consumer Goods Production",
-            ("ppbymip_cgp.mod", "ppbymip_cgp.py", ["data/cgpdemand.dat"])
-        )
+            "PPbyMIP: Consumer Goods Production",
+            ("ppbymip_cgp.mod", "ppbymip.py", ["data/cgpdemand.dat"])
+        ),
+        "/pympl/ppbymip_clb": (
+            "PPbyMIP: Cleaning Liquids Bottling Line",
+            ("ppbymip_clb.mod", "ppbymip.py", ["data/cldemand.dat"])
+        ),
+        "/pympl/ppbymip_ps": (
+            "PPbyMIP: Pigment Sequencing",
+            ("ppbymip_ps.mod", "ppbymip.py", [
+                "data/pigment_dem.dat", "data/pigment_q.dat"
+            ])
+        ),
+        "/pympl/ppbymip_mp": (
+            "PPbyMIP: Making and Packing",
+            ("ppbymip_mp.mod", "ppbymip.py", [
+                "data/mp_daily_demand.dat",
+                "data/mp_making_production_rate.dat",
+                "data/mp_packing_production_rate.dat"
+            ])
+        ),
     }
     examples_list = sorted(examples)
 
@@ -191,49 +205,53 @@ class StringStream:
 
 
 @app.route("/evaluate", methods=["POST"])
+@limiter.limit("250/hour;50/minute;3/second")
 def evaluate():
     """Renders the evaluation page."""
     import tempfile, shutil
     from flask import make_response
-    org_cwd = os.getcwd()
     tmp_dir = tempfile.mkdtemp()
-    os.chdir(tmp_dir)
     try:
         pympl_model, python_code, files = request_data()
 
-        with open("model.mod", "w") as f:
+        with open(os.path.join(tmp_dir, "model.mod"), "w") as f:
             f.write(pympl_model)
 
         for ind, path, contents in files:
             path.replace(" ", "\\ ")
             if path != "":
+                path = os.path.join(tmp_dir, path)
                 dname = os.path.dirname(path)
                 if dname != "" and not os.path.exists(dname):
                     os.makedirs(dname)
                 with open(path, "w") as f:
                     f.write(contents)
 
-        sys.stdout = StringStream()
-        exec(python_code, globals(), locals())
-        output = sys.stdout.data
-        sys.stdout = sys.__stdout__
-        os.chdir(org_cwd)
+        with open(os.path.join(tmp_dir, "main.py"), "w") as f:
+            f.write(python_code)
+
+        from subprocess import Popen, PIPE, STDOUT
+        output = Popen(
+            ["python", "main.py"], cwd=tmp_dir,
+            stdout=PIPE, stderr=STDOUT,
+        ).communicate()[0]
+
         shutil.rmtree(tmp_dir)
 
         if "download" in request.form:
-            response = make_response(output.decode("utf-8"))
+            response = make_response(output)
             header = "attachment; filename=output.mod"
             response.headers["Content-Disposition"] = header
             return response
         else:
-            return output
+            response = make_response(output)
+            response.mimetype = "text/plain"
+            return response
 
     except Exception as e:
-        sys.stdout = sys.__stdout__
-        os.chdir(org_cwd)
         shutil.rmtree(tmp_dir)
         raise
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT, threaded=True)
+    app.run(host="0.0.0.0", port=PORT, threaded=False)

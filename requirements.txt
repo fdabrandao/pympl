@@ -1,3 +1,6 @@
 setuptools >= 3.3
 future >= 0.15.0
 six >= 1.5.2
+flask >= 0.10.1
+limits >= 1.0.8
+flask-limiter >= 0.8.2
