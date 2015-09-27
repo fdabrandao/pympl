@@ -20,5 +20,5 @@
 BASEDIR=`dirname $0`
 cd $BASEDIR
 
-sudo -H pip3 install -r requirements.txt
-sudo -H pip3 install . --upgrade
+sudo -H pip3 install -r requirements.txt || exit 1
+sudo -H pip3 install . --upgrade         || exit 1

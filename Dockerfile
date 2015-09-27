@@ -16,4 +16,4 @@ RUN bash test3.sh test_install quick_test
 
 EXPOSE 5555
 CMD ifconfig eth0 && \
-    python -m pympl.webapp.app 5555 `date | md5sum | head -c${1:-8}`
+    python -m pympl.webapp.app 5555 `date | md5sum | head -c${1:-16}`

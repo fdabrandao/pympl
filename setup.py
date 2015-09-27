@@ -7,6 +7,7 @@ new statements for evaluating python code within AMPL models.
 PyMPL also includes, among others, procedures for modelling piecewise
 linear functions, compressed arc-flow graphs for vector packing,
 sub-tour elimination constraints for TSP, and lot-sizing reformulations.
+PyMPL is fully compatible with both python 2 and 3.
 
 Setup
 `````
@@ -29,6 +30,7 @@ import os
 import ast
 from setuptools import setup
 from setuptools.command.install import install
+from pkg_resources import parse_version
 
 
 class CustomInstallCommand(install):
@@ -55,6 +57,8 @@ _version_re = re.compile(r'__version__\s+=\s+(.*)')
 with open("pympl/__init__.py", "rb") as f:
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode("utf-8")).group(1)))
+
+assert str(parse_version(version)) == version
 
 setup(
     name="PyMPL",
