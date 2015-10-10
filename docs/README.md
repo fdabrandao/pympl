@@ -1,11 +1,14 @@
 ## PyMPL: A Mathematical Programming Toolbox
-
 Copyright (C) 2015-2015, Filipe Brandão  
 Faculdade de Ciencias, Universidade do Porto  
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
+
 [PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, sub-tour elimination constraints for TSP, and lot-sizing reformulations. PyMPL is fully compatible with both python 2 and 3.
+
+![](https://img.shields.io/badge/license-GPL-blue.svg)
+[![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
 
 ### Useful links
 
