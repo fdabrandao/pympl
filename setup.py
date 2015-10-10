@@ -23,8 +23,6 @@ Links
 * `GiHub repository <https://github.com/fdabrandao/pympl>`_
 * `BitBucket repository <https://bitbucket.org/fdabrandao/pympl>`_
 """
-from builtins import str
-
 import re
 import os
 import ast
@@ -35,7 +33,6 @@ from pkg_resources import parse_version
 
 class CustomInstallCommand(install):
     """Custom Install Command."""
-
     def run(self):
         install.run(self)
 
@@ -55,10 +52,13 @@ def ls_dir(base_dir):
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 with open("pympl/__init__.py", "rb") as f:
+    try:
+        from builtins import str
+    except:
+        pass
     version = str(ast.literal_eval(_version_re.search(
         f.read().decode("utf-8")).group(1)))
-
-# assert str(parse_version(version)) == version
+    # assert str(parse_version(version)) == version
 
 setup(
     name="PyMPL",
