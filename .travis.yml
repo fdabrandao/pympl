@@ -7,7 +7,11 @@ python:
   - "3.5"
   - "3.5-dev" # 3.5 development branch
   - "nightly" # currently points to 3.6-dev
+addons:
+  apt:
+    packages:
+    - glpk-utils
 install:
   - pip install -r requirements.txt
   - pip install .
-script: python examples/unittests.py
+script: bash test.sh quick_test
