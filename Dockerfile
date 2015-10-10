@@ -1,4 +1,6 @@
-FROM fdabrandao/vpsolver
+FROM fdabrandao/docker-ubuntu
+
+MAINTAINER Filipe Brandão <fdabrandao@dcc.fc.up.pt>
 
 USER root
 RUN mkdir -p /pympl
@@ -6,6 +8,7 @@ ADD . /pympl
 ENV HOME=/pympl
 WORKDIR /pympl
 
+RUN pip2 install -r requirements.txt
 RUN bash test.sh quick_test
 
 RUN bash install.sh
