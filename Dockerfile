@@ -8,6 +8,9 @@ ADD . /pympl
 ENV HOME=/pympl
 WORKDIR /pympl
 
+RUN pip2 install pyvpsolver --pre
+RUN pip3 install pyvpsolver --pre
+
 RUN pip2 install -r requirements.txt
 RUN bash test.sh quick_test
 
