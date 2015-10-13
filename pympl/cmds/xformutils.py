@@ -1531,6 +1531,10 @@ def XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix=""):
 
     end-procedure
     """
+    #!Need to have demands in 0,1
+    for i in mrange(1, NT):
+        assert d[i] in (0, 1)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
