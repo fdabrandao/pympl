@@ -7,8 +7,11 @@
 *.egg-info
 /build/
 /dist/
+/venv*
 /futurize.sh
 /git_push.sh
 /git_fetch.sh
 /register.sh
+/rmbackups.sh
+/testupdate.sh
 /workspace_private
