@@ -14,4 +14,4 @@ addons:
 install:
   - pip install -r requirements.txt
   - pip install .
-script: bash test.sh quick_test test_install
+script: bash test.sh --options quick_test
