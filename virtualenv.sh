@@ -20,6 +20,33 @@
 BASEDIR=`dirname $0`
 cd $BASEDIR
 
-python3 examples/test.py $*         || exit 1
-python3 examples/test_ppbymip.py $* || exit 1
-python3 examples/unittests.py $*    || exit 1
+pyexec="";
+venv="venv";
+
+while true;
+do
+  case "$1" in
+    -p)
+        if [[ -n "$2" ]]; then pyexec=$2; else error; fi
+        shift 2;;
+    --venv)
+        if [[ -n "$2" ]]; then venv=$2; else error; fi
+        shift 2;;
+    *)
+        if [[ -n "$1" ]]; then error; else break; fi
+  esac
+done
+
+if [[ -n "$pyexec" ]]; then
+    virtualenv --system-site-packages -p $pyexec $venv || exit 1;
+else
+    virtualenv --system-site-packages $venv || exit 1;
+fi
+
+source $venv/bin/activate         || exit 1
+python --version                  || exit 1
+pip install -r requirements.txt   || exit 1
+pip install pyvpsolver --pre      || exit 1
+pip install . --upgrade           || exit 1
+bash test.sh --options quick_test || exit 1
+deactivate                        || exit 1

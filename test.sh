@@ -19,7 +19,35 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 BASEDIR=`dirname $0`
 cd $BASEDIR
+CMD="$0 $*"
 
-python examples/test.py $*         || exit 1
-python examples/test_ppbymip.py $* || exit 1
-python examples/unittests.py $*    || exit 1
+error(){
+    echo "Command line: "$CMD
+    echo "Error: invalid arguments."
+    exit 1
+}
+
+venv=""
+options=""
+
+while true;
+do
+  case "$1" in
+    --venv)
+        if [[ -n "$2" ]]; then venv=$2; else error; fi
+        shift 2;;
+    --options)
+        if [[ -n "$2" ]]; then options=$2; else error; fi
+        shift 2;;
+    *)
+        if [[ -n "$1" ]]; then error; else break; fi
+  esac
+done
+
+if [[ -n "$venv" ]]; then
+    source $venv/bin/activate;
+fi;
+
+python examples/test.py $options         || exit 1
+python examples/test_ppbymip.py $options || exit 1
+python examples/unittests.py $options    || exit 1

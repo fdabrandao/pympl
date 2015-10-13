@@ -19,6 +19,35 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 BASEDIR=`dirname $0`
 cd $BASEDIR
+CMD="$0 $*"
 
-sudo -H pip3 install -r requirements.txt || exit 1
-sudo -H pip3 install . --upgrade         || exit 1
+error(){
+    echo "Command line: "$CMD
+    echo "Error: invalid arguments."
+    exit 1
+}
+
+venv=""
+port=5555
+
+while true;
+do
+  case "$1" in
+    --venv)
+        if [[ -n "$2" ]]; then venv=$2; else error; fi
+        shift 2;;
+    --port)
+        if [[ -n "$2" ]]; then port=$2; else error; fi
+        shift 2;;
+    *)
+        if [[ -n "$1" ]]; then error; else break; fi
+  esac
+done
+
+if [[ -n "$venv" ]]; then
+    source $venv/bin/activate;
+fi;
+
+ifconfig eth0 || exit 1
+python --version || exit 1
+python -m pympl.webapp.app $port `date | md5sum | head -c${1:-16}` || exit 1
