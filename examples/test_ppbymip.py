@@ -23,25 +23,16 @@ from __future__ import print_function
 
 import os
 import sys
-sdir = os.path.dirname(__file__)
-if sdir != "":
-    os.chdir(sdir)
-
-if __name__ == "__main__":
-    if "test_install" in sys.argv:
-        sys.argv.remove("test_install")
-    else:
-        project_dir = "../"
-        sys.path.insert(0, project_dir)
-        os.environ["PATH"] = "{0}/scripts:{1}".format(
-            project_dir, os.environ["PATH"]
-        )
-
 import ppbymip_bike as bike
 import ppbymip_cgp as cgp
 import ppbymip_clb as clb
 import ppbymip_mp as mp
 import ppbymip_ps as ps
+
+if __name__ == "__main__":
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
 
 
 def main():

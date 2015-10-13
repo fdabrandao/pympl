@@ -20,26 +20,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import unittest
 import os
 import sys
-sdir = os.path.dirname(__file__)
-if sdir != "":
-    os.chdir(sdir)
+import unittest
+from pympl import PyMPL
 
 if __name__ == "__main__":
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     if "quick_test" in sys.argv:
         sys.argv.remove("quick_test")
-    if "test_install" in sys.argv:
-        sys.argv.remove("test_install")
-    else:
-        project_dir = "../"
-        sys.path.insert(0, project_dir)
-        os.environ["PATH"] = "{0}/scripts:{1}".format(
-            project_dir, os.environ["PATH"]
-        )
-
-from pympl import PyMPL
 
 
 class TestPyMPL(unittest.TestCase):
