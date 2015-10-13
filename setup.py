@@ -60,6 +60,8 @@ with open("pympl/__init__.py", "rb") as f:
         f.read().decode("utf-8")).group(1)))
     # assert str(parse_version(version)) == version
 
+print ls_dir("pympl/")
+
 setup(
     name="PyMPL",
     version=version,
@@ -70,8 +72,6 @@ setup(
     description="Mathematical Programming Toolbox for AMPL",
     long_description=__doc__,
     packages=["pympl"],
-    package_data={"": ls_dir("pympl/")},
-    include_package_data=True,
     scripts=[os.path.join("scripts", f) for f in ls_dir("scripts/")],
     platforms="any",
     install_requires=open("requirements.txt").read().split("\n"),
