@@ -21,9 +21,15 @@ BASEDIR=`dirname $0`
 cd $BASEDIR
 CMD="$0 $*"
 
+usage(){
+    echo -e "Usage:"
+    echo -e "  $0 [--venv venv_dir] [--options test_options]"
+}
+
 error(){
     echo "Command line: "$CMD
     echo "Error: invalid arguments."
+    usage
     exit 1
 }
 
@@ -32,16 +38,19 @@ options=""
 
 while true;
 do
-  case "$1" in
+    case "$1" in
     --venv)
         if [[ -n "$2" ]]; then venv=$2; else error; fi
         shift 2;;
     --options)
-        if [[ -n "$2" ]]; then options=$2; else error; fi
-        shift 2;;
+        if [[ -n "$2" ]]; then
+            options=$2; shift 2;
+        else
+            options=""; shift 1;
+        fi;;
     *)
         if [[ -n "$1" ]]; then error; else break; fi
-  esac
+    esac
 done
 
 if [[ -n "$venv" ]]; then

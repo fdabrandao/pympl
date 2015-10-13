@@ -21,9 +21,15 @@ BASEDIR=`dirname $0`
 cd $BASEDIR
 CMD="$0 $*"
 
+usage(){
+    echo -e "Usage:"
+    echo -e "  $0 [--venv venv_dir] [--port app_port]"
+}
+
 error(){
     echo "Command line: "$CMD
     echo "Error: invalid arguments."
+    usage
     exit 1
 }
 
@@ -32,7 +38,7 @@ port=5555
 
 while true;
 do
-  case "$1" in
+    case "$1" in
     --venv)
         if [[ -n "$2" ]]; then venv=$2; else error; fi
         shift 2;;
@@ -41,7 +47,7 @@ do
         shift 2;;
     *)
         if [[ -n "$1" ]]; then error; else break; fi
-  esac
+    esac
 done
 
 if [[ -n "$venv" ]]; then

@@ -19,6 +19,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 BASEDIR=`dirname $0`
 cd $BASEDIR
+CMD="$0 $*"
+
+usage(){
+    echo -e "Usage:"
+    echo -e "  $0 --venv venv_dir [-p python_exe]"
+}
+
+error(){
+    echo "Command line: "$CMD
+    echo "Error: invalid arguments."
+    usage
+    exit 1
+}
 
 pyexec="";
 venv="venv";
@@ -36,6 +49,10 @@ do
         if [[ -n "$1" ]]; then error; else break; fi
   esac
 done
+
+if [[ -z "$venv" ]]; then
+    error
+fi
 
 if [[ -n "$pyexec" ]]; then
     virtualenv --system-site-packages -p $pyexec $venv || exit 1;
