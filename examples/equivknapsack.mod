@@ -1,3 +1,9 @@
+/*
+Wolsey, L. A. (1977). Valid inequalities, covering problems and discrete
+dynamic programs.
+Simple generalization of the "minimum equivalent 0-1 knapsack inequalities"
+application.
+*/
 $PARAM[m]{len(a)};
 $PARAM[bounds]{bounds, 1};
 

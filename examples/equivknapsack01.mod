@@ -1,3 +1,7 @@
+/*
+Wolsey, L. A. (1977). Valid inequalities, covering problems and discrete
+dynamic programs.
+*/
 $PARAM[m]{len(a)};
 
 $EXEC{
