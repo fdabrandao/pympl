@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
 
 def main():
-    """Runs all PyMPL examples."""
+    """Runs PyMPL examples."""
 
     try:
         print("equivknapsack:")

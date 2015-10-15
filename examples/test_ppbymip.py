@@ -36,29 +36,29 @@ if __name__ == "__main__":
 
 
 def main():
-    """Runs all PyMPL examples."""
+    """Runs all lot-sizing examples."""
 
-    print("bike:")
+    print("ppbymip_bike:")
     bike.main()
 
     if "quick_test" not in sys.argv:
-        print("cgp:")
+        print("ppbymip_cgp:")
         cgp.main()
 
     if "quick_test" not in sys.argv:
-        print("clb:")
+        print("ppbymip_clb:")
         clb.main()
 
     if "quick_test" not in sys.argv:
-        print("clb:")
+        print("ppbymip_clb:")
         clb.main()
 
     if "quick_test" not in sys.argv:
-        print("mp:")
+        print("ppbymip_mp:")
         mp.main()
 
     if "quick_test" not in sys.argv:
-        print("ps:")
+        print("ppbymip_ps:")
         ps.main()
 
 if __name__ == "__main__":

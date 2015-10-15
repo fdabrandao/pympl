@@ -25,7 +25,7 @@ from builtins import range
 
 import os
 import sys
-from pympl import PyMPL, glpkutils, script_wsol
+from pympl import PyMPL, Tools, glpkutils
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)

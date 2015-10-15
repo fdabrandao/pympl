@@ -28,6 +28,7 @@ import six
 import re
 from .base import CmdBase, SubmodBase
 from ..model import Model, writemod
+from ..tools import Tools
 from .. import utils
 
 
@@ -305,7 +306,7 @@ class SubmodVBPFlow(SubmodBase):
 
         return graph, model, declared_vars
 
-    def extract(self, get_var_value, verbose=False):
+    def extract(self, get_var_value, verbose=None):
         """Extracts arc-flow solutions."""
         lst_sol = []
         for zvar, model, graph, prefix in zip(
@@ -317,8 +318,9 @@ class SubmodVBPFlow(SubmodBase):
             graph.set_flow(varvalues)
             sol = graph.extract_solution(graph.S, "<-", graph.T)
             lst_sol.append((zvar, varvalues.get(zvar, 0), sol))
-            if verbose:
-                print("Graph: {0} (flow={1:d})\n\t{2}".format(
+            Tools.log(
+                "Graph: {0} (flow={1:d})\n\t{2}".format(
                     zvar, varvalues.get("_total_flow", 0), sol
-                ))
+                ), verbose=verbose
+            )
         return lst_sol

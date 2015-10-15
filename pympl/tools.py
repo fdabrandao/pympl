@@ -31,7 +31,7 @@ import tempfile
 import subprocess
 
 
-class Solver(object):
+class Tools(object):
     """Tools for calling solver wrappers."""
 
     TMP_DIR = tempfile.mkdtemp()
@@ -43,28 +43,28 @@ class Solver(object):
     def set_verbose(verbose):
         """Enables/disables verbose output."""
         if verbose is not None:
-            Solver.VERBOSE = verbose
+            Tools.VERBOSE = verbose
 
     @staticmethod
     def new_tmp_file(ext="tmp"):
         """Creates temporary files."""
         if not ext.startswith("."):
             ext = ".{0}".format(ext)
-        fname = "{0}/{1}{2}".format(Solver.TMP_DIR, Solver.TMP_CNT, ext)
-        Solver.TMP_CNT += 1
+        fname = "{0}/{1}{2}".format(Tools.TMP_DIR, Tools.TMP_CNT, ext)
+        Tools.TMP_CNT += 1
         return fname
 
     @staticmethod
     @atexit.register
     def clear():
         """Deletes temporary files and kills child processes."""
-        for p in Solver.PLIST:
+        for p in Tools.PLIST:
             try:
                 os.killpg(p.pid, signal.SIGTERM)
             except:
                 pass
         try:
-            shutil.rmtree(Solver.TMP_DIR)
+            shutil.rmtree(Tools.TMP_DIR)
         except:
             pass
 
@@ -72,7 +72,7 @@ class Solver(object):
     def log(msg, verbose=None):
         """Log function."""
         if verbose is None:
-            verbose = Solver.VERBOSE
+            verbose = Tools.VERBOSE
         if verbose:
             print(msg)
 
@@ -80,7 +80,7 @@ class Solver(object):
     def run(cmd, tee=None, grep=None, grepv=None, verbose=None):
         """Runs system commands."""
         if verbose is None:
-            verbose = Solver.VERBOSE
+            verbose = Tools.VERBOSE
 
         proc = subprocess.Popen(
             cmd, shell=True,
@@ -88,7 +88,7 @@ class Solver(object):
             stderr=subprocess.STDOUT,
             preexec_fn=os.setsid
         )
-        Solver.PLIST.append(proc)
+        Tools.PLIST.append(proc)
 
         def pipe_output(fin, fout_list, grep=None, grepv=None):
             while True:
@@ -118,7 +118,7 @@ class Solver(object):
             raise Exception("failed to run '{0}'".format(cmd))
 
     @staticmethod
-    def script_wsol(script_name, model, options=None, verbose=None):
+    def script(script_name, model, options=None, verbose=None):
         """Calls solver scripts and returns the solutions."""
         cmd = script_name
         if model.endswith(".mps"):
@@ -129,9 +129,9 @@ class Solver(object):
             raise Exception("Invalid file extension!")
         if options is not None:
             cmd += " --options \"{0}\"".format(options)
-        out_file = Solver.new_tmp_file()
-        sol_file = Solver.new_tmp_file(".sol")
-        Solver.run(
+        out_file = Tools.new_tmp_file()
+        sol_file = Tools.new_tmp_file(".sol")
+        Tools.run(
             "{0} --wsol {1}".format(cmd, sol_file),
             tee=out_file,
             verbose=verbose
@@ -159,7 +159,7 @@ class Solver(object):
 def signal_handler(signal_, frame):
     """Signal handler for a cleaner exit."""
     print("signal received: {0}".format(signal_))
-    Solver.clear()
+    Tools.clear()
     sys.exit(0)
 
 signal.signal(signal.SIGINT, signal_handler)

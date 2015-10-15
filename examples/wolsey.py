@@ -25,7 +25,7 @@ from builtins import range
 
 import os
 import sys
-from pympl import PyMPL, glpkutils, script_wsol
+from pympl import PyMPL, Tools, glpkutils
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -61,7 +61,7 @@ def main():
     parser.parse(mod_in, mod_out)
     lp_out = "tmp/wolseyR2network.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=False)
-    out, varvalues = script_wsol(
+    out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=False
     )
     print("")
@@ -85,7 +85,7 @@ def main():
     parser.parse(mod_in, mod_out)
     lp_out = "tmp/wolseyR1gamma.mod.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=False)
-    out, varvalues = script_wsol(
+    out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=False
     )
     print("")

@@ -25,7 +25,7 @@ from builtins import range
 
 import os
 import sys
-from pympl import PyMPL, glpkutils, script_wsol
+from pympl import PyMPL, Tools, glpkutils
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -57,13 +57,13 @@ def main():
     lp_out = "tmp/tsp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        out, varvalues = script_wsol(
+        out, varvalues = Tool.script(
             "vpsolver_gurobi.sh", lp_out, verbose=True
         )
     except Exception as e:
         print(repr(e))
 
-    out, varvalues = script_wsol(
+    out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
     )
 

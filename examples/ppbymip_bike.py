@@ -23,7 +23,7 @@ from __future__ import print_function
 
 import os
 import sys
-from pympl import PyMPL, glpkutils, script_wsol
+from pympl import PyMPL, Tools, glpkutils
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -42,7 +42,7 @@ def main():
     lp_out = "tmp/bike.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        out, varvalues = script_wsol(
+        out, varvalues = Tools.script(
             "gurobi_wrapper.sh", lp_out, verbose=True
         )
     except Exception as e:

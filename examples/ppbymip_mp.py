@@ -25,7 +25,7 @@ from builtins import range
 
 import os
 import sys
-from pympl import PyMPL, glpkutils, script_wsol
+from pympl import PyMPL, Tools, glpkutils
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -62,9 +62,10 @@ def main():
     lp_out = "tmp/mp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        out, varvalues = script_wsol(
+        out, varvalues = Tools.script(
             "gurobi_wrapper.sh", lp_out,
-            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
+            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
+            verbose=True
         )
     except Exception as e:
         print(repr(e))

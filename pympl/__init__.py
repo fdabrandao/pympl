@@ -23,6 +23,5 @@ __version__ = "0.7.4"
 
 from .pympl import PyMPL
 from .model import Model
+from .tools import Tools
 from . import glpkutils
-from .solver import Solver
-script_wsol = Solver.script_wsol
