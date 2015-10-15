@@ -7,12 +7,14 @@
   * [Useful links](#useful-links)
   * [Examples](#examples)
   * [PyMPL Parser](#pympl-parser)
+  * [PyMPL Tools](Tools)
   * [PyMPL Statements](STMTS)
 
 ### Useful links
 
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
+* PyPI repository: <https://pypi.python.org/pypi/PyMPL/>
 
 ### Examples
 
@@ -132,7 +134,7 @@ Advanced features:
 * Given a function `f(varname)` that takes a variable name and returns its value:
 
   * If any command used implements solution extraction you can use `parser[command_name].extract(f)` to extract the solution;
-  * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.
+  * If any command used implements cut generators you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
 Copyright © Filipe Brandão. All rights reserved.  

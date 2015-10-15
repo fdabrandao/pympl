@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <title>
-  Docker.md
+  Tools.md
   
     - Grip
   
@@ -44,81 +44,216 @@
               
                 <h3>
                   <span class="octicon octicon-book"></span>
-                  Docker.md
+                  Tools.md
                 </h3>
               
               <div class="markdown-body entry-content">
                 <h2>
-<a id="user-content-docker" class="anchor" href="#docker" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker</h2>
+<a id="user-content-pympl-tools" class="anchor" href="#pympl-tools" aria-hidden="true"><span class="octicon octicon-link"></span></a>PyMPL Tools</h2>
 
-<p>Docker is an open platform for building, shipping and running applications. Docker allows <a href="https://github.com/fdabrandao/pympl">PyMPL</a> to run on a large variety of platforms with very little effort.</p>
+<p>PyMPL includes a few tools in order to make it easier to parse PyMPL models, solve them and extract their solutions.</p>
 
-<h3>
-<a id="user-content-docker-setup" class="anchor" href="#docker-setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Docker Setup</h3>
-
-<p>Install Docker [<a href="https://docs.docker.com/installation/">Docker installation instructions</a>].</p>
-
-<p>Option 1: simply <code>pull</code> PyMPL from Docker repository (without building):</p>
-
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ docker pull fdabrandao/pympl</pre></div>
-
-<p>Option 2: <code>clone</code> PyMPL and <code>build</code> locally:</p>
-
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ git clone git@github.com:fdabrandao/pympl.git pympl
-user@locahost <span class="pl-k">~</span>$ docker build -t fdabrandao/pympl pympl</pre></div>
+<ul>
+<li><a href="#usage-example">Usage example</a></li>
+<li><a href="#solver-wrappers">Solver wrappers</a></li>
+<li><a href="#tools-api">Tools API</a></li>
+<li><a href="#glpkutils">glpkutils</a></li>
+</ul>
 
 <h3>
-<a id="user-content-usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage</h3>
+<a id="user-content-usage-example" class="anchor" href="#usage-example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage example</h3>
 
-<p>Directly using the command line interface:</p>
+<p>In the following example, we solve a small cutting stock problem with rolls of width 5180,
+items of width 1250, 1000, 750, 915, 920, 985 with demands
+19, 264, 10, 30, 5, 21, respectively. Since the base model (<code>model.mod</code>) is a valid GMPL model, 
+we use GLPK to convert it to LP and to solve it. Nevertheless, any other solver could have been used to solve it.</p>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ docker run --rm -it fdabrandao/pympl bash
-root@55d14f6b6f32:<span class="pl-k">~</span># <span class="pl-c1">source</span> venv2.7/bin/activate <span class="pl-c"># load a virtualenv</span>
-(venv2.7)root@55d14f6b6f32:<span class="pl-k">~</span># python examples/equivknapsack01.py
-...</pre></div>
+<p><code>model.mod (AMPL/GMPL + PyMPL statements)</code></p>
 
-<p>or through the PyMPL Web App (example URL: <code>http://172.17.0.60:5555/</code>):</p>
+<div class="highlight highlight-source-ampl"><pre>$EXEC{
+W <span class="pl-k">=</span> [<span class="pl-c1">5180</span>]                                       <span class="pl-c"># roll width</span>
+w <span class="pl-k">=</span> [[<span class="pl-c1">1250</span>], [<span class="pl-c1">1000</span>], [<span class="pl-c1">750</span>], [<span class="pl-c1">915</span>], [<span class="pl-c1">920</span>], [<span class="pl-c1">985</span>]] <span class="pl-c"># item widths</span>
+b <span class="pl-k">=</span> [<span class="pl-c1">19</span>, <span class="pl-c1">264</span>, <span class="pl-c1">10</span>, <span class="pl-c1">30</span>, <span class="pl-c1">5</span>, <span class="pl-c1">21</span>]                     <span class="pl-c"># item demands</span>
+};
+$<span class="pl-k">PARAM</span>[b{I}]{b, i0<span class="pl-k">=</span><span class="pl-c1">1</span>};
+<span class="pl-k">var</span> x{I}, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>;
+<span class="pl-c"># Generate an arc-flow model (with x[i] = total amount of flow on arcs (u, v, i)):</span>
+$VBP_FLOW[Z]{W, w,  [<span class="pl-s"><span class="pl-pds">"</span>x[1]<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>x[2]<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>x[3]<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>x[4]<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>x[5]<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>x[6]<span class="pl-pds">"</span></span>]};
+<span class="pl-k">minimize</span> <span class="pl-k">obj</span><span class="pl-k">:</span> Z;
+s.t. demand{i <span class="pl-k">in</span> I}<span class="pl-k">:</span> x[i] <span class="pl-k">&gt;=</span> b[i];
+<span class="pl-k">solve</span>;
+<span class="pl-k">end</span>;</pre></div>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ docker run --rm -it -p 5555 fdabrandao/pympl 
-eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:3c  
-          inet addr:172.17.0.60  Bcast:0.0.0.0  Mask:255.255.0.0
-          inet6 addr: fe80::42:acff:fe11:3c/64 Scope:Link
-          UP BROADCAST  MTU:1500  Metric:1
-          RX packets:2 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:2 errors:0 dropped:0 overruns:0 carrier:0
-          collisions:0 txqueuelen:0 
-          RX bytes:168 (168.0 B)  TX bytes:180 (180.0 B)
+<p><code>solve.py (Python)</code></p>
 
-URL: http://172.17.0.60:5555/
-USERNAME: ...
-PASSWORD: ...
- <span class="pl-k">*</span> Running on http://0.0.0.0:5555/
-...</pre></div>
+<div class="highlight highlight-source-python"><pre><span class="pl-k">from</span> pympl <span class="pl-k">import</span> PyMPL, Tools, glpkutils
+parser <span class="pl-k">=</span> PyMPL() <span class="pl-c"># initialize the parser </span>
+parser.parse(<span class="pl-s"><span class="pl-pds">"</span>model.mod<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>model.out.mod<span class="pl-pds">"</span></span>) <span class="pl-c"># parse "model.mod" and produce "model.out.mod"</span>
+glpkutils.mod2lp(<span class="pl-s"><span class="pl-pds">"</span>model.out.mod<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>model.lp<span class="pl-pds">"</span></span>) <span class="pl-c"># use GLPK to convert "model.out.mod" to LP</span>
+out, varvalues <span class="pl-k">=</span> Tools.script(<span class="pl-s"><span class="pl-pds">"</span>glpk_wrapper.sh<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>model.lp<span class="pl-pds">"</span></span>) <span class="pl-c"># solve and return the solution</span>
+<span class="pl-c"># extract a vector packing solution from the arc-flow solution:</span>
+sol <span class="pl-k">=</span> parser[<span class="pl-s"><span class="pl-pds">"</span>VBP_FLOW<span class="pl-pds">"</span></span>].extract(<span class="pl-k">lambda</span> <span class="pl-smi">varname</span>: varvalues.get(varname, <span class="pl-c1">0</span>))</pre></div>
+
+<p><code>Output</code></p>
+
+<pre><code>...
+OPTIMAL LP SOLUTION FOUND
+Integer optimization begins...
++    29: mip =     not found yet &gt;=              -inf        (1; 0)
++    88: &gt;&gt;&gt;&gt;&gt;   7.000000000e+01 &gt;=   6.900000000e+01   1.4% (30; 0)
++    93: &gt;&gt;&gt;&gt;&gt;   6.900000000e+01 &gt;=   6.900000000e+01   0.0% (6; 33)
++    93: mip =   6.900000000e+01 &gt;=     tree is empty   0.0% (0; 59)
+INTEGER OPTIMAL SOLUTION FOUND
+Time used:   0.0 secs
+Memory used: 0.1 Mb (145550 bytes)
+Writing MIP solution to `/tmp/Xz5GCUfsze/sol.out'...
+Graph: Z (flow=69)                                   # 69 rolls are used
+    [(4, ['i=3', 'i=3', 'i=4', 'i=4', 'i=4', 'i=4']),# 4 rolls with this pattern 
+     (1, ['i=1', 'i=2', 'i=3', 'i=3', 'i=4']),       # 1 roll with this pattern 
+     (13, ['i=1', 'i=2', 'i=2', 'i=2', 'i=4']),      # 13 rolls with this pattern 
+     (25, ['i=2', 'i=2', 'i=2', 'i=2', 'i=2']),      # 25 rolls with this pattern 
+     (5, ['i=1', 'i=2', 'i=2', 'i=2', 'i=5']),       # 5 rolls with this pattern 
+     (21, ['i=2', 'i=2', 'i=2', 'i=2', 'i=6'])]      # 21 rolls with this pattern 
+</code></pre>
 
 <h3>
-<a id="user-content-advanced" class="anchor" href="#advanced" aria-hidden="true"><span class="octicon octicon-link"></span></a>Advanced</h3>
+<a id="user-content-solver-wrappers" class="anchor" href="#solver-wrappers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solver wrappers</h3>
 
-<p>Run PyMPL Web App in background:</p>
+<p>PyMPL includes several scripts for solving MPS/LP models using different
+solvers:</p>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ CID=<span class="pl-s"><span class="pl-pds">$(</span>docker run -d -p 5555 fdabrandao/pympl<span class="pl-pds">)</span></span>
-user@locahost <span class="pl-k">~</span>$ docker inspect --format URL:http://{{.NetworkSettings.IPAddress}}:5555/ <span class="pl-smi">$CID</span>
-URL:http://172.17.0.71:5555/</pre></div>
+<ul>
+<li>
+<code>scripts/gurobi_wrapper.sh</code>: Gurobi</li>
+<li>
+<code>scripts/cplex_wrapper.sh</code>: IBM CPLEX</li>
+<li>
+<code>scripts/coinor_wrapper.sh</code>: COIN-OR CBC</li>
+<li>
+<code>scripts/glpk_wrapper.sh</code>: GLPK</li>
+<li>
+<code>scripts/scip_wrapper.sh</code>: SCIP</li>
+<li>
+<code>scripts/lpsolve_wrapper.sh</code>: lp_solve</li>
+</ul>
 
-<p>List all running PyMPL containers:</p>
+<p>Usage:</p>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ docker ps <span class="pl-k">|</span> grep fdabrandao/pympl
-...</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ X_wrapper.sh --mps model.mps
+$ X_wrapper.sh --lp model.lp
+$ X_wrapper.sh --mps model.mps --wsol vars.sol
+$ X_wrapper.sh --lp model.lp --wsol vars.sol</pre></div>
 
-<p>List URLs of all running PyMPL containers:</p>
+<h3>
+<a id="user-content-tools-api" class="anchor" href="#tools-api" aria-hidden="true"><span class="octicon octicon-link"></span></a>Tools API</h3>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ CIDs=<span class="pl-s"><span class="pl-pds">$(</span>docker ps <span class="pl-k">|</span> grep fdabrandao/pympl <span class="pl-k">|</span> cut -d<span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> -f1<span class="pl-pds">)</span></span>
-user@locahost <span class="pl-k">~</span>$ docker inspect --format URL:http://{{.NetworkSettings.IPAddress}}:5555/ <span class="pl-smi">$CIDs</span>
-...</pre></div>
+<p>How to import: </p>
 
-<p>Stop and remove all PyMPL containers:</p>
+<ul>
+<li>
+<code>from pympl import Tools</code>.</li>
+</ul>
 
-<div class="highlight highlight-source-shell"><pre>user@locahost <span class="pl-k">~</span>$ docker stop <span class="pl-s"><span class="pl-pds">$(</span>docker ps -a <span class="pl-k">|</span> grep fdabrandao/pympl <span class="pl-k">|</span> cut -d<span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> -f1<span class="pl-pds">)</span></span>
-user@locahost <span class="pl-k">~</span>$ docker rm <span class="pl-s"><span class="pl-pds">$(</span>docker ps -a <span class="pl-k">|</span> grep fdabrandao/pympl <span class="pl-k">|</span> cut -d<span class="pl-s"><span class="pl-pds">"</span> <span class="pl-pds">"</span></span> -f1<span class="pl-pds">)</span></span></pre></div>
+<p>How to use:</p>
+
+<ul>
+<li>
+<p><code>output, solution = Tools.script(script_name, model, options=None, verbose=None)</code></p>
+
+<ul>
+<li>Description: calls VPSolver scripts.</li>
+<li>Important arguments:
+
+<ul>
+<li>
+<code>script_name</code>: wrapper script (e.g., <code>glpk_wrapper.sh</code>);</li>
+<li>
+<code>model</code>: model file (.mps/.lp file name);</li>
+<li>
+<code>options</code>: parameters to pass to the wrapper.</li>
+</ul>
+</li>
+<li>Actions:
+
+<ul>
+<li>calls <code>script_name</code> to solve a .mps/.lp model;</li>
+<li>returns the output and a python dictionary <code>{var:value}</code> with the solution.</li>
+</ul>
+</li>
+<li>Usage examples:
+
+<ul>
+<li>
+<code>Tools.script(script name, .mps file/MPS object)</code>;</li>
+<li>
+<code>Tools.script(script name, .lp file/LP object)</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Tools.set_verbose(verbose)</code></p>
+
+<ul>
+<li>Description: sets the default "verbose" behaviour.</li>
+<li>Arguments:
+
+<ul>
+<li>
+<code>verbose</code>: <code>True</code> or <code>False</code>.</li>
+</ul>
+</li>
+<li>Note: The default behaviour is overridden if the <code>verbose</code> argument is set to a value different from <code>None</code> in any API call.</li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-glpkutils" class="anchor" href="#glpkutils" aria-hidden="true"><span class="octicon octicon-link"></span></a>glpkutils</h3>
+
+<p>How to import: </p>
+
+<ul>
+<li>
+<code>from pympl import glpkutils</code>.</li>
+</ul>
+
+<p>How to use:</p>
+
+<ul>
+<li>
+<p><code>glpkutils.mod2lp(fname_mod, fname_lp, verbose=None)</code></p>
+
+<ul>
+<li>Description: calls glpsol to convert GMPL models to LP.</li>
+<li>Important arguments:
+
+<ul>
+<li>
+<code>fname_mod</code>: GMPL model file (.mod file name);</li>
+<li>
+<code>fname_lp</code>: LP model file (.lp file name).</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><code>glpkutils.mod2mps(fname_mod, fname_mps, verbose=None)</code></p>
+
+<ul>
+<li>Description: calls glpsol to convert GMPL models to MPS.</li>
+<li>Important arguments:
+
+<ul>
+<li>
+<code>fname_mod</code>: GMPL model file (.mod file name);</li>
+<li>
+<code>fname_mps</code>: MPS model file (.mps file name).</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
 <hr>
 

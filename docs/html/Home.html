@@ -60,6 +60,7 @@
 <li><a href="#useful-links">Useful links</a></li>
 <li><a href="#examples">Examples</a></li>
 <li><a href="#pympl-parser">PyMPL Parser</a></li>
+<li><a href="Tools.html">PyMPL Tools</a></li>
 <li><a href="STMTS.html">PyMPL Statements</a></li>
 </ul>
 
@@ -70,6 +71,8 @@
 <li>GiHub repository: <a href="https://github.com/fdabrandao/pympl">https://github.com/fdabrandao/pympl</a>
 </li>
 <li>BitBucket repository: <a href="https://bitbucket.org/fdabrandao/pympl">https://bitbucket.org/fdabrandao/pympl</a>
+</li>
+<li>PyPI repository: <a href="https://pypi.python.org/pypi/PyMPL/">https://pypi.python.org/pypi/PyMPL/</a>
 </li>
 </ul>
 
@@ -188,7 +191,7 @@ os.system(<span class="pl-s"><span class="pl-pds">"</span>ampl ampl_model.mod<sp
 
 <ul>
 <li>If any command used implements solution extraction you can use <code>parser[command_name].extract(f)</code> to extract the solution;</li>
-<li>If any command used implements cut generation you can use <code>parser[command_name].separate(f)</code> to generate cutting planes.</li>
+<li>If any command used implements cut generators you can use <code>parser[command_name].separate(f)</code> to generate cutting planes.</li>
 </ul>
 </li>
 </ul>

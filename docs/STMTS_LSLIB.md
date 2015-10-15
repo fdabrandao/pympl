@@ -298,6 +298,8 @@ Usage: `$DLS_CC_SC{s, y, z, d, C, NT, Tk=None};`
 
 Description: Discrete lot-sizing (without initial stock) with start-up costs.
 
+Notes: `DLS_CC_SC` is only valid if demands are in {0, C}.
+
 Parameters: see [parameter description](#parameters).
 
 ***

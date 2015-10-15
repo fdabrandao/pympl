@@ -72,6 +72,8 @@ Porto, Portugal. All rights reserved. E-mail: <a href="mailto:fdabrandao@dcc.fc.
 </li>
 <li>BitBucket repository: <a href="https://bitbucket.org/fdabrandao/pympl">https://bitbucket.org/fdabrandao/pympl</a>
 </li>
+<li>PyPI repository: <a href="https://pypi.python.org/pypi/PyMPL">https://pypi.python.org/pypi/PyMPL</a>
+</li>
 </ul>
 
 <h3>
@@ -79,13 +81,13 @@ Porto, Portugal. All rights reserved. E-mail: <a href="mailto:fdabrandao@dcc.fc.
 
 <p>Install from the repository:</p>
 
-<div class="highlight highlight-source-shell"><pre>$ sudo pip install pympl</pre></div>
+<div class="highlight highlight-source-shell"><pre>$ pip install pympl</pre></div>
 
 <p>Or build and install locally:</p>
 
-<pre><code>$ sudo pip install -r requirements.txt
-$ sudo pip install . --upgrade
-$ bash test.sh test_install
+<pre><code>$ pip install -r requirements.txt
+$ pip install . --upgrade
+$ bash test.sh
 </code></pre>
 
 <p>PyMPL can also be used inside a <a href="Docker.html">Docker container</a> that includes a simple web app for an easy usage.</p>
@@ -160,7 +162,7 @@ os.system(<span class="pl-s"><span class="pl-pds">"</span>ampl ampl_model.mod<sp
 
 <ul>
 <li>If any command used implements solution extraction you can use <code>parser[command_name].extract(f)</code> to extract the solution;</li>
-<li>If any command used implements cut generation you can use <code>parser[command_name].separate(f)</code> to generate cutting planes.</li>
+<li>If any command used implements cut generators you can use <code>parser[command_name].separate(f)</code> to generate cutting planes.</li>
 </ul>
 </li>
 </ul>

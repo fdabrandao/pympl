@@ -22,17 +22,18 @@ user@locahost ~$ docker build -t fdabrandao/pympl pympl
 Directly using the command line interface:
 
 ```bash
-user@locahost ~$ docker run -it fdabrandao/pympl bash
-root@55d14f6b6f32:~# python examples/equivknapsack01.py
+user@locahost ~$ docker run --rm -it fdabrandao/pympl bash
+root@55d14f6b6f32:~# source venv2.7/bin/activate # load a virtualenv
+(venv2.7)root@55d14f6b6f32:~# python examples/equivknapsack01.py
 ...
 ```
 
 or through the PyMPL Web App (example URL: `http://172.17.0.60:5555/`):
 
 ```bash
-user@locahost ~$ docker run -it -p 5555 fdabrandao/pympl 
+user@locahost ~$ docker run --rm -it -p 5555 fdabrandao/pympl 
 eth0      Link encap:Ethernet  HWaddr 02:42:ac:11:00:3c  
-          inet addr:*172.17.0.60*  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet addr:172.17.0.60  Bcast:0.0.0.0  Mask:255.255.0.0
           inet6 addr: fe80::42:acff:fe11:3c/64 Scope:Link
           UP BROADCAST  MTU:1500  Metric:1
           RX packets:2 errors:0 dropped:0 overruns:0 frame:0
