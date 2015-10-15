@@ -15,19 +15,20 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 * PyMPL documentation: <https://github.com/fdabrandao/pympl/wiki>
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
+* PyPI repository: <https://pypi.python.org/pypi/PyMPL>
 
 ### Setup
 
 Install from the repository:
 ```bash
-$ sudo pip install pympl
+$ pip install pympl
 ```
 
 Or build and install locally:
 ```
-$ sudo pip install -r requirements.txt
-$ sudo pip install . --upgrade
-$ bash test.sh test_install
+$ pip install -r requirements.txt
+$ pip install . --upgrade
+$ bash test.sh
 ```
 
 PyMPL can also be used inside a [Docker container](https://github.com/fdabrandao/pympl/wiki/Docker) that includes a simple web app for an easy usage.
@@ -103,7 +104,7 @@ Advanced features:
 * Given a function `f(varname)` that takes a variable name and returns its value:
 
   * If any command used implements solution extraction you can use `parser[command_name].extract(f)` to extract the solution;
-  * If any command used implements cut generation you can use `parser[command_name].separate(f)` to generate cutting planes.
+  * If any command used implements cut generators you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
 Copyright © Filipe Brandão. All rights reserved.  
