@@ -204,9 +204,10 @@ def tsp_cut_generator(graph, cutvars, get_var_value):
     ds = UnionFind(len(V))
     ind = {v: i for i, v in enumerate(V)}
 
+    varvalue = {}
     for (u, v) in cutvars:
-        value = get_var_value(cutvars[u, v])
-        if abs(1-value) < 1e-5:
+        varvalue[cutvars[u, v]] = get_var_value(cutvars[u, v])
+        if abs(1-varvalue[cutvars[u, v]]) < 1e-5:
             ds.link(ind[u], ind[v])
 
     if ds.ngroups > 1:
@@ -215,11 +216,11 @@ def tsp_cut_generator(graph, cutvars, get_var_value):
             if len(group) <= 2:
                 continue
             grp = set([V[id_] for id_ in group])
-            cuts.append((
-                [
-                   (cutvars[u, v], 1)
-                   for u in grp for v in grp if u < v
-                ], "<=", len(grp)-1
-            ))
+            lincomb = [
+               (cutvars[u, v], 1)
+               for u in grp for v in grp if u < v
+            ]
+            if sum(varvalue[var]*coef for var, coef in lincomb) > len(grp)-1:
+                cuts.append((lincomb, "<=", len(grp)-1))
 
     return cuts
