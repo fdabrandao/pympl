@@ -5,7 +5,7 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
 
-[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, sub-tour elimination constraints for TSP, and lot-sizing reformulations. PyMPL is fully compatible with both python 2 and 3.
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, sub-tour elimination constraints for TSP, and lot-sizing reformulations. PyMPL is fully compatible with both python 2 and 3.
 
 ![](https://img.shields.io/badge/license-GPL-blue.svg)
 [![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
@@ -15,11 +15,12 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 * PyMPL documentation: <https://github.com/fdabrandao/pympl/wiki>
 * GiHub repository: <https://github.com/fdabrandao/pympl>
 * BitBucket repository: <https://bitbucket.org/fdabrandao/pympl>
+* Docker repository: <https://hub.docker.com/r/fdabrandao/pympl>
 * PyPI repository: <https://pypi.python.org/pypi/PyMPL>
 
 ### Setup
 
-Install from the repository:
+Install from the [repository](https://pypi.python.org/pypi/PyMPL):
 ```bash
 $ pip install pympl
 ```
@@ -31,7 +32,7 @@ $ pip install . --upgrade
 $ bash test.sh
 ```
 
-PyMPL can also be used inside a [Docker container](https://github.com/fdabrandao/pympl/wiki/Docker) that includes a simple web app for an easy usage.
+PyMPL can also be used inside a [Docker container](https://github.com/fdabrandao/pympl/wiki/Docker-container) that includes a simple web app for an easy usage.
 
 ### Examples
 
