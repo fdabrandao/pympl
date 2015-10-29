@@ -12,6 +12,6 @@ $VBP_FLOW[Z]{W, w, ["x[%d]"%i for i in _sets['I']]};
 minimize obj: Z;
 s.t. demand{i in I}: x[i] >= b[i];
 
+end;
 solve;
 display Z;
-end;

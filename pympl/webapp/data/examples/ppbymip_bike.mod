@@ -14,7 +14,7 @@ $PARAM[d]{[400, 400, 800, 800, 1200, 1200, 1200, 1200],i0=1};
 var x{1..NT}, >= 0;   # production lot size
 var y{1..NT}, binary; # production set-up
 var s{0..NT}, >= 0;   # inventory level
-var r{1..NT}, ${">= 0" if BACKLOG else "== 0"}$; # backlog level
+var r{1..NT}, ${">= 0" if BACKLOG else ">= 0, <= 0"}$; # backlog level
 # LS-U (enough capacity to produde everything):
 param C{t in 1..NT} := sum{tt in t..NT} d[tt];
 
@@ -52,8 +52,8 @@ else:
     WW_U_B(s, r, y, d, NT)
 };
 
+end;
 solve;
 display x;
 display y;
 display s;
-end;

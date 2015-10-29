@@ -80,7 +80,7 @@ def main():
     print("wolseyR1gamma:")
 
     mod_in = "wolseyR1gamma.mod"
-    mod_out = "tmp/wolseyR1gamma.mod.out.mod"
+    mod_out = "tmp/wolseyR1gamma.out.mod"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
     lp_out = "tmp/wolseyR1gamma.mod.lp"

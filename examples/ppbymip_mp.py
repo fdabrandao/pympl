@@ -70,7 +70,7 @@ def main():
     except Exception as e:
         print(repr(e))
 
-    #print "varvalues:", [(k, v) for k, v in sorted(varvalues.items())]
+    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
 
 if __name__ == "__main__":
     main()

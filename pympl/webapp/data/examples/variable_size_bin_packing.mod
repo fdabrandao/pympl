@@ -28,7 +28,7 @@ $VBP_FLOW[^Z[3]]{W3, ws, ["x[3, %d]"%i for i in _sets['I']]};
 minimize obj: sum{t in T} C[t] * Z[t];
 s.t. demand{i in I}: sum{t in T} x[t, i] >= b[i];
 
+end;
 solve;
 display{t in T} Z[t]; # number of bins of type t used
 display sum{t in T} C[t] * Z[t]; # cost
-end;

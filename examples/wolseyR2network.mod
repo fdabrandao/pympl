@@ -18,7 +18,7 @@ s.t. flowcon{k in V diff {'S'}}:
       0;
 s.t. demand{k in I}: sum{(u,v,i) in A: i == k} -f[u,v,i]+Z0 <= 0;
 
+end;
 solve;
 display {i in I} demand[i].dual;
 display Z0;
-end;

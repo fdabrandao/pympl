@@ -22,8 +22,8 @@ s.t. B: 7*x - 2*y + 3*u <= 170;
 
 maximize obj: 2*x + 15*y;
 
+end;
 solve;
 display x, y, u;
 display z;
 display "Objective:", 2*x + 15*y;
-end;

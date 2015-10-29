@@ -46,7 +46,7 @@ var y{1..NI, 0..NT}, binary;
 var s{1..NI, 1..NT}, >= 0;
 
 # backlog level:
-var r{1..NI, 1..NT}, ${">= 0" if BACKLOG else "== 0"}$;
+var r{1..NI, 1..NT}, ${">= 0" if BACKLOG else ">= 0, <= 0"}$;
 
 # start-up of item i at the beginning of period t:
 var z{1..NI, 1..NT}, binary;
@@ -106,5 +106,5 @@ for i in mrange(1, NI):
         #DLS_CC_B(r, y, d, C, NT) # has no effect?
 };
 
-solve;
 end;
+solve;

@@ -78,5 +78,5 @@ for i in mrange(1, NI):
     DLS_CC_B(r, y, d, C, NT)
 };
 
-solve;
 end;
+solve;

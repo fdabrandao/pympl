@@ -75,6 +75,6 @@ s.t. tw2{i in V: i != start_node}:
 s.t. tw3{i in V: i != start_node}:
     s[i] <= D[i];
 
+end;
 solve;
 display x;
-end;

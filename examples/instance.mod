@@ -17,7 +17,7 @@ print("_params:", _params.keys())
 minimize obj: Z;
 s.t. demand{i in I}: x[i] >= instance1_b[i];
 
+end;
 solve;
 display Z;
 display x;
-end;
