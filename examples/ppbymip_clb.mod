@@ -24,7 +24,7 @@ $PARAM[h]{[0.0025, 0.0030, 0.0022, 0.0022], i0=1};
 
 $PARAM[g]{50};     # start-up cost
 $PARAM[gamma]{50}; # switch-off cost
-$PARAM[rho]{2};    # backlog cost/storage cost ratio
+$PARAM[rho]{5};    # backlog cost/storage cost ratio
 
 $PARAM[L]{7};  # production lower-bound
 $PARAM[C]{16}; # production upper-bound
@@ -44,7 +44,7 @@ var x{1..NI, 1..NT}, >= 0;
 var s{1..NI, 1..NT}, >= 0;
 
 # backlog variables:
-var r{1..NI, 1..NT}, ${">= 0" if BACKLOG else "== 0"}$;
+var r{1..NI, 1..NT}, ${">= 0" if BACKLOG else ">= 0, <= 0"}$;
 
 # production variables:
 var y{1..NI, 1..NT}, binary;
@@ -70,10 +70,12 @@ s.t. upper_bound{i in 1..NI, t in 1..NT}:
 s.t. lower_bound{i in 1..NI, t in 1..NT}:
     x[i, t] >= L*y[i, t];
 
+#s.t. rNT{i in 1..NI}: r[i, NT] = 0; # not used in the book
+
 s.t. setups1{i in 1..NI, t in 1..NT}:
     z[i, t] - (if t > 1 then w[i, t-1]) = y[i, t] - (if t > 1 then y[i, t-1]);
-s.t. setups2{i in 1..NI, t in 1..NT}:
-    z[i, t] <= y[i, t];
+#s.t. setups2{i in 1..NI, t in 1..NT}:
+#    z[i, t] <= y[i, t]; # not used in the book
 
 s.t. one_at_time{t in 1..NT}: sum{i in 1..NI} y[i, t] <= 1;
 
@@ -92,16 +94,17 @@ if DISCRETE is False:
         d = [demand[i, t] for t in mrange(1, NT)]
         if BACKLOG is False:
             #WW_U(s, y, d, NT)
-            #WW_CC(s, y, d, C, NT)
-            WW_U_SC(s, y, z, d, NT)
+            WW_CC(s, y, d, C, NT, Tk=15)
+            WW_U_SC(s, y, z, d, NT, Tk=15)
             #LS_U(s, x, y, d, NT)
             #LS_U_SC(s, x, y, z, d, NT) # Not compatible with LB?
+            pass
         else:
             r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
             w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
-            WW_U_B(s, r, y, d, NT)
+            #WW_U_B(s, r, y, d, NT)
             #LS_U_B(s, r, x, y, d, NT)
-            WW_U_SCB(s, r, y, z, w, d, NT, Tk=5)
+            WW_U_SCB(s, r, y, z, w, d, NT, Tk=15)
             WW_CC_B(s, r, y, d, C, NT, Tk=5)
         #WW_U_LB(s, y, d, L, NT, Tk=15)
 else:
@@ -120,5 +123,5 @@ else:
             DLS_CC_B(r, y, d, C, NT)
 };
 
-solve;
 end;
+solve;

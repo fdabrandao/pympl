@@ -18,6 +18,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+from __future__ import print_function
 from __future__ import division
 from builtins import range
 
@@ -40,7 +41,7 @@ The implementations are a direct translation from the LS-LIB's xform.mos file.
 !    WW-U       **DONE!** (XFormWWU) seems to be ok! (bike.mod, clb.mod)
 !    WW-U-B     **DONE!** (XFormWWUB) seems to be ok! (bike.mod, clb.mod)
 !    WW-U-SC    **DONE!** (XFormWWUSC) seems to be ok! (clb.mod)
-!    WW-U-SC,B  **DONE!** (XFormWWUSCB) needs to be checked! (clb.mod)
+!    WW-U-SC,B  **DONE!** (XFormWWUSCB) seems to be ok! (clb.mod)
 !    WW-CC      **DONE!** (XFormWWCC) seems to be ok! (clb.mod)
 
 !    LS-U1=(MC) **DONE!** (XFormLSU1) seems to be ok! (bike.mod)
@@ -48,14 +49,14 @@ The implementations are a direct translation from the LS-LIB's xform.mos file.
 !    LS-U-B     **DONE!** (XFormLSUB) seems to be ok! (bike.mod, clb.mod)
 
 !Added 30/9/2005
-!    DLSI-CC    **DONE!** (XFormDLSICC) has no effect on ps.mod!!
+!    DLSI-CC    **DONE!** (XFormDLSICC) needs to be checked!
 !    DLSI-CC-B  **DONE!** (XFormDLSICCB) seems to be ok! (cgp.mod, clb.mod)
 !    DLS-CC-B   **DONE!** (XFormDLSCCB) seems to be ok! (cgp.mod, clb.mod)
 !    DLS-CC-SC  **DONE!** (XFormDLSCCSC) seems to be ok! (clb.mod)
 
 ! Added 30/9/05 (not in Xformsimple)
 !    WW-U-LB    **DONE!** (XFormWWULB) has no effect on clb.mod!!
-!    WW-CC-B    **DONE!** (XFormWWCCB) wrong solution on clb.mod (LB?)!!
+!    WW-CC-B    **DONE!** (XFormWWCCB) seems to be ok! (clb.mod)
 
 !Missing 24/7/07
 !    LS-U-SC    **DONE!** (XFormLSUSC) Not compatible with LB on clb.mod!!
@@ -82,13 +83,19 @@ def CumulDemand(d, D, NT):
         forall (k in 1..NT,l in 1..k-1) D(k,l):=0
     end-procedure
     """
+    # forall (k in 1..NT) D(k,k):=d(k)
     for k in mrange(1, NT):
         D[k, k] = d[k]
+
     for k in mrange(1, NT):
         D[k, 0] = 0
+
+    # forall (k in 1..NT,l in k+1..NT) D(k,l):=D(k,l-1)+d(l)
     for k in mrange(1, NT):
         for l in mrange(k+1, NT):
             D[k, l] = D[k, l-1]+d[l]
+
+    # forall (k in 1..NT,l in 1..k-1) D(k,l):=0
     for k in mrange(1, NT):
         for l in mrange(1, k-1):
             D[k, l] = 0
@@ -104,6 +111,8 @@ def CumulDemand0(d, D, NT):
         forall (l in 2..NT) D(l):=D(l-1)+d(l)
     end-procedure
     """
+    # D(1):=d(1)
+    # forall (l in 2..NT) D(l):=D(l-1)+d(l)
     D[1] = d[1]
     for l in mrange(2, NT):
         D[l] = D[l-1]+d[l]
@@ -303,7 +312,6 @@ def XFormWWUSCB(model, s, r, y, z, w, d, NT, Tk, prefix=""):
         !forall (t in 1..NT) XY(t):=a(t)+b(t)+y(t)>=1
         forall (t in 1..NT | d(t) > 0) XY(t):=a(t)+b(t)+y(t)>=1
 
-
         ! modification  9/2/04
         forall (k in 1..NT,t in k..minlist(NT,k+Tk-1)| d(t) > 0)
           !XA(k,t):=s(k-1)>=sum(l in k..t) d(l)*(a(l)-sum(i in k+1..l) w(i))
@@ -341,7 +349,7 @@ def XFormWWUSCB(model, s, r, y, z, w, d, NT, Tk, prefix=""):
     # forall (k in 1..NT,t in k..minlist(NT,k+Tk-1)| d(t) > 0) XA(k,t) :=
     # s(k-1)>=sum(l in k..t) d(l)*(a(l)-sum(i in k..l-1) w(i))
     for k in mrange(1, NT):
-        for k in mrange(k, min(NT, k+Tk-1)):
+        for t in mrange(k, min(NT, k+Tk-1)):
             if d[t] > 0:
                 rhs = []
                 for l in mrange(k, t):
@@ -540,7 +548,6 @@ def XFormWWCC(model, s, y, d, C, NT, Tk, prefix=""):
         end-declarations
 
         CumulDemand(d,D,NT)
-
 
         forall(k in 1..NT,t in k..minlist(NT,k+Tk-1)) create(ws(k-1,t))
 
@@ -750,7 +757,7 @@ def XFormWWCCB2(model, s, r, y, D, C, T1, TN, prefix=""):
     # forall (k in Ts,l in k..TN,t in Ts0 | ceil( (D(k,l)-gr(l,t))/C) > 0)
     # ds(k-1)+dr(l)+sum(i in k..l)y(i)+
     # sum(i in Ts0|gs(k-1,i)>=gs(k-1,t))ws(k-1,i)+
-    # sum(i in Ts0|gr(l,i)>gr(l,t))wr(l,i)  # possible bug: shouldn't be >=?
+    # sum(i in Ts0|gr(l,i)>gr(l,t))wr(l,i)
     # >= ceil( (D(k,l)-gr(l,t))/C)
     for k in Ts:
         for l in mrange(k, TN):
@@ -763,7 +770,7 @@ def XFormWWCCB2(model, s, r, y, D, C, T1, TN, prefix=""):
                         if gs[k-1, i] >= gs[k-1, t]:
                             lhs.append(wsvar(k-1, i))
                     for i in Ts0:
-                        if gr[l, i] >= gr[l, t]:
+                        if gr[l, i] > gr[l, t]:
                             lhs.append(wrvar(l, i))
                     model.add_con(lhs, ">=", ceil((D[k, l]-gr[l, t])/C))
 
@@ -807,7 +814,8 @@ def XFormWWCCB(model, s, r, y, d, C, NT, Tk, prefix=""):
         while True:
             t1 += Tk-1
             t2 = min(NT, t1+Tk+Tk-3)
-            XFormWWCCB2(model, s, r, y, D, C, t1, t2, prefix)
+            newprefix = prefix+"_{0}_{1}_".format(t1,t2)
+            XFormWWCCB2(model, s, r, y, D, C, t1, t2, newprefix)
             if t2 >= NT:
                 break
 
