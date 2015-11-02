@@ -96,17 +96,13 @@ if DISCRETE is False:
             #WW_U(s, y, d, NT)
             WW_CC(s, y, d, C, NT, Tk=15)
             WW_U_SC(s, y, z, d, NT, Tk=15)
-            #LS_U(s, x, y, d, NT)
-            #LS_U_SC(s, x, y, z, d, NT) # Not compatible with LB?
-            pass
+            #WW_U_LB(s, y, d, L, NT, Tk=15)
         else:
             r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
             w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
             #WW_U_B(s, r, y, d, NT)
-            #LS_U_B(s, r, x, y, d, NT)
             WW_U_SCB(s, r, y, z, w, d, NT, Tk=15)
             WW_CC_B(s, r, y, d, C, NT, Tk=5)
-        #WW_U_LB(s, y, d, L, NT, Tk=15)
 else:
    for i in mrange(1, NI):
         s0 = 0

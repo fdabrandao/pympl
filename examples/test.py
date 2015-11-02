@@ -32,6 +32,7 @@ import tsp_gurobi
 import sos
 import pwl
 import twostage
+import lslib_test
 
 if __name__ == "__main__":
     sdir = os.path.dirname(__file__)
@@ -87,6 +88,13 @@ def main():
         try:
             tsp_gurobi.main()
         except ImportError as e:
+            print(repr(e))
+
+    if "quick_test" not in sys.argv:
+        print("lslib_test:")
+        try:
+            lslib_test.main()
+        except Exception as e:
             print(repr(e))
 
 if __name__ == "__main__":
