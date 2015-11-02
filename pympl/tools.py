@@ -114,6 +114,7 @@ class Tools(object):
                     pipe_output(proc.stdout, [ftee], grep, grepv)
 
         exit_code = proc.wait()
+        proc.stdout.close()
         if exit_code != 0:
             raise Exception("failed to run '{0}'".format(cmd))
 
