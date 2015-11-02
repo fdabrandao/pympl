@@ -6,7 +6,8 @@ from random import seed, randint
 seed(test_seed)
 
 NT = 10
-S0 = 0
+S0 = 10
+S0VAR = False
 C = randint(5, 10)
 
 if TEST_PROB == "WW_U":
@@ -146,6 +147,8 @@ s.t. setups2{t in 1..NT}:
 
 $EXEC{
 s = ["s[%d]"%(t) for t in mrange(0, NT)]
+if S0VAR is False:
+    s[0] = S0
 r = ["r[%d]"%(t) for t in mrange(1, NT)]
 x = ["x[%d]"%(t) for t in mrange(1, NT)]
 y = ["y[%d]"%(t) for t in mrange(1, NT)]

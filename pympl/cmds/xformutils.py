@@ -75,6 +75,21 @@ def mrange(a, b):
     return range(a, b+1)
 
 
+def NetDemand(sinit, d, NT):
+    """Computes the net demand when s[0] != 0."""
+    if isinstance(sinit, str):
+        netd = {}
+        for t in mrange(1, NT):
+            netd[t] = d[t]
+        return sinit, netd
+    else:
+        netd = {}
+        for t in mrange(1, NT):
+            netd[t] = max(d[t]-sinit, 0)
+            sinit = max(sinit-d[t], 0)
+        return sinit, netd
+
+
 def CumulDemand(d, D, NT):
     """
     procedure CumulDemand(
@@ -147,6 +162,8 @@ def XFormWWU(model, s, y, d, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
@@ -199,6 +216,8 @@ def XFormWWUB(model, s, r, y, d, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
@@ -275,6 +294,8 @@ def XFormWWUSC(model, s, y, z, d, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
@@ -332,6 +353,8 @@ def XFormWWUSCB(model, s, r, y, z, w, d, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     def avar(i):
         return prefix+"a_{0}".format(i)
 
@@ -426,6 +449,8 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
           sum(i in t+1..k)y(i)-floor(D(t+1,k)/L)
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # Ts=1..NT
     # Ts0=0..NT
     Ts = mrange(1, NT)
@@ -576,6 +601,8 @@ def XFormWWCC(model, s, y, d, C, NT, Tk, prefix=""):
 
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     def wsvar(i, j):
         return prefix+"ws_{0}_{1}".format(i, j)
 
@@ -812,6 +839,8 @@ def XFormWWCCB(model, s, r, y, d, C, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
@@ -861,6 +890,8 @@ def XFormLSU1(model, s, x, y, d, NT, Tk, prefix=""):
         end-if
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     def xxvar(i, j):
         return prefix+"xx_{0}_{1}".format(i, j)
 
@@ -949,6 +980,8 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
 
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # CumulDemand(d,D,NT)
     D = {}
     CumulDemand(d, D, NT)
@@ -1116,6 +1149,8 @@ def XFormLSUBMC(model, s, r, x, y, d, NT, Tk, prefix=""):
             Y(t,k):=d(k)*y(t)>=xx(t,k)
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     def xxvar(i, j):
         return prefix+"xx_{0}_{1}".format(i, j)
 
@@ -1245,6 +1280,8 @@ def XFormLSUSC(model, s, x, y, z, d, NT, Tk, prefix=""):
 
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # w: array(range,range) of mpvar
     def wvar(i, j):
         return prefix+"w_{0}_{1}".format(i, j)
@@ -1336,6 +1373,8 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
 
     end-procedure
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # v: array(range,range) of mpvar
     def vvar(i, j):
         return prefix+"v_{0}_{1}".format(i, j)
@@ -1391,7 +1430,7 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
         model.add_con(s[t], "=", rhs)
 
 
-def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
+def XFormDLSICC(model, s0, y, d, C, NT, Tk, prefix=""):
     """
     DLSI-CC
 
@@ -1430,6 +1469,8 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
                        !ceil(D(t)/C)
     end-procedure
     """
+    s0, d = NetDemand(s0, d, NT)
+
     def wsvar(i):
         return prefix+"ws_{0}".format(i)
 
@@ -1456,7 +1497,7 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
 
     # XS:=s>=C*ds+sum(i in 1..minlist(NT,Tk))gs(i)*ws(i)
     model.add_con(
-        s, ">=",
+        s0, ">=",
         [(C, dsvar())]+[(gs[i], wsvar(i)) for i in mrange(1, min(NT, Tk))]
     )
 
@@ -1473,7 +1514,7 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
         model.add_con(lhs, ">=", floor(D[t]/C)+1)
 
 
-def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
+def XFormDLSICCB(model, s0, r, y, d, C, NT, Tk, prefix=""):
     """
     DLSI-CC-B
 
@@ -1521,6 +1562,8 @@ def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
 
     end-procedure
     """
+    s0, d = NetDemand(s0, d, NT)
+
     def zvar(i):
         return prefix+"z_{0}".format(i)
 
@@ -1563,7 +1606,7 @@ def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
     for j in mrange(1, Tkk):
         for l in mrange(0, Tkk):
             if f[l, 0] > f[j, 0]:
-                lhs = [s, r[j], (C*f[j, l], zvar(j))]
+                lhs = [s0, r[j], (C*f[j, l], zvar(j))]
                 rhs = [C*f[l, 0], (1, avar(j)), (-1, avar(l))]
                 model.add_con(lhs, ">=", rhs)
 
@@ -1579,12 +1622,12 @@ def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
     # forall (l in 1..Tkk) X3(l) :=
     # s >= C*f(l,0)+a(0)-a(l)
     for l in mrange(1, Tkk):
-        model.add_con(s, ">=", [C*f[l,0], (1, avar(0)), (-1, avar(l))])
+        model.add_con(s0, ">=", [C*f[l,0], (1, avar(0)), (-1, avar(l))])
 
     # forall (j in 1..Tkk) X4(j) :=
     # s+r(j)+C*z(j) >= C*f(j,0)
     for j in mrange(1, Tkk):
-        model.add_con([s, r[j], (C, zvar(j))], ">=", C*f[j, 0])
+        model.add_con([s0, r[j], (C, zvar(j))], ">=", C*f[j, 0])
 
 
 def XFormDLSCCB(model, r, y, d, C, NT, Tk, prefix=""):

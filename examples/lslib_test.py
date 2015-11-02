@@ -33,6 +33,7 @@ if __name__ == "__main__":
         os.chdir(sdir)
 
 TESTS = {
+    "LS_U": ("lslib_ls.mod", True),
     "LS_U1": ("lslib_ls.mod", True),
     "LS_U2": ("lslib_ls.mod", True),
     "LS_U_B": ("lslib_ls.mod", True),
@@ -45,8 +46,8 @@ TESTS = {
     "WW_U_LB": ("lslib_ww.mod", False),
     "WW_CC": ("lslib_ww.mod", True),
     "WW_CC_B": ("lslib_ww.mod", True),
-    "DLSI_CC": ("lslib_dls.mod", False),
-    "DLSI_CC_B": ("lslib_dls.mod", False),
+    "DLSI_CC": ("lslib_dls.mod", True),
+    "DLSI_CC_B": ("lslib_dls.mod", True),
     "DLS_CC_B": ("lslib_dls.mod", True),
     "DLS_CC_SC": ("lslib_dls.mod", False),
     # "DLS_CC_SCU": ("lslib_dls.mod", False),
@@ -80,7 +81,7 @@ def test(prob, approx=False):
     fname, check_exact = TESTS[prob]
     if approx:
         check_exact = False
-    for ind in range(100):
+    for ind in range(50):
         z_lp1 = solve(fname, prob, relax=True, xform=False, test_seed=ind)
         z_ip1 = solve(fname, prob, relax=False, xform=False, test_seed=ind)
         z_lp2 = solve(fname, prob, relax=True, xform=True, test_seed=ind)

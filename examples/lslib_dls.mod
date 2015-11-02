@@ -9,6 +9,7 @@ NT = 20
 C = randint(5, 10)
 S0 = randint(5, 20)
 S0 = 10
+S0VAR = False
 
 if TEST_PROB == "DLSI_CC":
     BACKLOG = False
@@ -115,6 +116,8 @@ s.t. setups2{t in 1..NT}:
     z[t] <= y[t];
 
 $EXEC{
+if S0VAR:
+    S0 = "s[0]"
 s = ["s[%d]"%(t) for t in mrange(1, NT)]
 r = ["r[%d]"%(t) for t in mrange(1, NT)]
 y = ["y[%d]"%(t) for t in mrange(1, NT)]

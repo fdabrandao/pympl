@@ -7,9 +7,16 @@ seed(test_seed)
 
 NT = 10
 S0 = 0
+S0VAR = False
 C = randint(5, 10)
 
-if TEST_PROB == "LS_U1":
+if TEST_PROB == "LS_U":
+    BACKLOG = False
+    CAPACITATED = False
+    SUP_COST = 0
+    SOFF_COST = 0
+    LB = 0
+elif TEST_PROB == "LS_U1":
     BACKLOG = False
     CAPACITATED = False
     SUP_COST = 0
@@ -56,6 +63,7 @@ if not CAPACITATED:
     C = sum(d)
 
 #print("C =", C)
+#print("S0 =", S0)
 #print("d =", d)
 #print("p =", p)
 #print("h =", h)
@@ -122,6 +130,8 @@ s.t. setups2{t in 1..NT}:
 
 $EXEC{
 s = ["s[%d]"%(t) for t in mrange(0, NT)]
+if S0VAR is False:
+    s[0] = S0
 r = ["r[%d]"%(t) for t in mrange(1, NT)]
 x = ["x[%d]"%(t) for t in mrange(1, NT)]
 y = ["y[%d]"%(t) for t in mrange(1, NT)]
@@ -130,7 +140,9 @@ w = ["w[%d]"%(t) for t in mrange(1, NT)]
 d = [_params["d"][t] for t in mrange(1, NT)]
 if xform:
     print("test:", TEST_PROB)
-    if TEST_PROB == "LS_U1":
+    if TEST_PROB == "LS_U":
+        LS_U(s, x, y, d, NT)
+    elif TEST_PROB == "LS_U1":
         LS_U1(s, x, y, d, NT)
     elif TEST_PROB == "LS_U2":
         LS_U2(s, x, y, d, NT)
