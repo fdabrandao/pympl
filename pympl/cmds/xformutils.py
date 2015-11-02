@@ -28,7 +28,8 @@ from math import floor, ceil
 The set of models included in this file come from the library of reformulations
 LS-LIB proposed in:
   Production Planning by Mixed Integer Programming (Pochet and Wolsey 2006).
-The implementations are a direct translation from the LS-LIB's xform.mos file.
+The implementations are a direct translation of LS-LIB's xform.mos file with
+minor modifications.
 """
 
 """
@@ -36,34 +37,36 @@ The implementations are a direct translation from the LS-LIB's xform.mos file.
 !  All Book Extended Formulations  !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-!  Xform  9/9/2005
+! Xform  9/9/2005
 !  Contains
-!    WW-U       **DONE!** (XFormWWU) seems to be ok! (bike.mod, clb.mod)
-!    WW-U-B     **DONE!** (XFormWWUB) seems to be ok! (bike.mod, clb.mod)
-!    WW-U-SC    **DONE!** (XFormWWUSC) seems to be ok! (clb.mod)
-!    WW-U-SC,B  **DONE!** (XFormWWUSCB) seems to be ok! (clb.mod)
-!    WW-CC      **DONE!** (XFormWWCC) seems to be ok! (clb.mod)
+!    WW-U       (XFormWWU) seems to be ok! (bike.mod, clb.mod)
+!    WW-U-B     (XFormWWUB) seems to be ok! (bike.mod, clb.mod)
+!    WW-U-SC    (XFormWWUSC) seems to be ok! (clb.mod)
+!    WW-U-SC,B  (XFormWWUSCB) seems to be ok! (clb.mod)
+!    WW-CC      (XFormWWCC) seems to be ok! (clb.mod)
 
-!    LS-U1=(MC) **DONE!** (XFormLSU1) seems to be ok! (bike.mod)
-!    LS-U2=(SP) **DONE!** (XFormLSU2) seems to be ok! (bike.mod)
-!    LS-U-B     **DONE!** (XFormLSUB) seems to be ok! (bike.mod, clb.mod)
+!    LS-U1=(MC) (XFormLSU1) assumes s[NT] = 0 and is not compatible with LB
+!    LS-U2=(SP) (XFormLSU2) assumes s[NT] = 0 and is not compatible with LB
+!    LS-U-B     (XFormLSUB) assumes s[NT] = 0 and is not compatible with LB
 
-!Added 30/9/2005
-!    DLSI-CC    **DONE!** (XFormDLSICC) needs to be checked!
-!    DLSI-CC-B  **DONE!** (XFormDLSICCB) seems to be ok! (cgp.mod, clb.mod)
-!    DLS-CC-B   **DONE!** (XFormDLSCCB) seems to be ok! (cgp.mod, clb.mod)
-!    DLS-CC-SC  **DONE!** (XFormDLSCCSC) seems to be ok! (clb.mod)
+! Added 30/9/2005
+!    DLSI-CC    (XFormDLSICC) approximation if s0 != 0
+!    DLSI-CC-B  (XFormDLSICCB) approximation if s0 != 0 (cgp.mod, clb.mod)
+!    DLS-CC-B   (XFormDLSCCB) seems to be ok! (cgp.mod, clb.mod)
+!    DLS-CC-SC  (XFormDLSCCSC) approximation and requires 0-1 demands (clb.mod)
 
-! Added 30/9/05 (not in Xformsimple)
-!    WW-U-LB    **DONE!** (XFormWWULB) has no effect on clb.mod!!
-!    WW-CC-B    **DONE!** (XFormWWCCB) seems to be ok! (clb.mod)
+! Added 30/9/05
+!    WW-U-LB    (XFormWWULB) approximation
+!    WW-CC-B    (XFormWWCCB) seems to be ok! (clb.mod)
 
-!Missing 24/7/07
-!    LS-U-SC    **DONE!** (XFormLSUSC) Not compatible with LB on clb.mod!!
+! Added 1/11/15
+!    LS-U-SC    (XFormLSUSC) assumes s[NT] = 0 and is not compatible with LB
+!    LS-U-SC,B  (XFormLSUSCB) assumes s[NT] = 0 and is not compatible with LB
+!                             does not work with s[0] != 0
 
 ! Added 16/12/09
-!    LT  Lasdon-Terjung
-!    DLS-CC-SC-U with integer (not just 0-1 demands)
+!    LT  Lasdon-Terjung (not implemented)
+!    DLS-CC-SC-U with integer demands (XFormDLSCCSCU) needs to be checked!
 """
 
 
@@ -428,9 +431,11 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
     Ts = mrange(1, NT)
     Ts0 = mrange(0, NT)
 
+    # ws: array(Ts0,range) of mpvar
     def wsvar(i, j):
         return prefix+"ws_{0}_{1}".format(i, j)
 
+    # ds: array(Ts0) of mpvar
     def dsvar(i):
         return prefix+"ds_{0}".format(i)
 
@@ -451,8 +456,7 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
         for t in mrange(max(0, k-Tk), k-1):
             gs[k, t] = L*(floor(D[t+1, k]/L)+1)-D[t+1, k]
 
-    # forall(k in Ts0)
-    # gs(k,k):=L
+    # forall(k in Ts0) gs(k,k):=L
     for k in Ts0:
         gs[k, k] = L
 
@@ -463,13 +467,13 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
     for k in Ts0:
         model.add_var(name=dsvar(k), lb=0)
         for t in mrange(max(0, k-Tk), min(NT, k+Tk)):
-            if gs[k, t] != 0 or True:  # possible bug: gs[k, t] != 0?
+            if gs[k, t] != 0:
                 model.add_var(name=wsvar(k, t), lb=0)
 
     # forall(k in Ts0) XS(k) :=
     # s(k)>=L*ds(k)+sum(i in maxlist(0,k-Tk)..minlist(NT,k+Tk))gs(k,i)*ws(k,i)
     for k in Ts0:
-        rhs = [
+        rhs = [(L, dsvar(k))] + [
             (gs[k, i], wsvar(k, i))
             for i in mrange(max(0, k-Tk), min(NT, k+Tk))
             if gs[k, i] != 0
@@ -482,14 +486,16 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
         lhs = [
             wsvar(k, i)
             for i in mrange(max(0, k-Tk), min(NT, k+Tk))
+            if gs[k, i] != 0
         ]
         model.add_con(lhs, "<=", 1)
 
     # forall (k in Ts0,l in k+1..minlist(NT,k+Tk),t in k..l) XRKT(k,l,t) :=
-    # ds(k)+sum(i in maxlist(0,k-Tk)..minlist(NT,k+Tk)|gs(k,i)>=gs(k,t))
-    #   ws(k,i)
+    # ds(k)+
+    # sum(i in maxlist(0,k-Tk)..minlist(NT,k+Tk)|gs(k,i)>=gs(k,t)) ws(k,i)
     # >=
-    # floor( (D(k+1,l)-gs(k,t))/L)+1+sum(i in k+1..l)
+    # floor( (D(k+1,l)-gs(k,t))/L)+1+
+    # sum(i in k+1..l)
     #   (floor((D(k+1,i-1)-gs(k,t))/L) - floor( (D(k+1,l)-gs(k,t))/L))*y(i)
     for k in Ts0:
         for l in mrange(k+1, min(NT, k+Tk)):
@@ -511,8 +517,8 @@ def XFormWWULB(model, s, y, d, L, NT, Tk, prefix=""):
                 model.add_con(lhs, ">=", rhs)
 
     # forall(k in Ts0,t in maxlist(0,k-Tk)..k-1) XLKT(k,t) :=
-    # ds(k)+sum(i in maxlist(0,k-Tk)..minlist(NT,k+Tk)|gs(k,i)>=gs(k,t))
-    #   ws(k,i)
+    # ds(k)+
+    # sum(i in maxlist(0,k-Tk)..minlist(NT,k+Tk)|gs(k,i)>=gs(k,t)) ws(k,i)
     # >= sum(i in t+1..k)y(i)-floor(D(t+1,k)/L)
     for k in Ts0:
         for t in mrange(max(0, k-Tk), k-1):
@@ -948,15 +954,21 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
     CumulDemand(d, D, NT)
 
     def v1var(i):
+        if i > NT-Tk+1:  # possible bug: undefined variable
+            return 0
         return prefix+"v1_{0}".format(i)
 
     def v2var(i):
+        if i < Tk-1:  # possible bug: undefined variable
+            return 0
         return prefix+"v2_{0}".format(i)
 
     def wvar(i):
         return prefix+"w_{0}".format(i)
 
     def uvar(i, j):
+        if j > min(i+Tk-2, NT):
+            return 0
         return prefix+"u_{0}_{1}".format(i, j)
 
     # v1,v2,w:dynamic array (0..NT) of mpvar
@@ -965,15 +977,15 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
     # forall(t in Tk-1..NT) create(v2(t))
     for t in mrange(1, NT-Tk+1):
         model.add_var(name=wvar(t), lb=0)
-    for t in mrange(0, NT):  # possible bug: NT or NT-Tk+1?
+    for t in mrange(0, NT-Tk+1):  # possible bug: NT or NT-Tk+1?
         model.add_var(name=v1var(t), lb=0)
-    for t in mrange(0, NT):  # possible bug: 0 or Tk-1?
+    for t in mrange(Tk-1, NT):  # possible bug: 0 or Tk-1?
         model.add_var(name=v2var(t), lb=0)
 
     # u:dynamic array (0..NT,0..NT) of mpvar
     # forall(i in 0..NT, j in i..minlist(i+Tk-2,NT)) create(u(i,j))
     for i in mrange(0, NT):
-        for j in mrange(i, min(i+Tk, NT)):  # possible bug: i+Tk or i+Tk-2?
+        for j in mrange(i, min(i+Tk-2, NT)):  # possible bug: i+Tk or i+Tk-2?
             model.add_var(name=uvar(i, j), lb=0)
 
     # forall (t in 0..NT+1) SP1(t):=
@@ -1014,7 +1026,8 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
         for i in mrange(t, NT):
             rhs.append((D[t, i], uvar(t, i)))
             # possible bug: t+Tk-1 or min(t+Tk-1, NT)?
-            rhs.append((D[t, min(t+Tk-1, NT)], v1var(t)))
+            if t+Tk-1 <= NT:
+                rhs.append((D[t, t+Tk-1], v1var(t)))
         model.add_con(x[t], ">=", rhs)
 
     # forall (t in 1..NT) Y(t):=
@@ -1025,7 +1038,7 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
             if D[t, i] > 0:
                 rhs.append(uvar(t, i))
                 # possible bug: min(t+Tk-1, NT) or t+Tk-1?
-                if D[t, min(t+Tk-1, NT)] > 0:
+                if t+Tk-1 <= NT and D[t, t+Tk-1] > 0:
                     rhs.append(v1var(t))
         model.add_con(y[t], ">=", rhs)
 
@@ -1039,7 +1052,7 @@ def XFormLSU2(model, s, x, y, d, NT, Tk, prefix=""):
         for i in mrange(0, t):
             for j in mrange(t+1, NT):
                 rhs.append((D[t+1, j], uvar(i, j)))
-            if t < NT-Tk:
+            if t <= NT-Tk:
                 rhs.append((D[t+1, t+Tk], wvar(t+1)))
             for i in mrange(t+1, min(NT, t+Tk-1)):
                 rhs.append((D[t+1, i], v2var(i)))
@@ -1199,42 +1212,183 @@ def XFormLSUSC(model, s, x, y, z, d, NT, Tk, prefix=""):
     LS-U-SC
 
     procedure XFormLSUSC(
-        s : array (range) of linctr,
-        x : array (range) of linctr,
-        y : array (range) of linctr,
-        z : array (range) of linctr,
-        d : array (range) of real,
-        NT : integer,
-        Tk : integer,
-        MC : integer)
+        s: array(range) of linctr,
+        x: array(range) of linctr,
+        y: array(range) of linctr,
+        z: array(range) of linctr,
+        d: array(range) of real,
+        NT: integer,
+        Tk: integer,
+        MC: integer)
 
-     !XFormLSU1(s,x,y,d,NT,Tk,MC) + constraints 10.13 (pag. 322)?
-     ! Not compatible with LB!
+    declarations
+        w: array(range,range) of mpvar
+    end-declarations
+
+    forall(u in 1..NT,t in u..NT)do
+    create(w(u,t))
+    end-do
+
+    forall(t in 1..NT)
+    sum(u in 1..t)w(u,t)=1
+
+    forall(t in 1..NT, k in 1..t)
+    sum(u in k..t)w(u,t)<= y(k)+ if(k<t,sum(u in k+1..t)z(u),0)
+
+    forall(u in 1..NT-1,t in u..NT-1)
+    w(u,t)>=w(u,t+1)
+
+    forall(t in 1..NT)do
+    w(t,t)<=y(t)
+    x(t)=sum(k in t..NT)d(k)*w(t,k)
+    end-do
+
     end-procedure
     """
-    # From the book (pag. 322):
+    # w: array(range,range) of mpvar
     def wvar(i, j):
-        name = prefix+"w_{0}_{1}".format(i, j)
-        if name not in model.vars:
-            model.add_var(name=name, lb=0, ub=1)
-        return name
+        return prefix+"w_{0}_{1}".format(i, j)
 
+    # forall(u in 1..NT,t in u..NT) create(w(u,t))
+    for u in mrange(1, NT):
+        for t in mrange(u, NT):
+            model.add_var(name=wvar(u, t), lb=0)
+
+    # forall(t in 1..NT) sum(u in 1..t)w(u,t)=1
     for t in mrange(1, NT):
-        model.add_con([wvar(s, t) for s in mrange(1, t)], "<=", 1)
+        lhs = [wvar(u, t) for u in mrange(1, t)]
+        model.add_con(lhs, "<=", 1)  # possible bug: = or <=?
 
-    for t in mrange(1, min(NT, Tk)):
-        for s in mrange(1, t):
-            model.add_con(wvar(s, t), "<=", y[s])
-
-    for t in mrange(1, min(NT, Tk)):
-        for k in mrange(1, t-1):
-            lhs = [wvar(i, t) for i in mrange(k, t)]
-            rhs = [y[k]]+[z[i] for i in mrange(k+1, t)]
+    # forall(t in 1..NT, k in 1..t)
+    # sum(u in k..t)w(u,t)<= y(k)+ if(k<t,sum(u in k+1..t)z(u),0)
+    for t in mrange(1, NT):
+        for k in mrange(1, t):
+            lhs = [wvar(u, t) for u in mrange(k, t)]
+            rhs = [y[k]]+[z[u] for u in mrange(k+1, t)]
             model.add_con(lhs, "<=", rhs)
 
-    for u in mrange(1, min(NT, Tk)):
-        rhs = [(d[t], wvar(u, t)) for t in mrange(u, NT)]
-        model.add_con(x[u], "=", rhs)
+    # forall(u in 1..NT-1,t in u..NT-1)
+    # w(u,t)>=w(u,t+1)
+    for u in mrange(1, NT-1):
+        for t in mrange(u, NT-1):
+            model.add_con(wvar(u, t), ">=", wvar(u, t+1))
+
+    # forall(t in 1..NT) do
+    #   w(t,t)<=y(t)
+    #   x(t)=sum(k in t..NT)d(k)*w(t,k)
+    # end-do
+    for t in mrange(1, NT):
+        model.add_con(wvar(t, t), "<=", y[t])
+        rhs = [(d[k], wvar(t, k)) for k in mrange(t, NT)]
+        model.add_con(x[t], "<=", rhs)
+
+
+def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
+    """
+    LS-U-SC-B
+
+    procedure XFormLSUSCB(
+        s: array(range) of linctr,
+        !r: array(range) of linctr,
+        x: array(range) of linctr,
+        y: array(range) of linctr,
+        z: array(range) of linctr,
+        w: array(range) of linctr,
+        d: array(range) of real,
+        NT: integer,
+        Tk: integer,
+        MC: integer)
+
+    declarations
+        v: array(range,range) of mpvar
+    end-declarations
+
+    forall(u in 1..NT,t in 1..NT)do
+    create(v(u,t))
+    end-do
+
+    forall(t in 1..NT)
+    sum(u in 1..NT)v(u,t)=1
+
+    !forall(t in 1..NT, k in 1..t)
+    !sum(u in k..t)v(u,t)<= y(k)+ if(k<t,sum(u in k+1..t)z(u),0)
+
+    !
+    forall(k in 1..NT, u in maxlist(1,k-Tk)..k,t in k..minlist(k+Tk,NT))
+    sum(i in u..t)v(i,k)<= y(k)+ if(t>k,sum(i in k+1..t)z(i),0)+
+            if(u<k,sum(i in u..k-1)w(i),0)
+    !)
+
+
+    forall(u in 1..NT-1,t in u..NT-1)
+    v(u,t)>=v(u,t+1)
+
+    forall(u in 2..NT,t in 1..u)
+    v(u,t)>=v(u,t-1)
+
+    forall(t in 1..NT)do
+    v(t,t)<=y(t)
+    x(t)=sum(k in 1..NT)d(k)*v(t,k)
+    end-do
+
+    forall(t in 1..NT-1)
+    s(t)=sum(u in 1..t,k in t+1..NT)d(k)*v(u,k)
+
+    end-procedure
+    """
+    # v: array(range,range) of mpvar
+    def vvar(i, j):
+        return prefix+"v_{0}_{1}".format(i, j)
+
+    # forall(u in 1..NT,t in 1..NT) create(v(u,t))
+    for u in mrange(1, NT):
+        for t in mrange(1, NT):
+            model.add_var(name=vvar(u, t), lb=0)
+
+    # forall(t in 1..NT) sum(u in 1..NT)v(u,t)=1
+    for t in mrange(1, NT):
+        lhs = [vvar(u, t) for u in mrange(1, NT)]
+        model.add_con(lhs, "<=", 1)  # possible bug: = or <=?
+
+    # forall(k in 1..NT, u in maxlist(1,k-Tk)..k,t in k..minlist(k+Tk,NT))
+    # sum(i in u..t)v(i,k)<= y(k)+ if(t>k,sum(i in k+1..t)z(i),0)+
+    #         if(u<k,sum(i in u..k-1)w(i),0)
+    for k in mrange(1, NT):
+        for u in mrange(max(1, k-Tk), k):
+            for t in mrange(k, min(k+Tk, NT)):
+                lhs = [vvar(i, k) for i in mrange(u, t)]
+                rhs = [y[k]]
+                rhs += [z[i] for i in mrange(k+1, t)]
+                rhs += [w[i] for i in mrange(u, k-1)]
+                model.add_con(lhs, "<=", rhs)
+
+    # forall(u in 1..NT-1,t in u..NT-1) v(u,t)>=v(u,t+1)
+    for u in mrange(1, NT-1):
+        for t in mrange(u, NT-1):
+            model.add_con(vvar(u, t), ">=", vvar(u, t+1))
+
+    # forall(u in 2..NT,t in 1..u) v(u,t)>=v(u,t-1)
+    for u in mrange(2, NT):
+        for t in mrange(2, u): # possible bug: 1..u or 2..u?
+            model.add_con(vvar(u, t), ">=", vvar(u, t-1))
+
+    # forall(t in 1..NT) do
+    #   v(t,t)<=y(t)
+    #   x(t)=sum(k in 1..NT)d(k)*v(t,k)
+    # end-do
+    for t in mrange(1, NT):
+        model.add_con(vvar(t, t), "<=", y[t])
+        rhs = [(d[k], vvar(t, k)) for k in mrange(1, NT)]
+        model.add_con(x[t], "=", rhs)
+
+    # forall(t in 1..NT-1) s(t)=sum(u in 1..t,k in t+1..NT)d(k)*v(u,k)
+    for t in mrange(1, NT-1):
+        rhs = [
+            (d[k], vvar(u, k))
+            for u in mrange(1, t)
+            for k in mrange(t+1, NT)
+        ]
+        model.add_con(s[t], "=", rhs)
 
 
 def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
@@ -1272,7 +1426,8 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
         forall (t in 1..minlist(NT,Tk))
             XKT(t):= ds+sum(i in 1..t)y(i)+
                        sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >=
-                       ceil(D(t)/C)
+                       floor(D(t)/C)+1
+                       !ceil(D(t)/C)
     end-procedure
     """
     def wsvar(i):
@@ -1310,12 +1465,12 @@ def XFormDLSICC(model, s, y, d, C, NT, Tk, prefix=""):
 
     # forall (t in 1..minlist(NT,Tk)) XKT(t) :=
     #   ds+sum(i in 1..t)y(i)+
-    #   sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >= ceil(D(t)/C)
+    #   sum(i in 1..minlist(NT,Tk)|gs(i)>=gs(t))ws(i) >= floor(D(t)/C)+1
     for t in mrange(1, min(NT, Tk)):
         lhs = [dsvar()]
         lhs += [y[i] for i in mrange(1, t)]
         lhs += [wsvar(i) for i in mrange(1, min(NT, Tk)) if gs[i] >= gs[t]]
-        model.add_con(lhs, ">=", ceil(D[t]/C))
+        model.add_con(lhs, ">=", floor(D[t]/C)+1)
 
 
 def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
@@ -1381,20 +1536,21 @@ def XFormDLSICCB(model, s, r, y, d, C, NT, Tk, prefix=""):
 
     # f(0,0):=0
     # forall(j in 1..Tkk) f(j,0):=D(j)/C-floor(D(j)/C)
-    # forall(j in 1..Tkk,l in 0..Tkk|j<>l)
-    #   f(j,l):=f(j,0)-f(l,0)+if(f(j,0)<f(l,0),1,0)
     f = {}
     f[0, 0] = 0
     for j in mrange(1, Tkk):
         f[j, 0] = D[j]/C-floor(D[j]/C)
+    # forall(j in 1..Tkk,l in 0..Tkk|j<>l)
+    #   f(j,l):=f(j,0)-f(l,0)+if(f(j,0)<f(l,0),1,0)
     for j in mrange(1, Tkk):
         for l in mrange(0, Tkk):
             if j != l:
                 f[j, l] = f[j, 0]-f[l, 0]+(1 if f[j, 0] < f[l, 0] else 0)
 
+    # z: array(0..Tkk) of linctr
     # forall(j in 1..Tkk) z(j):=sum(i in 1..j) y(i) - floor(D(j)/C)
     for j in mrange(1, Tkk):
-        model.add_var(name=zvar(j), lb=0)
+        model.add_var(name=zvar(j))
         rhs = [y[i] for i in mrange(1, j)]+[-floor(D[j]/C)]
         model.add_con(zvar(j), "=", rhs)
 
@@ -1539,7 +1695,7 @@ def XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix=""):
 
     end-procedure
     """
-    #!Need to have demands in 0,1
+    # !Need to have demands in 0,1
     for i in mrange(1, NT):
         assert d[i] in (0, 1)
 
@@ -1557,7 +1713,7 @@ def XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix=""):
         for l in mrange(t, NT):
             for p1 in mrange(1, min(Tk, l-t)):
                 if (t >= l-Tk and d[l] > 0 and
-                        floor(D[t, l]) == p1 and t <= NT+1-p1):
+                    floor(D[t, l]) == p1 and t <= NT+1-p1):
                     lhs = s[t-1] if t > 1 else 0
                     rhs = [D[t, l]]
                     rhs += [(-1, y[u]) for u in mrange(t, t+p1-1)]
@@ -1567,6 +1723,117 @@ def XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix=""):
                     ]
                     rhs += [
                         (-D[u, l], z[u])
+                        for u in mrange(t+p1, l)
+                    ]
+                    model.add_con(lhs, ">=", rhs)
+
+
+def XFormDLSCCSCU(model, s, y, z, d, NT, Tk, prefix=""):
+    """
+    DLS-CC-SC-U
+
+    !--------------------------------------------------
+    ! Created 9-10-2009
+    ! Valid for more general integer demands
+    ! We suppose that the demands are <= no of machines
+    ! Added  16/12/09
+    !---------------------------------------------------
+    procedure XFormDLSCCSCU(
+        s : array (range) of linctr,
+        y : array (range) of linctr,
+        z : array (range) of linctr,
+        d : array (range) of integer,
+        NT : integer,
+        Tk : integer,
+        MC: integer)
+
+
+        declarations
+            XWW: array (1..NT,range) of linctr
+            CUMD : array (range,range) of integer
+            ! Added 2/10/05
+            BA: array(range,range,range) of linctr
+            IP: array(1..NT,1..NT) of integer
+        end-declarations
+
+        forall( u in 1..NT,t in u..NT)
+            CUMD(u,t):=sum(v in u..t)d(v)
+
+        forall(t in 1..NT,l in t..NT) do
+            forall(k in t..l) do
+                if(CUMD(t,k)>k-t+1) then
+                    IP(t,l):=1
+                end-if
+            end-do
+        end-do
+
+        !
+        forall(p1 in 1..NT,t in 1..NT,l in t..NT|
+            p1<l-t and Tk>= l-t and d(l)>0 and
+            floor(CUMD(t,l))= p1 and t<= NT+1-p1 and IP(t,l)=0)
+        BA(p1,t,l):=
+            IF(t> 1,s(t-1),0) >=
+            CUMD(t,l)-SUM(u in t..t+p1-1)y(u) -
+            SUM(u in t+1..t+p1-1)(CUMD(u,l)-p1+u-t)*z(u) -
+            SUM(u in t+p1..l|t+p1<= l)(CUMD(u,l))*z(u)
+
+        if MC >0 then
+        forall(p1 in 1..NT,t in 1..NT,l in t..NT|
+            p1<l-t and Tk>= l-t and d(l)>0 and
+            floor(CUMD(t,l))= p1 and t<= NT+1-p1 and IP(t,l)=0)
+            setmodcut(BA(p1,t,l))
+        end-if
+
+    end-procedure
+    """
+    # CUMD : array (range,range) of integer
+    # forall( u in 1..NT,t in u..NT) CUMD(u,t):=sum(v in u..t)d(v)
+    CUMD = {}
+    for u in mrange(1, NT):
+        for t in mrange(u, NT):
+            CUMD[u, t] = sum(d[v] for v in mrange(u, t))
+
+    # IP: array(1..NT,1..NT) of integer
+    # forall(t in 1..NT,l in t..NT) do
+    #    forall(k in t..l) do
+    #        if(CUMD(t,k)>k-t+1) then
+    #            IP(t,l):=1
+    #        end-if
+    #    end-do
+    # end-do
+    IP = {}
+    for t in mrange(1, NT):
+        for l in mrange(1, NT):
+            IP[t, l] = 0
+    for t in mrange(1, NT):
+        for l in mrange(t, NT):
+            for k in mrange(t, l):
+                if CUMD[t, k] > k-t+1:
+                    IP[t, l] = 1
+
+    # forall(p1 in 1..NT,t in 1..NT,l in t..NT|
+    #     p1<l-t and Tk>= l-t and d(l)>0 and
+    #     floor(CUMD(t,l))= p1 and t<= NT+1-p1 and IP(t,l)=0)
+    # BA(p1,t,l):=
+    #     IF(t> 1,s(t-1),0) >=
+    #     CUMD(t,l)-SUM(u in t..t+p1-1)y(u) -
+    #     SUM(u in t+1..t+p1-1)(CUMD(u,l)-p1+u-t)*z(u) -
+    #     SUM(u in t+p1..l|t+p1<= l)(CUMD(u,l))*z(u)
+    for p1 in mrange(1, NT):
+        for t in mrange(1, NT):
+            for l in mrange(t, NT):
+                if (p1 < l-t and Tk >= l-t and
+                    d[l] > 0 and floor(CUMD[t, l]) == p1 and
+                    t <= NT+1-p1 and IP[t, l] == 0):
+                    lhs = s[t-1] if t > 1 else 0
+                    rhs = [CUMD[t, l]]
+                    rhs += [(-1, y[u]) for u in mrange(t, t+p1-1)]
+                    rhs += [
+                        (-(CUMD[u, l]-p1+u-t), z[u])
+                        for u in mrange(t+1, t+p1-1)
+                    ]
+                    rhs += [
+                        (-CUMD[u, l], z[u])
                         for u in mrange(t+p1, l)
                     ]
                     model.add_con(lhs, ">=", rhs)

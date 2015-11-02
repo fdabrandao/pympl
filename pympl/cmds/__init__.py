@@ -27,5 +27,7 @@ from .sos import SubmodSOS1, SubmodSOS2, SubmodPWL
 from .xform import SubmodWWU, SubmodWWUB
 from .xform import SubmodWWUSC, SubmodWWUSCB, SubmodWWULB
 from .xform import SubmodWWCC, SubmodWWCCB
-from .xform import SubmodLSU, SubmodLSU1, SubmodLSU2, SubmodLSUB, SubmodLSUSC
-from .xform import SubmodDLSICC, SubmodDLSICCB, SubmodDLSCCB, SubmodDLSCCSC
+from .xform import SubmodLSU, SubmodLSU1, SubmodLSU2
+from .xform import SubmodLSUB, SubmodLSUSC, SubmodLSUSCB
+from .xform import SubmodDLSICC, SubmodDLSICCB
+from .xform import SubmodDLSCCB, SubmodDLSCCSC, SubmodDLSCCSCU
