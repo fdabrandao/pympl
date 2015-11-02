@@ -44,16 +44,17 @@ def linear_constraint(left, sign, right):
         elif isinstance(e, tuple):
             a, b = e
             assert (
-                isinstance(a, (int, float)) or
-                isinstance(b, (int, float))
+                isinstance(a, (int, float, six.string_types)) and
+                isinstance(b, (int, float, six.string_types))
             )
-            assert (
-                isinstance(a, six.string_types) or
-                isinstance(b, six.string_types)
-            )
-            if isinstance(a, six.string_types):
+            if isinstance(a, (int, float)) and isinstance(b, (int, float)):
+                return signal*a*b
+            elif isinstance(a, six.string_types):
+                assert isinstance(b, (int, float))
                 pairs[a] += signal*b
             else:
+                assert isinstance(b, six.string_types)
+                assert isinstance(a, (int, float))
                 pairs[b] += signal*a
             return 0
 
