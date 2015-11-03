@@ -1372,6 +1372,8 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
     s(t)=sum(u in 1..t,k in t+1..NT)d(k)*v(u,k)
 
     end-procedure
+
+    + some minor modifications to handle variable s[0]
     """
     s[0], d = NetDemand(s[0], d, NT)
 
@@ -1380,13 +1382,13 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
         return prefix+"v_{0}_{1}".format(i, j)
 
     # forall(u in 1..NT,t in 1..NT) create(v(u,t))
-    for u in mrange(1, NT):
-        for t in mrange(1, NT):
+    for u in mrange(0, NT):  # possible bug: 0 or 1?
+        for t in mrange(0, NT):  # possible bug: 0 or 1?
             model.add_var(name=vvar(u, t), lb=0)
 
     # forall(t in 1..NT) sum(u in 1..NT)v(u,t)=1
     for t in mrange(1, NT):
-        lhs = [vvar(u, t) for u in mrange(1, NT)]
+        lhs = [vvar(u, t) for u in mrange(0, NT)]  # possible bug: 0 or 1?
         model.add_con(lhs, "<=", 1)  # possible bug: = or <=?
 
     # forall(k in 1..NT, u in maxlist(1,k-Tk)..k,t in k..minlist(k+Tk,NT))
@@ -1397,18 +1399,18 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
             for t in mrange(k, min(k+Tk, NT)):
                 lhs = [vvar(i, k) for i in mrange(u, t)]
                 rhs = [y[k]]
-                rhs += [z[i] for i in mrange(k+1, t)]
-                rhs += [w[i] for i in mrange(u, k-1)]
+                rhs += [z[i] for i in mrange(k+1, t) if i > 0]
+                rhs += [w[i] for i in mrange(u, k-1) if i > 0]
                 model.add_con(lhs, "<=", rhs)
 
     # forall(u in 1..NT-1,t in u..NT-1) v(u,t)>=v(u,t+1)
-    for u in mrange(1, NT-1):
+    for u in mrange(0, NT-1):  # possible bug: 0 or 1?
         for t in mrange(u, NT-1):
             model.add_con(vvar(u, t), ">=", vvar(u, t+1))
 
     # forall(u in 2..NT,t in 1..u) v(u,t)>=v(u,t-1)
     for u in mrange(2, NT):
-        for t in mrange(2, u): # possible bug: 1..u or 2..u?
+        for t in mrange(1, u):
             model.add_con(vvar(u, t), ">=", vvar(u, t-1))
 
     # forall(t in 1..NT) do
@@ -1424,10 +1426,10 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
     for t in mrange(1, NT-1):
         rhs = [
             (d[k], vvar(u, k))
-            for u in mrange(1, t)
+            for u in mrange(0, t)  # possible bug: 0 or 1?
             for k in mrange(t+1, NT)
         ]
-        model.add_con(s[t], "=", rhs)
+        model.add_con(s[t], ">=", rhs)  # possible bug: >= or =?
 
 
 def XFormDLSICC(model, s0, y, d, C, NT, Tk, prefix=""):
