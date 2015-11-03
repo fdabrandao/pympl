@@ -25,7 +25,7 @@ from builtins import range
 from math import floor, ceil
 
 """
-The set of models included in this file come from the library of reformulations
+Most of models included in this file come from the library of reformulations
 LS-LIB proposed in:
   Production Planning by Mixed Integer Programming (Pochet and Wolsey 2006).
 The implementations are a direct translation of LS-LIB's xform.mos file with
@@ -62,7 +62,7 @@ minor modifications.
 ! Added 1/11/15
 !    LS-U-SC    (XFormLSUSC) assumes s[NT] = 0 and is not compatible with LB
 !    LS-U-SC,B  (XFormLSUSCB) assumes s[NT] = 0 and is not compatible with LB
-!                             does not work with s[0] != 0
+!    LS-U-SL    (XFormLSUSL) seems to be ok! (clb.mod)
 
 ! Added 16/12/09
 !    LT  Lasdon-Terjung (not implemented)
@@ -1375,8 +1375,6 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
 
     + some minor modifications to handle variable s[0]
     """
-    s[0], d = NetDemand(s[0], d, NT)
-
     # v: array(range,range) of mpvar
     def vvar(i, j):
         return prefix+"v_{0}_{1}".format(i, j)
@@ -1430,6 +1428,226 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
             for k in mrange(t+1, NT)
         ]
         model.add_con(s[t], ">=", rhs)  # possible bug: >= or =?
+
+
+def XFormLSUSL(model, s, x, y, v, d, u, NT, Tk, prefix=""):
+    """
+    LS-U-SL
+
+    Proposed in the paper:
+    The uncapacitated lot-sizing problem with sales and safety stocks
+    of Marko Loparic, Yves Pochet, and Laurence A. Wolsey
+
+    procedure XFormLSUSL(
+        s : array (range) of linctr,
+        x : array (range) of linctr,
+        y : array (range) of linctr,
+        v : array (range) of linctr,
+        d : array (range) of real,
+        u : array (range) of real,
+        NT : integer,
+        Tk : integer,
+        MC: integer)
+
+        declarations
+        al: array(range,range) of mpvar
+        bet: array(range,range) of mpvar
+    end-declarations
+
+
+    forall(i in 1..NT,j in i..NT)
+    create(bet(i,j))
+
+    forall(i in 1..NT,j in i..NT|u(j)>0)
+    create(al(i,j))
+
+    forall(i in 1..NT)
+    x(i)=sum(j in i..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+
+    forall(j in 1..NT)
+    sum(i in 1..j)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))=v(j)+d(j)
+
+    forall(j in 1..NT)
+    sum(i in 1..j)(al(i,j)+bet(i,j))=1
+
+    forall(i in 1..NT,j in i..NT)
+    al(i,j)+bet(i,j)<=y(i)
+
+    end-procedure
+    """
+    # al: array(range,range) of mpvar
+    def alvar(i, j):
+        return prefix+"al_{0}_{1}".format(i, j)
+
+    # bet: array(range,range) of mpvar
+    def betvar(i, j):
+        return prefix+"bet_{0}_{1}".format(i, j)
+
+    # forall(i in 1..NT,j in i..NT) create(bet(i,j))
+    for i in mrange(0, NT):
+        for j in mrange(i, NT):
+            model.add_var(name=betvar(i, j), lb=0, ub=1)
+
+    # forall(i in 1..NT,j in i..NT|u(j)>0) create(al(i,j))
+    for i in mrange(0, NT):
+        for j in mrange(i, NT):
+            model.add_var(name=alvar(i, j), lb=0, ub=1)
+
+    # forall(i in 1..NT)
+    # x(i)=sum(j in i..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+    x[0] = s[0]
+    for i in mrange(0, NT):
+        rhs = []
+        for j in mrange(max(1, i), NT):
+            rhs.append((d[j], betvar(i, j)))
+            rhs.append((d[j]+u[j], alvar(i, j)))
+        model.add_con(x[i], "=", rhs)
+
+    # forall(j in 1..NT)
+    # sum(i in 1..j)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))=v(j)+d(j)
+    for j in mrange(1, NT):
+        lhs = []
+        for i in mrange(0, j):
+            lhs.append((d[j], betvar(i, j)))
+            lhs.append((d[j]+u[j], alvar(i, j)))
+        model.add_con(lhs, "=", [v[j], d[j]])
+
+    # forall(j in 1..NT)
+    # sum(i in 1..j)(al(i,j)+bet(i,j))=1
+    for j in mrange(1, NT):
+        lhs = []
+        for i in mrange(0, j):
+            lhs.append(alvar(i, j))
+            lhs.append(betvar(i, j))
+        model.add_con(lhs, "=", 1)
+
+    # forall(i in 1..NT,j in i..NT)
+    # al(i,j)+bet(i,j)<=y(i)
+    for i in mrange(1, NT):
+        for j in mrange(i, NT):
+            model.add_con([alvar(i, j), betvar(i, j)], "<=", y[i])
+
+
+def XFormLSUSCSL(model, s, x, y, z, v, d, u, NT, Tk, prefix=""):
+    """
+    LS-U-SC,SL
+
+    procedure XFormLSUSCSL(
+        s : array (range) of linctr,
+        x : array (range) of linctr,
+        y : array (range) of linctr,
+        z : array (range) of linctr,
+        v : array (range) of linctr,
+        d : array (range) of real,
+        u : array (range) of real,
+        NT : integer,
+        Tk : integer,
+        MC: integer)
+
+    declarations
+        al: array(range,range) of mpvar
+        bet: array(range,range) of mpvar
+        w: array(range,range) of mpvar
+    end-declarations
+
+    forall(i in 1..NT,j in i..NT)do
+    create(bet(i,j))
+    create(w(i,j))
+    end-do
+
+    forall(i in 1..NT,j in i..NT|u(j)>0)
+    create(al(i,j))
+
+    forall(i in 1..NT)
+    x(i)=sum(j in i..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+
+    forall(j in 1..NT)
+    sum(i in 1..j)u(j)*al(i,j)=v(j)
+
+    forall(j in 1..NT)
+    sum(i in 1..j)w(i,j)=1
+
+    forall(i in 1..NT,j in i..NT)do
+    al(i,j)+bet(i,j)=w(i,j)
+    w(i,j)<=y(i)
+    end-do
+
+    forall(t in 1..NT, k in 1..t)
+    sum(i in k..t)w(i,t)<= y(k)+ if(k<t,sum(i in k+1..t)z(i),0)
+
+    forall(i in 1..NT-1,t in i..NT-1)
+    w(i,t)>=w(i,t+1)
+
+    end-procedure
+    """
+    # al: array(range,range) of mpvar
+    def alvar(i, j):
+        return prefix+"al_{0}_{1}".format(i, j)
+
+    # bet: array(range,range) of mpvar
+    def betvar(i, j):
+        return prefix+"bet_{0}_{1}".format(i, j)
+
+    # w: array(range,range) of mpvar
+    def wvar(i, j):
+        return prefix+"w_{0}_{1}".format(i, j)
+
+    # forall(i in 1..NT,j in i..NT) create(bet(i,j))
+    # forall(i in 1..NT,j in i..NT) create(w(i,j))
+    for i in mrange(0, NT):
+        for j in mrange(i, NT):
+            model.add_var(name=betvar(i, j), lb=0, ub=1)
+            model.add_var(name=wvar(i, j), lb=0, ub=1)
+
+    # forall(i in 1..NT,j in i..NT|u(j)>0) create(al(i,j))
+    for i in mrange(0, NT):
+        for j in mrange(i, NT):
+            model.add_var(name=alvar(i, j), lb=0, ub=1)
+
+    # forall(i in 1..NT)
+    # x(i)=sum(j in i..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+    x[0] = s[0]
+    for i in mrange(0, NT):
+        rhs = []
+        for j in mrange(max(1, i), NT):
+            rhs.append((d[j], betvar(i, j)))
+            rhs.append((d[j]+u[j], alvar(i, j)))
+        model.add_con(x[i], "=", rhs)
+
+    # forall(j in 1..NT)
+    # sum(i in 1..j)u(j)*al(i,j)=v(j)
+    for j in mrange(1, NT):
+        lhs = [(u[j], alvar(i, j)) for i in mrange(0, j)]
+        model.add_con(lhs, "=", v[j])
+
+    # forall(j in 1..NT)
+    # sum(i in 1..j)w(i,j)=1
+    for j in mrange(1, NT):
+        lhs = [wvar(i, j) for i in mrange(0, j)]
+        model.add_con(lhs, "=", 1)
+
+    # forall(i in 1..NT,j in i..NT)do
+    # al(i,j)+bet(i,j)=w(i,j)
+    # w(i,j)<=y(i)
+    # end-do
+    for i in mrange(1, NT):
+        for j in mrange(i, NT):
+            model.add_con([alvar(i, j), betvar(i, j)], "=", wvar(i, j))
+            model.add_con(wvar(i, j), "<=", y[i])
+
+    # forall(t in 1..NT, k in 1..t)
+    # sum(i in k..t)w(i,t)<= y(k)+ if(k<t,sum(i in k+1..t)z(i),0)
+    for t in mrange(1, NT):
+        for k in mrange(1, t):
+            lhs = [wvar(i, t) for i in mrange(k, t)]
+            rhs = [y[k]] + [z[i] for i in mrange(k+1, t)]
+            model.add_con(lhs, "<=", rhs)
+
+    # forall(i in 1..NT-1,t in i..NT-1)
+    # w(i,t)>=w(i,t+1)
+    for i in mrange(1, NT-1):
+        for t in mrange(i, NT-1):
+            model.add_con(wvar(i, t), ">=", wvar(i, t+1))
 
 
 def XFormDLSICC(model, s0, y, d, C, NT, Tk, prefix=""):

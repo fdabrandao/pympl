@@ -39,6 +39,8 @@ TESTS = {
     "LS_U_B": ("lslib_ls.mod", True),
     "LS_U_SC": ("lslib_ls.mod", True),
     "LS_U_SCB": ("lslib_ls.mod", True),
+    "LS_U_SL": ("lslib_ls.mod", True),
+    "LS_U_SCSL": ("lslib_ls.mod", True),
     "WW_U": ("lslib_ww.mod", True),
     "WW_U_B": ("lslib_ww.mod", True),
     "WW_U_SC": ("lslib_ww.mod", True),
