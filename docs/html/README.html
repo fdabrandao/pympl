@@ -57,7 +57,7 @@ Porto, Portugal. All rights reserved. E-mail: <a href="mailto:fdabrandao@dcc.fc.
 
 <hr>
 
-<p><a href="https://github.com/fdabrandao/pympl">PyMPL</a> is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, sub-tour elimination constraints for TSP, and lot-sizing reformulations. PyMPL is fully compatible with both python 2 and 3.</p>
+<p><a href="https://github.com/fdabrandao/pympl">PyMPL</a> is a python extension to the AMPL modelling language that adds new <a href="STMTS.html">statements</a> for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling <a href="STMTS_SOS.html">piecewise linear functions</a>, <a href="STMTS_VPSolver.html">compressed arc-flow graphs</a> for vector packing, <a href="STMTS_TSP.html">sub-tour elimination constraints</a> for TSP, and <a href="STMTS_LSLIB.html">lot-sizing reformulations</a> (LS-LIB). PyMPL is fully compatible with both python 2 and 3.</p>
 
 <p><a href="https://camo.githubusercontent.com/2329b3418e73f1b98f3ea9e1ee8fc69a195afcbc/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d47504c2d626c75652e737667" target="_blank"><img src="https://camo.githubusercontent.com/2329b3418e73f1b98f3ea9e1ee8fc69a195afcbc/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d47504c2d626c75652e737667" alt="" data-canonical-src="https://img.shields.io/badge/license-GPL-blue.svg" style="max-width:100%;"></a>
 <a href="https://travis-ci.org/fdabrandao/pympl"><img src="https://camo.githubusercontent.com/249c81d5ad203b2b29b9d7126ef0e8fcd57cddf1/68747470733a2f2f7472617669732d63692e6f72672f6664616272616e64616f2f70796d706c2e7376673f6272616e63683d6d6173746572" alt="" data-canonical-src="https://travis-ci.org/fdabrandao/pympl.svg?branch=master" style="max-width:100%;"></a></p>
@@ -112,10 +112,6 @@ $PWL[x,y]{zip(<span class="pl-k">xval</span>ues, <span class="pl-k">yval</span>u
 <span class="pl-k">maximize</span> <span class="pl-k">obj</span><span class="pl-k">:</span> <span class="pl-c1">2</span><span class="pl-k">*</span>x <span class="pl-k">+</span> <span class="pl-c1">15</span><span class="pl-k">*</span>y;
 s.t. A<span class="pl-k">:</span> <span class="pl-c1">3</span><span class="pl-k">*</span>x <span class="pl-k">+</span> <span class="pl-c1">4</span><span class="pl-k">*</span>y <span class="pl-k">&lt;=</span> <span class="pl-c1">250</span>;
 s.t. B<span class="pl-k">:</span> <span class="pl-c1">7</span><span class="pl-k">*</span>x <span class="pl-k">-</span> <span class="pl-c1">2</span><span class="pl-k">*</span>y <span class="pl-k">+</span> <span class="pl-c1">3</span><span class="pl-k">*</span>u <span class="pl-k">&lt;=</span> <span class="pl-c1">170</span>;
-
-<span class="pl-k">solve</span>;
-<span class="pl-k">display</span> x, y, u;
-<span class="pl-k">display</span> <span class="pl-s"><span class="pl-pds">"</span>Objective:<span class="pl-pds">"</span></span>, <span class="pl-c1">2</span><span class="pl-k">*</span>x <span class="pl-k">+</span> <span class="pl-c1">15</span><span class="pl-k">*</span>y;
 <span class="pl-k">end</span>;</pre></div>
 
 <p><code>vector_packing.mod</code>:</p>
@@ -131,9 +127,6 @@ $VBP_FLOW[Z]{_instance1.W, _instance1.w, [<span class="pl-s"><span class="pl-pds
 
 <span class="pl-k">minimize</span> <span class="pl-k">obj</span><span class="pl-k">:</span> Z;
 s.t. demand{i <span class="pl-k">in</span> I}<span class="pl-k">:</span> x[i] <span class="pl-k">&gt;=</span> instance1_b[i]; <span class="pl-c"># demand constraints</span>
-
-<span class="pl-k">solve</span>;
-<span class="pl-k">display</span> Z;
 <span class="pl-k">end</span>;</pre></div>
 
 <h3>

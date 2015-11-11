@@ -76,6 +76,7 @@
 <li><a href="#ls_u2">$LS_U2{...};</a></li>
 <li><a href="#ls_u_b">$LS_U_B{...};</a></li>
 <li><a href="#ls_u_sc">$LS_U_SC{...};</a></li>
+<li><a href="#ls_u_scb">$LS_U_SCB{...};</a></li>
 </ul>
 </li>
 <li>
@@ -353,6 +354,13 @@ demand <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pd
 
 <p>Description: Shortest path formulation for LS-U.</p>
 
+<p>Notes: </p>
+
+<ul>
+<li>Assumes s[NT] = 0;</li>
+<li>Not compatible with the LB variant.</li>
+</ul>
+
 <p>Parameters: see <a href="#parameters">parameter description</a>.</p>
 
 <h4>
@@ -367,9 +375,32 @@ demand <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pd
 <h4>
 <a id="user-content-ls_u_sc" class="anchor" href="#ls_u_sc" aria-hidden="true"><span class="octicon octicon-link"></span></a>LS_U_SC</h4>
 
-<p>Usage: <code>$LS_U_SC{s, r, x, y, z, d, NT, Tk=None};</code></p>
+<p>Usage: <code>$LS_U_SC{s, x, y, z, d, NT, Tk=None};</code></p>
 
-<p>Description: Extended formulation for LS-U-SC.</p>
+<p>Description: Extended formulation for LS-U-SC. </p>
+
+<p>Notes: </p>
+
+<ul>
+<li>Assumes s[NT] = 0;</li>
+<li>Not compatible with the LB variant.</li>
+</ul>
+
+<p>Parameters: see <a href="#parameters">parameter description</a>.</p>
+
+<h4>
+<a id="user-content-ls_u_scb" class="anchor" href="#ls_u_scb" aria-hidden="true"><span class="octicon octicon-link"></span></a>LS_U_SCB</h4>
+
+<p>Usage: <code>$LS_U_SCB{s, x, y, z, w, d, NT, Tk=None};</code></p>
+
+<p>Description: Extended formulation for LS-U-SC,B.</p>
+
+<p>Notes: </p>
+
+<ul>
+<li>Assumes s[NT] = 0;</li>
+<li>Not compatible with the LB variant.</li>
+</ul>
 
 <p>Parameters: see <a href="#parameters">parameter description</a>.</p>
 
@@ -410,7 +441,12 @@ demand <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pd
 
 <p>Description: Discrete lot-sizing (without initial stock) with start-up costs.</p>
 
-<p>Notes: <code>DLS_CC_SC</code> is only valid if demands are in {0, C}.</p>
+<p>Notes: </p>
+
+<ul>
+<li>
+<code>DLS_CC_SC</code> is only valid if demands are in {0, C}.</li>
+</ul>
 
 <p>Parameters: see <a href="#parameters">parameter description</a>.</p>
 
