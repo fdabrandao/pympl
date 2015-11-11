@@ -8,6 +8,14 @@ Version 1.0
 
 (release date to be announced, codename to be selected)
 
+Version 0.8.2
+-------------
+
+Bugfix release, released on November 11th 2015
+
+- Fixed bugs in LS-LIB reformulations.
+- Added tests for LS-LIB reformulations.
+
 Version 0.8.1
 -------------
 

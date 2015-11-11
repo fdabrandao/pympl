@@ -5,7 +5,7 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
 
-[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new statements for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling piecewise linear functions, compressed arc-flow graphs for vector packing, sub-tour elimination constraints for TSP, and lot-sizing reformulations. PyMPL is fully compatible with both python 2 and 3.
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new [statements](https://github.com/fdabrandao/pympl/wiki/STMTS) for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling [piecewise linear functions](https://github.com/fdabrandao/pympl/wiki/STMTS_SOS), [compressed arc-flow graphs](https://github.com/fdabrandao/pympl/wiki/STMTS_VPSolver) for vector packing, [sub-tour elimination constraints](https://github.com/fdabrandao/pympl/wiki/STMTS_TSP) for TSP, and [lot-sizing reformulations](https://github.com/fdabrandao/pympl/wiki/STMTS_LSLIB) (LS-LIB). PyMPL is fully compatible with both python 2 and 3.
 
 ![](https://img.shields.io/badge/license-GPL-blue.svg)
 [![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
@@ -52,10 +52,6 @@ $PWL[x,y]{zip(xvalues, yvalues)};
 maximize obj: 2*x + 15*y;
 s.t. A: 3*x + 4*y <= 250;
 s.t. B: 7*x - 2*y + 3*u <= 170;
-
-solve;
-display x, y, u;
-display "Objective:", 2*x + 15*y;
 end;
 ```
 
@@ -73,9 +69,6 @@ $VBP_FLOW[Z]{_instance1.W, _instance1.w, ["x[%d]"%i for i in _sets['I']]};
 
 minimize obj: Z;
 s.t. demand{i in I}: x[i] >= instance1_b[i]; # demand constraints
-
-solve;
-display Z;
 end;
 ```
 
