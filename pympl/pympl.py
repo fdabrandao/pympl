@@ -86,14 +86,14 @@ class PyMPL(object):
         "LS_U_B": SubmodLSUB,
         "LS_U_SC": SubmodLSUSC,
         "LS_U_SCB": SubmodLSUSCB,
-        "LS_U_SL": SubmodLSUSL,
-        "LS_U_SCSL": SubmodLSUSCSL,
-        "LS_U_SCBSL": SubmodLSUSCBSL,
+        # "LS_U_SL": SubmodLSUSL,
+        # "LS_U_SCSL": SubmodLSUSCSL,
+        # "LS_U_SCBSL": SubmodLSUSCBSL,
         "DLSI_CC": SubmodDLSICC,
         "DLSI_CC_B": SubmodDLSICCB,
         "DLS_CC_B": SubmodDLSCCB,
         "DLS_CC_SC": SubmodDLSCCSC,
-        "DLS_CC_SCU": SubmodDLSCCSCU,
+        # "DLS_CC_SCU": SubmodDLSCCSCU,
     }
 
     def __init__(self, locals_=None, globals_=None):
