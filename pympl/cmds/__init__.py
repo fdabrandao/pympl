@@ -29,6 +29,6 @@ from .xform import SubmodWWUSC, SubmodWWUSCB, SubmodWWULB
 from .xform import SubmodWWCC, SubmodWWCCB
 from .xform import SubmodLSU, SubmodLSU1, SubmodLSU2
 from .xform import SubmodLSUB, SubmodLSUSC, SubmodLSUSCB
-from .xform import SubmodLSUSL, SubmodLSUSCSL
+from .xform import SubmodLSUSL, SubmodLSUSCSL, SubmodLSUSCBSL
 from .xform import SubmodDLSICC, SubmodDLSICCB
 from .xform import SubmodDLSCCB, SubmodDLSCCSC, SubmodDLSCCSCU

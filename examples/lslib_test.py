@@ -32,6 +32,7 @@ if __name__ == "__main__":
     if sdir != "":
         os.chdir(sdir)
 
+inf = float("inf")
 TESTS = {
     "LS_U": ("lslib_ls.mod", True),
     "LS_U1": ("lslib_ls.mod", True),
@@ -39,8 +40,9 @@ TESTS = {
     "LS_U_B": ("lslib_ls.mod", True),
     "LS_U_SC": ("lslib_ls.mod", True),
     "LS_U_SCB": ("lslib_ls.mod", True),
-    "LS_U_SL": ("lslib_ls.mod", True),
-    "LS_U_SCSL": ("lslib_ls.mod", True),
+    # "LS_U_SL": ("lslib_ls.mod", True),
+    # "LS_U_SCSL": ("lslib_ls.mod", True),
+    # "LS_U_SCBSL": ("lslib_ls.mod", True),
     "WW_U": ("lslib_ww.mod", True),
     "WW_U_B": ("lslib_ww.mod", True),
     "WW_U_SC": ("lslib_ww.mod", True),
@@ -75,7 +77,10 @@ def solve(mod_in, prob, relax, xform, test_seed):
     #         if abs(varvalues[var]-round(varvalues[var])) > 1e-5:
     #             if var[0] in ["y", "z", "w"]:
     #                 print(var, varvalues[var])
-    return varvalues["cost"]
+    try:
+        return varvalues["cost"]
+    except:
+        return inf
 
 
 def test(prob, approx=False):

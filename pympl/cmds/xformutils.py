@@ -1375,6 +1375,8 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
 
     + some minor modifications to handle variable s[0]
     """
+    s[0], d = NetDemand(s[0], d, NT)
+
     # v: array(range,range) of mpvar
     def vvar(i, j):
         return prefix+"v_{0}_{1}".format(i, j)
@@ -1393,7 +1395,7 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
     # sum(i in u..t)v(i,k)<= y(k)+ if(t>k,sum(i in k+1..t)z(i),0)+
     #         if(u<k,sum(i in u..k-1)w(i),0)
     for k in mrange(1, NT):
-        for u in mrange(max(1, k-Tk), k):
+        for u in mrange(max(0, k-Tk), k):  # possible bug: 0 or 1?
             for t in mrange(k, min(k+Tk, NT)):
                 lhs = [vvar(i, k) for i in mrange(u, t)]
                 rhs = [y[k]]
@@ -1402,7 +1404,7 @@ def XFormLSUSCB(model, s, x, y, z, w, d, NT, Tk, prefix=""):
                 model.add_con(lhs, "<=", rhs)
 
     # forall(u in 1..NT-1,t in u..NT-1) v(u,t)>=v(u,t+1)
-    for u in mrange(0, NT-1):  # possible bug: 0 or 1?
+    for u in mrange(1, NT-1):  # possible bug: 0 or 1?
         for t in mrange(u, NT-1):
             model.add_con(vvar(u, t), ">=", vvar(u, t+1))
 
@@ -1648,6 +1650,139 @@ def XFormLSUSCSL(model, s, x, y, z, v, d, u, NT, Tk, prefix=""):
     for i in mrange(1, NT-1):
         for t in mrange(i, NT-1):
             model.add_con(wvar(i, t), ">=", wvar(i, t+1))
+
+
+def XFormLSUSCBSL(model, s, r, x, y, z, w, v, d, u, NT, Tk, prefix=""):
+    """
+    LS-U-SC,B,SL
+
+    procedure XFormLSUSCBSL(
+        s : array (range) of linctr,
+        r : array (range) of linctr,
+        x : array (range) of linctr,
+        y : array (range) of linctr,
+        z : array (range) of linctr,
+        w : array (range) of linctr,
+        v : array (range) of linctr,
+        d : array (range) of real,
+        u : array (range) of real,
+        NT : integer,
+        Tk : integer,
+        MC: integer)
+
+    declarations
+        al: array(range,range) of mpvar
+        bet: array(range,range) of mpvar
+        ww: array(range,range) of mpvar
+    end-declarations
+
+    forall(i in 1..NT,j in 1..NT)do
+    create(bet(i,j))
+    create(ww(i,j))
+    create(al(i,j))
+    end-do
+
+    forall(i in 1..NT)
+    x(i)=sum(j in 1..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+
+    forall(i in 1..NT-1)
+    s(i)=sum(k in 1..i,j in i+1..NT)(d(j)*bet(k,j)+(d(j)+u(j))*al(k,j))
+
+    forall(j in 1..NT)
+    sum(i in 1..NT)u(j)*al(i,j)=v(j)
+
+    forall(j in 1..NT)
+    sum(i in 1..NT)ww(i,j)=1
+
+    forall(i in 1..NT,j in 1..NT)do
+    al(i,j)+bet(i,j)=ww(i,j)
+    ww(i,j)<=y(i)
+    end-do
+
+    forall(k in 1..NT, j in maxlist(1,k-Tk)..k,t in k..minlist(k+Tk,NT))
+    sum(i in j..t)ww(i,k)<= y(k)+ if(t>k,sum(i in k+1..t)z(i),0)+
+            if(j<k,sum(i in j..k-1)w(i),0)
+
+    end-procedure
+    """
+    # al: array(range,range) of mpvar
+    def alvar(i, j):
+        return prefix+"al_{0}_{1}".format(i, j)
+
+    # bet: array(range,range) of mpvar
+    def betvar(i, j):
+        return prefix+"bet_{0}_{1}".format(i, j)
+
+    # ww: array(range,range) of mpvar
+    def wwvar(i, j):
+        return prefix+"ww_{0}_{1}".format(i, j)
+
+    # forall(i in 1..NT,j in 1..NT) create(bet(i,j))
+    # forall(i in 1..NT,j in 1..NT) create(ww(i,j))
+    # forall(i in 1..NT,j in 1..NT) create(al(i,j))
+    for i in mrange(0, NT):
+        for j in mrange(0, NT):
+            model.add_var(name=betvar(i, j), lb=0)
+            model.add_var(name=wwvar(i, j), lb=0)
+            model.add_var(name=alvar(i, j), lb=0)
+
+    # forall(i in 1..NT)
+    # x(i)=sum(j in 1..NT)(d(j)*bet(i,j)+(d(j)+u(j))*al(i,j))
+    x[0] = s[0]
+    for i in mrange(1, NT):
+        rhs = []
+        for j in mrange(max(1, i), NT):
+            rhs.append((d[j]+1000, betvar(i, j)))
+            rhs.append((d[j]+u[j]+1000, alvar(i, j)))
+        model.add_con([r[i], x[i]], "=", rhs)
+
+    # forall(i in 1..NT-1)
+    # s(i)=sum(k in 1..i,j in i+1..NT)(d(j)*bet(k,j)+(d(j)+u(j))*al(k,j))
+    for i in mrange(1, NT-1):
+        rhs = []
+        for k in mrange(1, i):
+            for j in mrange(i+1, NT):
+                rhs.append((d[j]+1000, betvar(k, j)))
+                rhs.append((d[j]+u[j]+1000, alvar(k, j)))
+        model.add_con(s[i], "=", rhs)
+
+    # forall(j in 1..NT)
+    # sum(i in 1..NT)u(j)*al(i,j)=v(j)
+    for j in mrange(1, NT):
+        lhs = [(u[j], alvar(i, j)) for i in mrange(1, NT)]
+        if j > 1:
+            model.add_con(lhs, "=", [v[j], r[j-1]])
+        else:
+            model.add_con(lhs, "=", v[j])
+
+    """
+    # forall(j in 1..NT)
+    # sum(i in 1..NT)ww(i,j)=1
+    for j in mrange(1, NT):
+        lhs = [wwvar(i, j) for i in mrange(0, NT)]
+        model.add_con(lhs, "<=", 1)
+
+    # forall(i in 1..NT,j in 1..NT)do
+    # al(i,j)+bet(i,j)=ww(i,j)
+    # ww(i,j)<=y(i)
+    # end-do
+    for i in mrange(1, NT):
+        for j in mrange(1, NT):
+            model.add_con([alvar(i, j), betvar(i, j)], "=", wwvar(i, j))
+            model.add_con(wwvar(i, j), "<=", y[i])
+
+    # forall(k in 1..NT, j in maxlist(1,k-Tk)..k,t in k..minlist(k+Tk,NT))
+    # sum(i in j..t)ww(i,k)<= y(k)+ if(t>k,sum(i in k+1..t)z(i),0)+
+    #        if(j<k,sum(i in j..k-1)w(i),0)
+    for k in mrange(1, NT):
+        for j in mrange(max(1, k-Tk), k):
+            for t in mrange(k, min(k+Tk, NT)):
+                lhs = [wwvar(i, k) for i in mrange(j, t)]
+                rhs = [y[k]]
+                rhs += [z[i] for i in mrange(k+1, t)]
+                rhs += [w[i] for i in mrange(j, k-1)]
+                model.add_con(lhs, "<=", rhs)
+    """
 
 
 def XFormDLSICC(model, s0, y, d, C, NT, Tk, prefix=""):

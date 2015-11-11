@@ -77,6 +77,8 @@ for i in mrange(1, NT):
 if not CAPACITATED:
     C = sum(d)
 
+#LB = int(C/2.0)
+
 #print("LB:", LB)
 #print("C:", C)
 #print("d:", d)
@@ -133,6 +135,8 @@ s.t. dem_sat{t in 1..NT}:
     d[t] + (if t > 1 then r[t-1]) + s[t];
 
 s.t. s0: s[0] = ${S0}$;
+s.t. sNT: s[NT] = 0;
+s.t. rNT: r[NT] = 0;
 
 s.t. upper_bound{t in 1..NT}:
     x[t] <= C*y[t];
@@ -171,5 +175,6 @@ if xform:
         WW_CC(s, y, d, C, NT)
     elif TEST_PROB == "WW_CC_B":
         WW_CC_B(s, r, y, d, C, NT)
+        pass
 };
 end;

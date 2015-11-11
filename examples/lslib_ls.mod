@@ -6,7 +6,7 @@ from random import seed, randint
 seed(test_seed)
 
 NT = 10
-S0 = 0
+S0 = 11
 S0VAR = False
 C = randint(5, 10)
 
@@ -74,6 +74,14 @@ elif TEST_PROB == "LS_U_SCSL":
     LB = 0
     SL = 10
     SL_VALUE = -1
+elif TEST_PROB == "LS_U_SCBSL":
+    BACKLOG = True
+    CAPACITATED = False
+    SUP_COST = 10
+    SOFF_COST = 10
+    LB = 0
+    SL = 10
+    SL_VALUE = -1
 else:
     assert False
 
@@ -92,9 +100,12 @@ for i in mrange(1, NT):
 if not CAPACITATED:
     C = sum(d)+sum(u)
 
+#LB = int(C/1.0)
+
 #print("C =", C)
 #print("S0 =", S0)
 #print("d =", d)
+#print("u =", u)
 #print("p =", p)
 #print("h =", h)
 #print("q =", q)
@@ -153,7 +164,8 @@ s.t. dem_sat{t in 1..NT}:
     d[t] + v[t] + (if t > 1 then r[t-1]) + s[t];
 
 s.t. s0: s[0] = ${S0}$;
-#s.t. sNT: s[NT] = 0;
+#s.t. sNT: s[NT] = ${S0}$;
+#s.t. rNT: r[NT] = 10000;
 
 s.t. upper_bound{t in 1..NT}:
     x[t] <= C*y[t];
@@ -196,6 +208,8 @@ if xform:
         LS_U_SL(s, x, y, v, d, u, NT)
     elif TEST_PROB == "LS_U_SCSL":
         LS_U_SCSL(s, x, y, z, v, d, u, NT)
+    elif TEST_PROB == "LS_U_SCBSL":
+        LS_U_SCBSL(s, r, x, y, z, w, v, d, u, NT)
     else:
         assert False
 };

@@ -13,30 +13,25 @@ S0VAR = False
 
 if TEST_PROB == "DLSI_CC":
     BACKLOG = False
-    CAPACITATED = True
     SUP_COST = 0
     SOFF_COST = 0
 elif TEST_PROB == "DLSI_CC_B":
     BACKLOG = True
-    CAPACITATED = True
     SUP_COST = 0
     SOFF_COST = 0
 elif TEST_PROB == "DLS_CC_B":
     BACKLOG = True
-    CAPACITATED = True
     SUP_COST = 0
     SOFF_COST = 0
     S0 = 0
 elif TEST_PROB == "DLS_CC_SC":
     BACKLOG = False
-    CAPACITATED = True
     SUP_COST = 10
     SOFF_COST = 10
     C = 1 # DLS_CC_SC requires 0-1 demands
     S0 = 0
 elif TEST_PROB == "DLS_CC_SCU":
     BACKLOG = False
-    CAPACITATED = True
     SUP_COST = 10
     SOFF_COST = 10
     S0 = 0
@@ -52,9 +47,6 @@ for i in mrange(1, NT):
     p.append(randint(1, 3))
     h.append(randint(1, 5))
     q.append(randint(20, 50))
-
-if not CAPACITATED:
-    C = sum(d)
 
 #print("C =", C)
 #print("d =", d)
