@@ -50,15 +50,10 @@ from .xformutils import XFormDLSCCSCU
 class SubmodWWU(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwu_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -90,15 +85,10 @@ class SubmodWWU(SubmodBase):
 class SubmodWWUB(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, r, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwub_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -132,15 +122,10 @@ class SubmodWWUB(SubmodBase):
 class SubmodWWUSC(SubmodBase):
     """Command for creating WW-U-SC extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, z, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwusc_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -174,15 +159,10 @@ class SubmodWWUSC(SubmodBase):
 class SubmodWWUSCB(SubmodBase):
     """Command for creating WW-U-SC,B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, r, y, z, w, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwuscb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -220,15 +200,10 @@ class SubmodWWUSCB(SubmodBase):
 class SubmodWWULB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, d, L, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwulb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -260,15 +235,10 @@ class SubmodWWULB(SubmodBase):
 class SubmodWWCC(SubmodBase):
     """Command for creating WW-CC extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwcc_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
@@ -300,15 +270,10 @@ class SubmodWWCC(SubmodBase):
 class SubmodWWCCB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, r, y, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_wwccb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -342,15 +307,10 @@ class SubmodWWCCB(SubmodBase):
 class SubmodLSU1(SubmodBase):
     """Command for creating LS-U1 extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsu1_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -384,15 +344,10 @@ class SubmodLSU1(SubmodBase):
 class SubmodLSU2(SubmodBase):
     """Command for creating LS-U1 extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsu2_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -426,15 +381,10 @@ class SubmodLSU2(SubmodBase):
 class SubmodLSU(SubmodBase):
     """Command for creating LS-U extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsu_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -468,15 +418,10 @@ class SubmodLSU(SubmodBase):
 class SubmodLSUB(SubmodBase):
     """Command for creating LS-U-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, r, x, y, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsub_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -512,15 +457,10 @@ class SubmodLSUB(SubmodBase):
 class SubmodLSUSC(SubmodBase):
     """Command for creating LS-U-SC extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, z, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsusc_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -556,15 +496,10 @@ class SubmodLSUSC(SubmodBase):
 class SubmodLSUSCB(SubmodBase):
     """Command for creating LS-U-SC,B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, z, w, d, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsuscb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -602,15 +537,10 @@ class SubmodLSUSCB(SubmodBase):
 class SubmodLSUSL(SubmodBase):
     """Command for creating LS-U-SL extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, v, d, u, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsusl_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -648,15 +578,10 @@ class SubmodLSUSL(SubmodBase):
 class SubmodLSUSCSL(SubmodBase):
     """Command for creating LS-U-SC,SL extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, x, y, z, v, d, u, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsuscsl_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(x, list) and len(x) == NT
@@ -696,15 +621,10 @@ class SubmodLSUSCSL(SubmodBase):
 class SubmodLSUSCBSL(SubmodBase):
     """Command for creating LS-U-SC,B,SL extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, r, x, y, z, w, v, d, u, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_lsuscbsl_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(r, list) and len(r) == NT
@@ -748,15 +668,10 @@ class SubmodLSUSCBSL(SubmodBase):
 class SubmodDLSICC(SubmodBase):
     """Command for creating DLSI-CC extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s0, y, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_dlsicc_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
@@ -783,15 +698,10 @@ class SubmodDLSICC(SubmodBase):
 class SubmodDLSICCB(SubmodBase):
     """Command for creating DLSI-CC-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s0, r, y, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_dlsiccb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
@@ -820,15 +730,10 @@ class SubmodDLSICCB(SubmodBase):
 class SubmodDLSCCB(SubmodBase):
     """Command for creating DLS-CC-B extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, r, y, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_dlsccb_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
@@ -857,15 +762,10 @@ class SubmodDLSCCB(SubmodBase):
 class SubmodDLSCCSC(SubmodBase):
     """Command for creating DLS-CC-SC extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, z, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_dlsccsc_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) == NT
         assert isinstance(y, list) and len(y) == NT
@@ -896,15 +796,10 @@ class SubmodDLSCCSC(SubmodBase):
 class SubmodDLSCCSCU(SubmodBase):
     """Command for creating DLS-CC-SC-U extended formulations."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, s, y, z, d, C, NT, Tk=None):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_dlsccscu_{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         assert isinstance(s, list) and len(s) == NT
         assert isinstance(y, list) and len(y) == NT

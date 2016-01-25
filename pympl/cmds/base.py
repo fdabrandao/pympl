@@ -24,11 +24,17 @@ from builtins import object
 class CmdBase(object):
     """Base class for PyMPL commands."""
 
-    def __init__(self, cmd_name, pyvars, sets, params):
+    def __init__(self, cmd_name, prefix, pyvars, sets, params):
         self.cmd_name = cmd_name
+        self._prefix = prefix
+        self._count = 0
         self._pyvars = pyvars
         self._sets = sets
         self._params = params
+
+    def _new_prefix(self):
+        self._count += 1
+        return "{}_{}_".format(self._prefix, self._count)
 
     def __call__(self, *args, **kwargs):
         """Evalutates CMD()."""

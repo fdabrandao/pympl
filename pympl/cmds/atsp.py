@@ -35,15 +35,13 @@ class SubmodATSPMTZ(SubmodBase):
 
     def __init__(self, *args, **kwargs):
         SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False, DL=False):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_atspmtz{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         A = sorted(xvars.keys())
         V = sorted(set(u for u, v in A) | set(v for u, v in A))
@@ -75,15 +73,13 @@ class SubmodATSPSCF(SubmodBase):
 
     def __init__(self, *args, **kwargs):
         SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_atspscf{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         A = sorted(xvars.keys())
         V = sorted(set(u for u, v in A) | set(v for u, v in A))
@@ -115,15 +111,13 @@ class SubmodATSPMCF(SubmodBase):
 
     def __init__(self, *args, **kwargs):
         SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
         self._graph_lst = []
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_atspmcf{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         A = sorted(xvars.keys())
         V = sorted(set(u for u, v in A) | set(v for u, v in A))

@@ -137,9 +137,7 @@ class SubmodVBPFlow(SubmodBase):
         assert match is not None
         zvar = match
 
-        prefix = "_{0}_".format(zvar.lstrip("^"))
-        prefix = prefix.replace("[", "_").replace("]", "_")
-        prefix = prefix.replace(",", "").replace(" ", "")
+        prefix = self._new_prefix()
 
         graph, model, declared_vars = self._generate_model(
             zvar, W, w, b, bounds, prefix
@@ -269,9 +267,7 @@ class SubmodMVPFlow(SubmodBase):
         zvars = match
         assert len(zvars) == len(Ws)
 
-        prefix = "_{0}_".format("prefix") # FIXME
-        prefix = prefix.replace("[", "_").replace("]", "_")
-        prefix = prefix.replace(",", "").replace(" ", "")
+        prefix = self._new_prefix()
 
         graph, model, declared_vars = self._generate_model(
             zvars, Ws, ws, b, bounds, prefix

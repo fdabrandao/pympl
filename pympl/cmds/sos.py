@@ -64,15 +64,10 @@ def add_sos2(model, varl, ub=1, prefix=""):
 class SubmodSOS1(SubmodBase):
     """Command for creating SOS1 constraints."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, varl, ub=1):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_sos1{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         varl = list(varl)
         model = Model()
@@ -88,15 +83,10 @@ class SubmodSOS1(SubmodBase):
 class SubmodSOS2(SubmodBase):
     """Command for creating SOS2 constraints."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, arg1, varl, ub=1):
         """Evalutates CMD[arg1](*args)."""
         assert arg1 is None
-        self._cnt += 1
-        prefix = "_sos2{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         varl = list(varl)
         model = Model()
@@ -112,18 +102,13 @@ class SubmodSOS2(SubmodBase):
 class SubmodPWL(SubmodBase):
     """Command for modeling Piecewise Linear Functions."""
 
-    def __init__(self, *args, **kwargs):
-        SubmodBase.__init__(self, *args, **kwargs)
-        self._cnt = 0
-
     def _evalcmd(self, varnames, xyvalues):
         """Evalutates CMD[arg1](*args)."""
         match = utils.parse_symblist(varnames, allow_index="[]")
         assert match is not None
         xvar, yvar = match
 
-        self._cnt += 1
-        prefix = "_pwl{0}_".format(self._cnt)
+        prefix = self._new_prefix()
 
         xyvalues = list(xyvalues)
         n = len(xyvalues)

@@ -128,7 +128,10 @@ class PyMPL(object):
 
     def add_cmd(self, cmd, cmdcls):
         """Adds a new command to the parser."""
-        self._locals[cmd] = cmdcls(cmd, self._locals, self._sets, self._params)
+        prefix = "_{}{}".format(cmd.lower(), len(self._locals))
+        self._locals[cmd] = cmdcls(
+            cmd, prefix, self._locals, self._sets, self._params
+        )
         self._cmds.append(cmd)
 
     def parse(self, mod_in=None, mod_out=None, comment_cmds=True):

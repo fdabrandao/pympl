@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from .base import CmdBase, SubmodBase
 from .default import CmdSet, CmdParam, CmdVar, CmdCon, CmdStmt
-from .vbp import SubmodVBPFlow, CmdVBPGraph, SubmodMVPFlow, CmdMVPGraph
+from .vpsolver import SubmodVBPFlow, CmdVBPGraph, SubmodMVPFlow, CmdMVPGraph
 from .atsp import SubmodATSPSCF, SubmodATSPMCF, SubmodATSPMTZ
 from .sos import SubmodSOS1, SubmodSOS2, SubmodPWL
 from .xform import SubmodWWU, SubmodWWUB
