@@ -1,23 +1,21 @@
-$VBP_LOAD[instance1{I,D}]{"data/instance.vbp", 1};
+$EXEC{
+from pyvpsolver import VBP
+instance = VBP.from_file("data/instance.vbp")
+};
+$SET[I]{range(instance.m)};
+$PARAM[b{^I}]{instance.b};
 var x{I}, >= 0;
 
 $VBP_FLOW[Z]{
-    _instance1.W,
-    _instance1.w,
-    ["x[%d]"%i for i in _sets['I']]
-};
-
-$EXEC{
-print(_params["instance1_b"])
-print(_instance1.b)
-print("_sets:", _sets.keys())
-print("_params:", _params.keys())
+    instance.W,
+    instance.w,
+    ["x[%d]"%i for i in range(instance.m)]
 };
 
 minimize obj: Z;
-s.t. demand{i in I}: x[i] >= instance1_b[i];
+s.t. demand{i in I}: x[i] >= b[i];
 
-end;
 solve;
 display Z;
 display x;
+end;

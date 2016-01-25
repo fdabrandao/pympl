@@ -26,7 +26,7 @@ import re
 import sys
 from .cmds import SubmodBase
 from .cmds import CmdSet, CmdParam, CmdVar, CmdCon, CmdStmt
-from .cmds import SubmodVBPFlow, CmdVBPGraph, CmdVBPLoad
+from .cmds import SubmodVBPFlow, CmdVBPGraph, SubmodMVPFlow, CmdMVPGraph
 from .cmds import SubmodATSPMTZ, SubmodATSPSCF, SubmodATSPMCF
 from .cmds import SubmodSOS1, SubmodSOS2, SubmodPWL
 from .cmds import SubmodWWU, SubmodWWUB
@@ -67,9 +67,10 @@ class PyMPL(object):
         "ATSP_MTZ": SubmodATSPMTZ,
         "ATSP_SCF": SubmodATSPSCF,
         "ATSP_MCF": SubmodATSPMCF,
-        "VBP_LOAD": CmdVBPLoad,
         "VBP_FLOW": SubmodVBPFlow,
         "VBP_GRAPH": CmdVBPGraph,
+        "MVP_FLOW": SubmodMVPFlow,
+        "MVP_GRAPH": CmdMVPGraph,
         "SOS1": SubmodSOS1,
         "SOS2": SubmodSOS2,
         "PWL": SubmodPWL,
