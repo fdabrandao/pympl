@@ -63,7 +63,7 @@ with open("pympl/__init__.py", "rb") as f:
 setup(
     name="PyMPL",
     version=version,
-    license="GPLv3+",
+    license="AGPLv3+",
     author="Filipe Brandao",
     author_email="fdabrandao@dcc.fc.up.pt",
     url="https://github.com/fdabrandao/pympl",
@@ -81,7 +81,7 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+        "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
         "Topic :: Scientific/Engineering"
     ],
     cmdclass={"install": CustomInstallCommand},
