@@ -176,7 +176,7 @@ class CmdVBPGraph(CmdBase):
         graph = AFG(instance, verbose=False).graph()
         graph.relabel(
             lambda u: u if isinstance(u, six.string_types) else str(u),
-            lambda i: labels[i] if isinstance(i, int) and i < m else "LOSS"
+            lambda i: labels[i] if i != graph.LOSS else "LOSS"
         )
         return graph
 
@@ -247,8 +247,7 @@ class SubmodVBPFlow(SubmodBase):
 
         instance = VBP(W, w, bb, verbose=False)
         graph = AFG(instance, verbose=False).graph()
-        feedback = (graph.T, graph.S, "Z")
-        graph.A.append(feedback)
+        feedback = (graph.T, graph.S, graph.LOSS)
 
         vnames = {}
         vnames[feedback] = zvar
