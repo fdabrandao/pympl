@@ -1,13 +1,13 @@
 ## PyMPL: A Mathematical Programming Toolbox
-Copyright (C) 2015-2015, Filipe Brandão  
-Faculdade de Ciencias, Universidade do Porto  
+Copyright (C) 2015-2016, Filipe Brandão  
+Faculdade de Ciências, Universidade do Porto  
 Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
 
 [PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new [statements](https://github.com/fdabrandao/pympl/wiki/STMTS) for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling [piecewise linear functions](https://github.com/fdabrandao/pympl/wiki/STMTS_SOS), [compressed arc-flow graphs](https://github.com/fdabrandao/pympl/wiki/STMTS_VPSolver) for vector packing, [sub-tour elimination constraints](https://github.com/fdabrandao/pympl/wiki/STMTS_TSP) for TSP, and [lot-sizing reformulations](https://github.com/fdabrandao/pympl/wiki/STMTS_LSLIB) (LS-LIB). PyMPL is fully compatible with both python 2 and 3.
 
-![](https://img.shields.io/badge/license-GPL-blue.svg)
+![](https://img.shields.io/badge/license-AGPLv3+-blue.svg)
 [![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
 
 ### Useful links
@@ -59,16 +59,21 @@ end;
 
 ```ampl
 # Load a vector packing instance from a file:
-$VBP_LOAD[instance1{I,D}]{"instance1.vbp", i0=1};
+$EXEC{
+from pyvpsolver import VBP
+instance = VBP.from_file("data/instance.vbp")
+};
+$SET[I]{range(instance.m)};
+$PARAM[b{^I}]{instance.b};
 
 var x{I}, >= 0;
 
-# Generate an arc-flow model for instance1:
-$VBP_FLOW[Z]{_instance1.W, _instance1.w, ["x[%d]"%i for i in _sets['I']]};
+# Generate the arc-flow model:
+$VBP_FLOW[Z]{instance.W, instance.w, ["x[%d]"%i for i in _sets['I']]};
 # Variable declarations and flow conservation constraints will be created here
 
 minimize obj: Z;
-s.t. demand{i in I}: x[i] >= instance1_b[i]; # demand constraints
+s.t. demand{i in I}: x[i] >= b[i]; # demand constraints
 end;
 ```
 
