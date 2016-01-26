@@ -169,7 +169,7 @@ class SubmodVBPFlow(SubmodBase):
 
         instance = VBP(W, w, bb, verbose=False)
         graph = AFG(instance, verbose=False).graph()
-        feedback = (graph.T, graph.S, graph.LOSS)
+        feedback = (graph.Ts[0], graph.S, graph.LOSS)
 
         vnames = {}
         vnames[feedback] = zvar
@@ -239,7 +239,7 @@ class SubmodVBPFlow(SubmodBase):
             total_flow = varvalues.get("_total_flow", 0)
             graph.set_flow(varvalues)
             sol = graph.extract_solution(
-                graph.S, "<-", graph.T, flow_limit=total_flow
+                graph.S, "<-", graph.Ts[0], flow_limit=total_flow
             )
             lst_sol.append((zvar, varvalues.get(zvar, 0), sol))
             Tools.log(
@@ -307,7 +307,7 @@ class SubmodMVPFlow(SubmodBase):
 
         vnames = {
             (T, graph.S, graph.LOSS): zvar
-            for zvar, T in zip(zvars, graph.T)
+            for zvar, T in zip(zvars, graph.Ts)
         }
 
         ub = {}
@@ -379,7 +379,7 @@ class SubmodMVPFlow(SubmodBase):
                 var.replace(prefix, "", 1): get_var_value(var)
                 for var in model.vars if var.startswith(prefix)
             }
-            for i, zvar, T in zip(range(len(zvars)), zvars, graph.T):
+            for i, zvar, T in zip(range(len(zvars)), zvars, graph.Ts):
                 total_flow = varvalues.get("_total_flow_{}".format(i), 0)
                 graph.set_flow(varvalues)
                 sol = graph.extract_solution(
