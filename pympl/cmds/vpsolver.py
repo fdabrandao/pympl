@@ -35,13 +35,15 @@ from .. import utils
 class CmdVBPGraph(CmdBase):
     """Command for creating arc-flow graphs for VBP instances."""
 
-    def _evalcmd(self, names, W, w, labels, bounds=None):
+    def _evalcmd(
+            self, names, W, w, labels, bounds=None,
+            S="S", T="T", LOSS="LOSS"):
         """Evalutates CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
 
-        graph = self._generate_graph(W, w, labels, bounds)
+        graph = self._generate_graph(W, w, labels, bounds, S, T, LOSS)
 
         defs = ""
         defs += utils.ampl_set(
@@ -52,7 +54,7 @@ class CmdVBPGraph(CmdBase):
         )[0]
         self._pyvars["_defs"] += defs
 
-    def _generate_graph(self, W, w, labels, bounds):
+    def _generate_graph(self, W, w, labels, bounds, S, T, LOSS):
         """Generates an arc-flow graph."""
         from pyvpsolver import VBP, AFG
         m = len(w)
@@ -67,8 +69,8 @@ class CmdVBPGraph(CmdBase):
         instance = VBP(W, w, b, verbose=False)
         graph = AFG(instance, verbose=False).graph()
         graph.relabel(
-            lambda u: u if isinstance(u, six.string_types) else str(u),
-            lambda lbl: labels[lbl] if lbl != graph.LOSS else "LOSS"
+            lambda u: S if u == graph.S else T if u == graph.Ts[0] else str(u),
+            lambda lbl: labels[lbl] if lbl != graph.LOSS else LOSS
         )
         return graph
 
@@ -76,24 +78,32 @@ class CmdVBPGraph(CmdBase):
 class CmdMVPGraph(CmdBase):
     """Command for creating arc-flow graphs for MVP instances."""
 
-    def _evalcmd(self, names, Ws, ws, labels, bounds=None):
+    def _evalcmd(
+            self, names, Ws, ws, labels, bounds=None,
+            S="S", Ts=None, LOSS="LOSS"):
         """Evalutates CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
 
-        graph = self._generate_graph(Ws, ws, labels, bounds)
+        graph = self._generate_graph(Ws, ws, labels, bounds, S, Ts, LOSS)
 
         defs = ""
         defs += utils.ampl_set(
             Vname, graph.V, self._sets, self._params
         )[0]
+        A_expanded = [
+            (u, v, lbl) if not isinstance(lbl, (tuple, list))
+            else (u, v) + tuple(lbl)
+            for (u, v, lbl) in graph.A
+        ]
         defs += utils.ampl_set(
-            Aname, graph.A, self._sets, self._params
+            Aname, A_expanded, self._sets, self._params
         )[0]
         self._pyvars["_defs"] += defs
 
-    def _generate_graph(self, Ws, ws, labels, bounds):
+    def _generate_graph(
+            self, Ws, ws, labels, bounds, S, Ts, LOSS):
         """Generates an arc-flow graph."""
         from pyvpsolver import MVP, AFG
         m = len(ws)
@@ -114,9 +124,20 @@ class CmdMVPGraph(CmdBase):
         Qs = [-1]*len(Ws)
         instance = MVP(Ws, Cs, Qs, ws, b, verbose=False)
         graph = AFG(instance, verbose=False).graph()
+
+        vlbl = {}
+        assert Ts is None or len(Ts) == len(graph.Ts)
+        for u in graph.V:
+            if u == graph.S:
+                vlbl[u] = S
+            elif u in graph.Ts:
+                vlbl[u] = Ts[graph.Ts.index(u)]
+            else:
+                vlbl[u] = str(u)
+
         graph.relabel(
-            lambda u: u if isinstance(u, six.string_types) else str(u),
-            lambda lbl: labels[lbl] if lbl != graph.LOSS else "LOSS"
+            lambda u: vlbl.get(u),
+            lambda lbl: labels[lbl] if lbl != graph.LOSS else LOSS
         )
         return graph
 
