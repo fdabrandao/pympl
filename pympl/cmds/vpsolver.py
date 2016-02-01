@@ -260,15 +260,38 @@ class SubmodMVPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvars, Ws, ws, b, bounds=None):
+    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, i0=1):
         """Evalutates CMD[zvar](*args)."""
-        match = utils.parse_symblist(zvars, allow_index="[]")
+        match = utils.parse_indexed(zvar, "{}")
         assert match is not None
-        zvars = match
-        assert len(zvars) == len(Ws)
+        zvar, index_list = match
+        assert index_list is None or len(index_list) == 1
 
         prefix = self._new_prefix()
 
+        if zvar.startswith("^"):
+            zvar = zvar.lstrip("^")
+        else:
+            if index_list is not None:
+                assert len(index_list) == 1
+                index = index_list[0]
+            else:
+                index = "{}_I".format(zvar)
+
+            if not index.startswith("^"):
+                sdefs, sdata = utils.ampl_set(
+                    index,
+                    list(range(i0, i0+len(Ws))),
+                    self._sets, self._params
+                )
+                self._pyvars["_defs"] += sdefs
+                self._pyvars["_data"] += sdata
+
+            self._pyvars["_model"] += utils.ampl_var(
+                zvar, index=index, typ="I", lb=0, ub=None
+            )
+
+        zvars = ["^{}[{}]".format(zvar, i0+i) for i in range(len(Ws))]
         graph, model, declared_vars = self._generate_model(
             zvars, Ws, ws, b, bounds, prefix
         )

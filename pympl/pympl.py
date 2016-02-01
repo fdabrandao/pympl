@@ -180,7 +180,7 @@ class PyMPL(object):
                         self._locals
                     )
                     res = str(self._locals["_model"])
-                res += self._locals["_defs"]
+                res = self._locals["_defs"]+res
                 self._add_data(self._locals["_data"])
             except Exception as e:
                 msg = "Exception occurred while evaluating {0}".format(
