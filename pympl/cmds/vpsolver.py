@@ -372,7 +372,6 @@ class SubmodMVPFlow(SubmodBase):
             lincomb = []
             for j in range(nopts[i]):
                 lincomb += assocs.get((i, j), [])
-            print(i, lincomb)
             if bounds is not None:
                 for var in lincomb:
                     ub[var] = bounds[i]
