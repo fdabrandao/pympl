@@ -37,13 +37,15 @@ class CmdVBPGraph(CmdBase):
 
     def _evalcmd(
             self, names, W, w, labels, bounds=None,
-            S="S", T="T", LOSS="LOSS"):
+            S="S", T="T", LOSS="LOSS", binary=False, verbose=None):
         """Evalutates CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
 
-        graph = self._generate_graph(W, w, labels, bounds, S, T, LOSS)
+        graph = self._generate_graph(
+            W, w, labels, bounds, S, T, LOSS, binary, verbose
+        )
 
         defs = ""
         defs += utils.ampl_set(
@@ -54,7 +56,8 @@ class CmdVBPGraph(CmdBase):
         )[0]
         self._pyvars["_defs"] += defs
 
-    def _generate_graph(self, W, w, labels, bounds, S, T, LOSS):
+    def _generate_graph(
+            self, W, w, labels, bounds, S, T, LOSS, binary, verbose):
         """Generates an arc-flow graph."""
         from pyvpsolver import VBP, AFG
         m = len(w)
@@ -66,8 +69,8 @@ class CmdVBPGraph(CmdBase):
                 min(W[d]//w[i][d]) for d in range(ndims) if w[i][d] != 0
                 for i in range(m)
             ]
-        instance = VBP(W, w, b, verbose=False)
-        graph = AFG(instance, verbose=False).graph()
+        instance = VBP(W, w, b, binary=binary, verbose=False)
+        graph = AFG(instance, verbose=verbose).graph()
         graph.relabel(
             lambda u: S if u == graph.S else T if u == graph.Ts[0] else str(u),
             lambda lbl: labels[lbl] if lbl != graph.LOSS else LOSS
@@ -80,13 +83,15 @@ class CmdMVPGraph(CmdBase):
 
     def _evalcmd(
             self, names, Ws, ws, labels, bounds=None,
-            S="S", Ts=None, LOSS="LOSS"):
+            S="S", Ts=None, LOSS="LOSS", binary=False, verbose=None):
         """Evalutates CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
 
-        graph = self._generate_graph(Ws, ws, labels, bounds, S, Ts, LOSS)
+        graph = self._generate_graph(
+            Ws, ws, labels, bounds, S, Ts, LOSS, binary, verbose
+        )
 
         defs = ""
         defs += utils.ampl_set(
@@ -103,7 +108,7 @@ class CmdMVPGraph(CmdBase):
         self._pyvars["_defs"] += defs
 
     def _generate_graph(
-            self, Ws, ws, labels, bounds, S, Ts, LOSS):
+            self, Ws, ws, labels, bounds, S, Ts, LOSS, binary, verbose):
         """Generates an arc-flow graph."""
         from pyvpsolver import MVP, AFG
         m = len(ws)
@@ -122,8 +127,8 @@ class CmdMVPGraph(CmdBase):
 
         Cs = [1]*len(Ws)
         Qs = [-1]*len(Ws)
-        instance = MVP(Ws, Cs, Qs, ws, b, verbose=False)
-        graph = AFG(instance, verbose=False).graph()
+        instance = MVP(Ws, Cs, Qs, ws, b, binary=binary, verbose=False)
+        graph = AFG(instance, verbose=verbose).graph()
 
         vlbl = {}
         assert Ts is None or len(Ts) == len(graph.Ts)
@@ -152,7 +157,8 @@ class SubmodVBPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvar, W, w, b, bounds=None):
+    def _evalcmd(
+            self, zvar, W, w, b, bounds=None, binary=False, verbose=False):
         """Evalutates CMD[zvar](*args)."""
         match = utils.parse_symbname(zvar, allow_index="[]")
         assert match is not None
@@ -161,7 +167,7 @@ class SubmodVBPFlow(SubmodBase):
         prefix = self._new_prefix()
 
         graph, model, declared_vars = self._generate_model(
-            zvar, W, w, b, bounds, prefix
+            zvar, W, w, b, bounds, prefix, binary, verbose
         )
 
         self._zvars.append(zvar.lstrip("^"))
@@ -171,7 +177,8 @@ class SubmodVBPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(self, zvar, W, w, b, bounds=None, prefix=""):
+    def _generate_model(self, zvar, W, w, b, bounds=None, prefix="",
+            binary=False, verbose=None):
         """Generates a arc-flow model."""
         from pyvpsolver import VBP, AFG
         m = len(w)
@@ -188,8 +195,8 @@ class SubmodVBPFlow(SubmodBase):
             else:
                 bb[i] = b[i]
 
-        instance = VBP(W, w, bb, verbose=False)
-        graph = AFG(instance, verbose=False).graph()
+        instance = VBP(W, w, bb, binary=binary, verbose=False)
+        graph = AFG(instance, verbose=verbose).graph()
         feedback = (graph.Ts[0], graph.S, graph.LOSS)
 
         vnames = {}
@@ -281,7 +288,8 @@ class SubmodMVPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, i0=1):
+    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, i0=1,
+            binary=False, verbose=None):
         """Evalutates CMD[zvar](*args)."""
         match = utils.parse_indexed(zvar, "{}")
         assert match is not None
@@ -314,7 +322,7 @@ class SubmodMVPFlow(SubmodBase):
 
         zvars = ["^{}[{}]".format(zvar, i0+i) for i in range(len(Ws))]
         graph, model, declared_vars = self._generate_model(
-            zvars, Ws, ws, b, bounds, prefix
+            zvars, Ws, ws, b, bounds, prefix, binary, verbose
         )
 
         self._zvars.append([zvar.lstrip("^") for zvar in zvars])
@@ -324,7 +332,8 @@ class SubmodMVPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(self, zvars, Ws, ws, b, bounds=None, prefix=""):
+    def _generate_model(self, zvars, Ws, ws, b, bounds=None, prefix="",
+            binary=False, verbose=None):
         """Generates a arc-flow model."""
         from pyvpsolver import MVP, AFG
         ndims = len(Ws[0])
@@ -346,8 +355,8 @@ class SubmodMVPFlow(SubmodBase):
 
         Cs = [1]*len(Ws)
         Qs = [-1]*len(Ws)
-        instance = MVP(Ws, Cs, Qs, ws, bb, verbose=False)
-        graph = AFG(instance, verbose=False).graph()
+        instance = MVP(Ws, Cs, Qs, ws, bb, binary=binary, verbose=False)
+        graph = AFG(instance, verbose=verbose).graph()
 
         vnames = {
             (T, graph.S, graph.LOSS): zvar
@@ -423,15 +432,15 @@ class SubmodMVPFlow(SubmodBase):
                 for var in model.vars if var.startswith(prefix)
             }
             for i, zvar, T in zip(range(len(zvars)), zvars, graph.Ts):
-                total_flow = varvalues.get("_total_flow_{}".format(i), 0)
+                total_flow_i = varvalues.get("_total_flow_{}".format(i), 0)
                 graph.set_flow(varvalues)
                 sol = graph.extract_solution(
-                    graph.S, "<-", T, flow_limit=total_flow
+                    graph.S, "<-", T, flow_limit=total_flow_i
                 )
                 lst_sol.append((zvar, varvalues.get(zvar, 0), sol))
                 Tools.log(
                     "Graph: {0} (flow={1:d})\n\t{2}".format(
-                        zvar, total_flow, sol
+                        zvar, total_flow_i, sol
                     ), verbose=verbose
                 )
         return lst_sol
