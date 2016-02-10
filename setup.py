@@ -26,15 +26,8 @@ Links
 import re
 import os
 import ast
-from setuptools import setup
-from setuptools.command.install import install
+from distutils.core import setup
 from pkg_resources import parse_version
-
-
-class CustomInstallCommand(install):
-    """Custom Install Command."""
-    def run(self):
-        install.run(self)
 
 
 def ls_dir(base_dir):
@@ -71,7 +64,6 @@ setup(
     long_description=__doc__,
     packages=["pympl"],
     package_data={"": ls_dir("pympl/")},
-    include_package_data=True,
     scripts=[os.path.join("scripts", f) for f in ls_dir("scripts/")],
     platforms="any",
     install_requires=open("requirements.txt").read().split("\n"),
