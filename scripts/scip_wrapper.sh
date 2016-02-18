@@ -46,7 +46,7 @@ solve(){
     rm -rf $TMP_DIR/vars.sol;
     (
         echo "read $model_file"
-        echo $options
+        echo "$options"
         echo "optimize"
         echo "write solution $TMP_DIR/vars.sol"
     ) | scip &
