@@ -32,19 +32,19 @@ if __name__ == "__main__":
 
 
 def main():
-    """Parses 'vbp.mod'"""
+    """Parses 'vpsolver_mvp.mod'"""
 
-    mod_in = "vbp.mod"
-    mod_out = "tmp/vbp.out.mod"
+    mod_in = "vpsolver_mvp.mod"
+    mod_out = "tmp/vpsolver_mvp.out.mod"
     parser = PyMPL()
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/instance.lp"
+    lp_out = "tmp/vpsolver_mvp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
     )
-    sol = parser["VBP_FLOW"].extract(
+    sol = parser["MVP_FLOW"].extract(
         lambda varname: varvalues.get(varname, 0),
         verbose=True
     )
@@ -53,7 +53,7 @@ def main():
     print("sol:", sol)
     print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
     print("")
-    assert varvalues["Z"] == 33  # check the solution objective value
+    assert varvalues["cost"] == 8  # check the solution objective value
 
     # exit_code = os.system("glpsol --math {0}".format(mod_out))
     # assert exit_code == 0

@@ -37,9 +37,9 @@ def mrange(a, b):
 NT = _params["NT"]
 demand = _params["d"]
 
-s = ["s[%d]"%(t) for t in mrange(0, NT)]
-x = ["x[%d]"%(t) for t in mrange(1, NT)]
-y = ["y[%d]"%(t) for t in mrange(1, NT)]
+s = ["s[{}]".format(t) for t in mrange(0, NT)]
+x = ["x[{}]".format(t) for t in mrange(1, NT)]
+y = ["y[{}]".format(t) for t in mrange(1, NT)]
 d = [demand[t] for t in mrange(1, NT)]
 if BACKLOG is False:
     #LS_U(s, x, y, d, NT)
@@ -47,7 +47,7 @@ if BACKLOG is False:
     #LS_U2(s, x, y, d, NT)
     WW_U(s, y, d, NT)
 else:
-    r = ["r[%d]"%(t) for t in mrange(1, NT)]
+    r = ["r[{}]".format(t) for t in mrange(1, NT)]
     #LS_U_B(s, r, x, y, d, NT)
     WW_U_B(s, r, y, d, NT)
 };

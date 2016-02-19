@@ -41,12 +41,9 @@ def main():
 
     lp_out = "tmp/bike.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
-    try:
-        out, varvalues = Tools.script(
-            "glpk_wrapper.sh", lp_out, verbose=True
-        )
-    except Exception as e:
-        print(repr(e))
+    out, varvalues = Tools.script(
+        "glpk_wrapper.sh", lp_out, verbose=True
+    )
 
     #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
 

@@ -179,15 +179,15 @@ s.t. setups2{t in 1..NT}:
     z[t] <= y[t];
 
 $EXEC{
-s = ["s[%d]"%(t) for t in mrange(0, NT)]
+s = ["s[{}]".format(t) for t in mrange(0, NT)]
 if S0VAR is False:
     s[0] = S0
-r = ["r[%d]"%(t) for t in mrange(1, NT)]
-x = ["x[%d]"%(t) for t in mrange(1, NT)]
-y = ["y[%d]"%(t) for t in mrange(1, NT)]
-v = ["v[%d]"%(t) for t in mrange(1, NT)]
-z = ["z[%d]"%(t) for t in mrange(1, NT)]
-w = ["w[%d]"%(t) for t in mrange(1, NT)]
+r = ["r[{}]".format(t) for t in mrange(1, NT)]
+x = ["x[{}]".format(t) for t in mrange(1, NT)]
+y = ["y[{}]".format(t) for t in mrange(1, NT)]
+v = ["v[{}]".format(t) for t in mrange(1, NT)]
+z = ["z[{}]".format(t) for t in mrange(1, NT)]
+w = ["w[{}]".format(t) for t in mrange(1, NT)]
 d = [_params["d"][t] for t in mrange(1, NT)]
 u = [_params["u"][t] for t in mrange(1, NT)]
 if xform:

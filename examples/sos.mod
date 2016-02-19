@@ -15,7 +15,7 @@ s.t. fix_x: x = sum{i in I} X[i] * z[i];
 s.t. fix_y: y = sum{i in I} Y[i] * z[i];
 s.t. convexity: sum{i in I} z[i] = 1;
 
-$SOS2{["z[%d]"%i for i in _sets['I']]};
+$SOS2{["z[{}]".format(i) for i in _sets['I']]};
 
 s.t. A: 3*x + 4*y <= 250;
 s.t. B: 7*x - 2*y + 3*u <= 170;

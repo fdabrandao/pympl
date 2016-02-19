@@ -67,7 +67,7 @@ def main():
             options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
             verbose=True
         )
-    except Exception as e:
+    except RuntimeError as e:
         print(repr(e))
 
     #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])

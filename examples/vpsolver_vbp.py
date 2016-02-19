@@ -20,8 +20,6 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-from builtins import map
-from builtins import range
 
 import os
 import sys
@@ -33,46 +31,35 @@ if __name__ == "__main__":
         os.chdir(sdir)
 
 
-def read_tsp(fname):
-    """Loads TSP instances."""
-    xs, ys = [], []
-    with open(fname) as f:
-        lst = list(map(float, f.read().split()))
-        n = int(lst.pop(0))
-        for i in range(n):
-            xs.append(lst.pop(0))
-            ys.append(lst.pop(0))
-    return n, xs, ys
-
-
 def main():
-    """Parses 'tsp.mod'."""
+    """Parses 'vpsolver_vbp.mod'"""
 
-    mod_in = "tsp.mod"
-    mod_out = "tmp/tsp.out.mod"
-    graph_size = "small"
-    parser = PyMPL(locals_=locals(), globals_=globals())
+    mod_in = "vpsolver_vbp.mod"
+    mod_out = "tmp/vpsolver_vbp.out.mod"
+    parser = PyMPL()
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/tsp.lp"
+    lp_out = "tmp/vpsolver_vbp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
-    try:
-        out, varvalues = Tools.script(
-            "vpsolver_gurobi.sh", lp_out, verbose=True
-        )
-    except RuntimeError as e:
-        print(repr(e))
-
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
     )
-
-    print(
-        "varvalues:", [
-            (k, v)
-            for k, v in sorted(varvalues.items()) if not k.startswith("_")
-        ]
+    sol = parser["VBP_FLOW"].extract(
+        lambda varname: varvalues.get(varname, 0),
+        verbose=True
     )
 
+    print("")
+    print("sol:", sol)
+    print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    print("")
+    assert varvalues["Z"] == 33  # check the solution objective value
+
+    # exit_code = os.system("glpsol --math {0}".format(mod_out))
+    # assert exit_code == 0
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ImportError as e:
+        print(repr(e))

@@ -62,11 +62,11 @@ def main():
     lp_out = "tmp/cgp.lp"
     glpkutils.mod2lp(mod_out, lp_out, True)
     try:
-        out, varvalues = Solver.script(
+        out, varvalues = Tools.script(
             "gurobi_wrapper.sh", lp_out,
             options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
         )
-    except Exception as e:
+    except RuntimeError as e:
         print(repr(e))
 
     #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])

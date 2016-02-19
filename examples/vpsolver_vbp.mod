@@ -9,7 +9,7 @@ var x{I}, >= 0;
 $VBP_FLOW[Z]{
     instance.W,
     instance.w,
-    ["x[%d]"%i for i in range(instance.m)]
+    ["x[{}]".format(i) for i in range(instance.m)]
 };
 
 minimize obj: Z;

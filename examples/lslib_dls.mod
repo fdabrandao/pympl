@@ -110,11 +110,11 @@ s.t. setups2{t in 1..NT}:
 $EXEC{
 if S0VAR:
     S0 = "s[0]"
-s = ["s[%d]"%(t) for t in mrange(1, NT)]
-r = ["r[%d]"%(t) for t in mrange(1, NT)]
-y = ["y[%d]"%(t) for t in mrange(1, NT)]
-z = ["z[%d]"%(t) for t in mrange(1, NT)]
-w = ["w[%d]"%(t) for t in mrange(1, NT)]
+s = ["s[{}]".format(t) for t in mrange(1, NT)]
+r = ["r[{}]".format(t) for t in mrange(1, NT)]
+y = ["y[{}]".format(t) for t in mrange(1, NT)]
+z = ["z[{}]".format(t) for t in mrange(1, NT)]
+w = ["w[{}]".format(t) for t in mrange(1, NT)]
 d = [_params["d"][t] for t in mrange(1, NT)]
 if xform:
     print("test:", TEST_PROB)

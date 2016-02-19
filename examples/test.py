@@ -23,15 +23,16 @@ from __future__ import print_function
 
 import os
 import sys
+import wolsey
 import equivknapsack01
 import equivknapsack
-import wolsey
-import vbp
-import tsp
+import vpsolver_vbp
+import vpsolver_mvp
+import twostage
 import tsp_gurobi
+import tsp
 import sos
 import pwl
-import twostage
 import lslib_test
 
 if __name__ == "__main__":
@@ -62,8 +63,14 @@ def main():
         print(repr(e))
 
     try:
-        print("vbp:")
-        vbp.main()
+        print("vpsolver_vbp:")
+        vpsolver_vbp.main()
+    except ImportError as e:
+        print(repr(e))
+
+    try:
+        print("vpsolver_mvp:")
+        vpsolver_mvp.main()
     except ImportError as e:
         print(repr(e))
 

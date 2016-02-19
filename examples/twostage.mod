@@ -24,7 +24,7 @@ var hbars{HS}, >= 0, integer;
 $VBP_FLOW[Z]{
     [H],
     [[hc] for hc in hcuts],
-    ["hbars[%d]"%height for height in HS]
+    ["hbars[{}]".format(height) for height in HS]
 };
 
 # Stage 2 (vertical cuts):
@@ -36,8 +36,8 @@ for height in HS:
         [w[it]] if h[it] == height else [W+1] # '<=' for non-extact
         for it in I
     ]
-    xvars = ["x[%d,%d]"%(height, it) for it in I]
-    VBP_FLOW["^hbars[%d]"%height]([W], ws, xvars)
+    xvars = ["x[{},{}]".format(height, it) for it in I]
+    VBP_FLOW["^hbars[{}]".format(height)]([W], ws, xvars)
 };
 
 minimize obj: Z;

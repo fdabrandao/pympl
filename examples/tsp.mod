@@ -53,17 +53,17 @@ minimize total: sum{(i,j) in A} c[i,j] * x[i,j];
 
 # Single Commodity Flow Model
 # Gavish and Graves (1978)
-#$ATSP_SCF{{(i,j): "x[%d,%d]"%(i,j) for i, j in _sets['A']}, cuts=False};
+#$ATSP_SCF{{(i,j): "x[{},{}]".format(i,j) for i, j in _sets['A']}, cuts=False};
 
 # Multi Commodity Flow Model
 # Wong (1980) and Claus (1984)
-#$ATSP_MCF{{(i,j): "x[%d,%d]"%(i,j) for i, j in _sets['A']}, cuts=False};
+#$ATSP_MCF{{(i,j): "x[{},{}]".format(i,j) for i, j in _sets['A']}, cuts=False};
 
 # Miller, Tucker and Zemlin (MTZ) (1960)
-#$ATSP_MTZ{{(i,j): "x[%d,%d]"%(i,j) for i, j in _sets['A']}, cuts=True};
+#$ATSP_MTZ{{(i,j): "x[{},{}]".format(i,j) for i, j in _sets['A']}, cuts=True};
 
 # Desrochers and Laporte (1991)
-$ATSP_MTZ{{(i,j): "x[%d,%d]"%(i,j) for i, j in _sets['A']}, DL=True, cuts=True};
+$ATSP_MTZ{{(i,j): "x[{},{}]".format(i,j) for i, j in _sets['A']}, DL=True, cuts=True};
 
 # Time Windows:
 var s{V}, >= 0;
