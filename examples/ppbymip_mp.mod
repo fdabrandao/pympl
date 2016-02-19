@@ -194,6 +194,4 @@ for i in IEND:
     WW_U_B(s, r, y, d, NT, Tk=8)
     #WW_CC_B(s, r, y, d, C, NT, Tk=6)
 };
-
 end;
-solve;

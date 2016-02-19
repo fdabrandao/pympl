@@ -118,6 +118,4 @@ else:
             #DLSI_CC_B(s0, r, y, d, C, NT)
             DLS_CC_B(r, y, d, C, NT)
 };
-
 end;
-solve;

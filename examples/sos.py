@@ -50,8 +50,8 @@ def main():
         for k, v in sorted(varvalues.items()) if not k.startswith("_")
     ])
 
-    exit_code = os.system("glpsol --math {0} | grep -v _".format(mod_out))
-    assert exit_code == 0
+    # exit_code = os.system("glpsol --math {0}".format(mod_out))
+    # assert exit_code == 0
 
 if __name__ == "__main__":
     main()

@@ -51,9 +51,4 @@ else:
     #LS_U_B(s, r, x, y, d, NT)
     WW_U_B(s, r, y, d, NT)
 };
-
 end;
-solve;
-display x;
-display y;
-display s;

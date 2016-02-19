@@ -26,7 +26,7 @@ import sys
 import equivknapsack01
 import equivknapsack
 import wolsey
-import instance
+import vbp
 import tsp
 import tsp_gurobi
 import sos
@@ -62,8 +62,8 @@ def main():
         print(repr(e))
 
     try:
-        print("instance:")
-        instance.main()
+        print("vbp:")
+        vbp.main()
     except ImportError as e:
         print(repr(e))
 

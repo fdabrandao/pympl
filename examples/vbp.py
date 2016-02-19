@@ -32,10 +32,10 @@ if __name__ == "__main__":
 
 
 def main():
-    """Parses 'instance.mod'"""
+    """Parses 'vbp.mod'"""
 
-    mod_in = "instance.mod"
-    mod_out = "tmp/instance.out.mod"
+    mod_in = "vbp.mod"
+    mod_out = "tmp/vbp.out.mod"
     parser = PyMPL()
     parser.parse(mod_in, mod_out)
 
@@ -55,8 +55,8 @@ def main():
     print("")
     assert varvalues["Z"] == 33  # check the solution objective value
 
-    exit_code = os.system("glpsol --math {0}".format(mod_out))
-    assert exit_code == 0
+    # exit_code = os.system("glpsol --math {0}".format(mod_out))
+    # assert exit_code == 0
 
 if __name__ == "__main__":
     try:

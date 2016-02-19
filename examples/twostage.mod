@@ -40,10 +40,7 @@ for height in HS:
     VBP_FLOW["^hbars[%d]"%height]([W], ws, xvars)
 };
 
+minimize obj: Z;
 # Demand constraints:
 s.t. demand{it in I}: sum{h in HS} x[h, it] >= b[it];
-
-minimize obj: Z;
-
 end;
-solve;

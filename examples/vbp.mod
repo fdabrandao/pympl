@@ -14,8 +14,4 @@ $VBP_FLOW[Z]{
 
 minimize obj: Z;
 s.t. demand{i in I}: x[i] >= b[i];
-
-solve;
-display Z;
-display x;
 end;
