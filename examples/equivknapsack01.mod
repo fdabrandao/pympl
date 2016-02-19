@@ -19,7 +19,8 @@ var pi{{0} union I} >= 0;
 var theta{V} >= 0;
 
 minimize obj: pi[0];
-s.t. gamma{(u,v,i) in A}: theta[v] >= theta[u]+(if i != 'LOSS' then pi[i] else 0);
+s.t. gamma{(u,v,i) in A: v != 'S'}:
+    theta[v] >= theta[u]+(if i != 'LOSS' then pi[i] else 0);
 s.t. pi0: pi[0] = theta['T'];
 s.t. pisum: sum{i in I} pi[i] = 1+2*pi[0];
 end;
