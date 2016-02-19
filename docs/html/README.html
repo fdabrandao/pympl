@@ -85,6 +85,8 @@ Porto, Portugal. All rights reserved. E-mail: <a href="mailto:fdabrandao@dcc.fc.
 
 <div class="highlight highlight-source-shell"><pre>$ pip install pympl</pre></div>
 
+<p>Note: use <code>pip install pympl --pre</code> if you want to install the latest pre-release.</p>
+
 <p>Or build and install locally:</p>
 
 <pre><code>$ pip install -r requirements.txt
@@ -121,13 +123,11 @@ $EXEC{
 <span class="pl-k">from</span> pyvpsolver import VBP
 instance <span class="pl-k">=</span> VBP.from_file(<span class="pl-s"><span class="pl-pds">"</span>data/instance.vbp<span class="pl-pds">"</span></span>)
 };
-$<span class="pl-k">SET</span>[I]{range(instance.m)};
-$<span class="pl-k">PARAM</span>[b{<span class="pl-k">^</span>I}]{instance.b};
-
+$<span class="pl-k">PARAM</span>[b{I}]{instance.b};
 <span class="pl-k">var</span> x{I}, <span class="pl-k">&gt;=</span> <span class="pl-c1">0</span>;
 
 <span class="pl-c"># Generate the arc-flow model:</span>
-$VBP_FLOW[Z]{instance.W, instance.w, [<span class="pl-s"><span class="pl-pds">"</span>x[%d]<span class="pl-pds">"</span></span>%i <span class="pl-k">for</span> i <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>I<span class="pl-pds">'</span></span>]]};
+$VBP_FLOW[Z]{instance.W, instance.w, [<span class="pl-s"><span class="pl-pds">"</span>x[{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i) <span class="pl-k">for</span> i <span class="pl-k">in</span> range(instance.m)]};
 <span class="pl-c"># Variable declarations and flow conservation constraints will be created here</span>
 
 <span class="pl-k">minimize</span> <span class="pl-k">obj</span><span class="pl-k">:</span> Z;

@@ -139,7 +139,7 @@ $<span class="pl-k">PARAM</span>[Y{<span class="pl-k">^</span>I}]{[<span class="
 s.t. fix_x<span class="pl-k">:</span> x <span class="pl-k">=</span> <span class="pl-k">sum</span>{i <span class="pl-k">in</span> I} X[i] <span class="pl-k">*</span> z[i];
 s.t. fix_y<span class="pl-k">:</span> y <span class="pl-k">=</span> <span class="pl-k">sum</span>{i <span class="pl-k">in</span> I} Y[i] <span class="pl-k">*</span> z[i];
 s.t. convexity<span class="pl-k">:</span> <span class="pl-k">sum</span>{i <span class="pl-k">in</span> I} z[i] <span class="pl-k">=</span> <span class="pl-c1">1</span>;
-$SOS2{[<span class="pl-s"><span class="pl-pds">"</span>z[%d]<span class="pl-pds">"</span></span>%i <span class="pl-k">for</span> i <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>I<span class="pl-pds">'</span></span>]]};</pre></div>
+$SOS2{[<span class="pl-s"><span class="pl-pds">"</span>z[{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i) <span class="pl-k">for</span> i <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>I<span class="pl-pds">'</span></span>]]};</pre></div>
 
 <h4>
 <a id="user-content-pwl" class="anchor" href="#pwl" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>PWL</h4>

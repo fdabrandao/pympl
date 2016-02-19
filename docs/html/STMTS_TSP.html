@@ -105,7 +105,7 @@ $<span class="pl-k">SET</span>[A]{<span class="pl-k">set</span> of arcs};
 $<span class="pl-k">PARAM</span>[cost{<span class="pl-k">^</span>A}]{cost of each <span class="pl-k">arc</span>};
 <span class="pl-k">var</span> x{A}, <span class="pl-k">binary</span>;
 <span class="pl-k">minimize</span> total<span class="pl-k">:</span> <span class="pl-k">sum</span>{(i,j) <span class="pl-k">in</span> A} cost[i,j] <span class="pl-k">*</span> x[i,j];
-$ATSP_MTZ{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[%d,%d]<span class="pl-pds">"</span></span>%(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}, DL<span class="pl-k">=</span>True, cuts<span class="pl-k">=</span>True};</pre></div>
+$ATSP_MTZ{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}, DL<span class="pl-k">=</span>True, cuts<span class="pl-k">=</span>True};</pre></div>
 
 <h4>
 <a id="user-content-atsp_scf" class="anchor" href="#atsp_scf" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ATSP_SCF</h4>
@@ -152,7 +152,7 @@ $<span class="pl-k">SET</span>[A]{<span class="pl-k">set</span> of arcs};
 $<span class="pl-k">PARAM</span>[cost{<span class="pl-k">^</span>A}]{cost of each <span class="pl-k">arc</span>};
 <span class="pl-k">var</span> x{A}, <span class="pl-k">binary</span>;
 <span class="pl-k">minimize</span> total<span class="pl-k">:</span> <span class="pl-k">sum</span>{(i,j) <span class="pl-k">in</span> A} cost[i,j] <span class="pl-k">*</span> x[i,j];
-$ATSP_SCF{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[%d,%d]<span class="pl-pds">"</span></span>%(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}, cuts<span class="pl-k">=</span>True};</pre></div>
+$ATSP_SCF{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}, cuts<span class="pl-k">=</span>True};</pre></div>
 
 <h4>
 <a id="user-content-atsp_mcf" class="anchor" href="#atsp_mcf" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ATSP_MCF</h4>
@@ -199,7 +199,7 @@ $<span class="pl-k">SET</span>[A]{<span class="pl-k">set</span> of arcs};
 $<span class="pl-k">PARAM</span>[cost{<span class="pl-k">^</span>A}]{cost of each <span class="pl-k">arc</span>};
 <span class="pl-k">var</span> x{A}, <span class="pl-k">binary</span>;
 <span class="pl-k">minimize</span> total<span class="pl-k">:</span> <span class="pl-k">sum</span>{(i,j) <span class="pl-k">in</span> A} cost[i,j] <span class="pl-k">*</span> x[i,j];
-$ATSP_MCF{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[%d,%d]<span class="pl-pds">"</span></span>%(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}};</pre></div>
+$ATSP_MCF{{(i,j)<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>x[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i,j) <span class="pl-k">for</span> i, j <span class="pl-k">in</span> _sets[<span class="pl-s"><span class="pl-pds">'</span>A<span class="pl-pds">'</span></span>]}};</pre></div>
 
 <hr>
 

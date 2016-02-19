@@ -103,13 +103,16 @@
 
 <ul>
 <li>
-<a href="STMTS_VPSolver.html#vbp_load">VBP_LOAD</a>: <code>$VBP_LOAD[name]{fname, i0=0, d0=0};</code>
+<a href="STMTS_VPSolver.html#vbp_flow">VBP_FLOW</a>: <code>$VBP_FLOW[zvar]{W, w, b, bounds=None, binary=False};</code>
 </li>
 <li>
-<a href="STMTS_VPSolver.html#vbp_flow">VBP_FLOW</a>: <code>$VBP_FLOW[zvar]{W, w, b, bounds=None};</code>
+<a href="STMTS_VPSolver.html#vbp_graph">VBP_GRAPH</a>: <code>$VBP_GRAPH[V_name, A_name]{W, w, labels, bounds=None, binary=False, S="S", T="T", LOSS="LOSS"};</code>
 </li>
 <li>
-<a href="STMTS_VPSolver.html#vbp_graph">VBP_GRAPH</a>: <code>$VBP_GRAPH[V_name, A_name]{W, w, labels, bounds=None};</code>
+<a href="STMTS_VPSolver.html#mvp_flow">MVP_FLOW</a>: <code>$MVP_FLOW[zvars]{Ws, ws, b, bounds=None, binary=False, i0=0};</code>
+</li>
+<li>
+<a href="STMTS_VPSolver.html#mvp_graph">MVP_GRAPH</a>: <code>$MVP_GRAPH[V_name, A_name]{Ws, ws, labels, bounds=None, binary=False, S="S", Ts=None, LOSS="LOSS"};</code>
 </li>
 </ul>
 </li>
@@ -144,7 +147,7 @@
 </ul>
 </li>
 <li>
-<p>Statements for Lot-sizing (<a href="STMTS_LSLIB.html">LS-LIB</a>):</p>
+<p>Statements for Lot-sizing (<a href="STMTS_LSLIB.html">LS-LIB</a>, implemented in collaboration with Laurence Wolsey):</p>
 
 <ul>
 <li>
@@ -160,7 +163,7 @@
 </li>
 </ol>
 
-<p><strong>Note</strong>: The values between <code>[]</code> are usually used to name new AMPL variables, constraints, sets, or parameters. Names starting with a <code>^</code> indicate that the corresponding AMPL element should not be defined by the command. This prefix is useful when the corresponding AMPL element was declared before and we do not want to declared it again.</p>
+<p><strong>Note</strong>: The values between <code>[]</code> are usually used to name new AMPL variables, constraints, sets, or parameters. Names starting with a <code>^</code> indicate that the corresponding AMPL element should not be defined by the command. This prefix is useful when the corresponding AMPL element has already been declared before and we do not want to declared it again.</p>
 
 <hr>
 

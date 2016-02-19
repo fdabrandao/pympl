@@ -95,7 +95,7 @@
 <h3>
 <a id="user-content-introduction" class="anchor" href="#introduction" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Introduction</h3>
 
-<p>The set of statements presented in this page come from the library of reformulations LS-LIB proposed in Production Planning by Mixed Integer Programming (<a href="http://www.springer.com/us/book/9780387299594">Pochet and Wolsey 2006</a>). For more details please refer to the book.</p>
+<p>The set of statements presented in this page came from the library of reformulations LS-LIB proposed in Production Planning by Mixed Integer Programming (<a href="http://www.springer.com/us/book/9780387299594">Pochet and Wolsey 2006</a>). For more details please refer to the book. The implementation of these reformulations was made in collaboration with Laurence Wolsey.</p>
 
 <h3>
 <a id="user-content-examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h3>
@@ -132,17 +132,12 @@ def mrange(a, b)<span class="pl-k">:</span>
 NT <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pds">"</span>NT<span class="pl-pds">"</span></span>]
 demand <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pds">"</span>d<span class="pl-pds">"</span></span>]
 
-s <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>s[%d]<span class="pl-pds">"</span></span>%(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">0</span>, NT)]
-x <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>x[%d]<span class="pl-pds">"</span></span>%(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
-y <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>y[%d]<span class="pl-pds">"</span></span>%(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+s <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>s[{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">0</span>, NT)]
+x <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>x[{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+y <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>y[{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
 d <span class="pl-k">=</span> [demand[t] <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
 LS_U(s, x, y, d, NT)
 };
-
-<span class="pl-k">solve</span>;
-<span class="pl-k">display</span> x;
-<span class="pl-k">display</span> y;
-<span class="pl-k">display</span> s;
 <span class="pl-k">end</span>;</pre></div>
 
 <p><code>clb.mod</code></p>
@@ -222,21 +217,19 @@ L <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pds">"<
 C <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pds">"</span>C<span class="pl-pds">"</span></span>]
 demand <span class="pl-k">=</span> _params[<span class="pl-s"><span class="pl-pds">"</span>d<span class="pl-pds">"</span></span>]
 <span class="pl-k">for</span> i <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NI)<span class="pl-k">:</span>
-    s <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>s[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
-    x <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>x[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
-    y <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>y[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
-    z <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>z[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+    s <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>s[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+    x <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>x[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+    y <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>y[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+    z <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>z[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
     d <span class="pl-k">=</span> [demand[i, t] <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
     <span class="pl-k">if</span> BACKLOG is False<span class="pl-k">:</span>
         WW_U(s, y, d, NT)
     <span class="pl-k">else</span><span class="pl-k">:</span>
-        r <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>r[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
-        w <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>w[%d,%d]<span class="pl-pds">"</span></span>%(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+        r <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>r[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
+        w <span class="pl-k">=</span> [<span class="pl-s"><span class="pl-pds">"</span>w[{},{}]<span class="pl-pds">"</span></span>.<span class="pl-k">format</span>(i, t) <span class="pl-k">for</span> t <span class="pl-k">in</span> mrange(<span class="pl-c1">1</span>, NT)]
         LS_U_B(s, r, x, y, d, NT)
         WW_U_SCB(s, r, y, z, w, d, NT, Tk<span class="pl-k">=</span><span class="pl-c1">5</span>)
 };
-
-<span class="pl-k">solve</span>;
 <span class="pl-k">end</span>;</pre></div>
 
 <h4>
