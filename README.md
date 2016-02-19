@@ -24,6 +24,7 @@ Install from the [repository](https://pypi.python.org/pypi/PyMPL):
 ```bash
 $ pip install pympl
 ```
+Note: use `pip install pympl --pre` if you want to install the latest pre-release.
 
 Or build and install locally:
 ```
@@ -63,13 +64,11 @@ $EXEC{
 from pyvpsolver import VBP
 instance = VBP.from_file("data/instance.vbp")
 };
-$SET[I]{range(instance.m)};
-$PARAM[b{^I}]{instance.b};
-
+$PARAM[b{I}]{instance.b};
 var x{I}, >= 0;
 
 # Generate the arc-flow model:
-$VBP_FLOW[Z]{instance.W, instance.w, ["x[%d]"%i for i in _sets['I']]};
+$VBP_FLOW[Z]{instance.W, instance.w, ["x[{}]".format(i) for i in range(instance.m)]};
 # Variable declarations and flow conservation constraints will be created here
 
 minimize obj: Z;
