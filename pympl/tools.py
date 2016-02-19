@@ -116,7 +116,7 @@ class Tools(object):
         exit_code = proc.wait()
         proc.stdout.close()
         if exit_code != 0:
-            raise Exception("failed to run '{0}'".format(cmd))
+            raise RuntimeError("failed to run '{0}'".format(cmd))
 
     @staticmethod
     def script(script_name, model, options=None, verbose=None):
