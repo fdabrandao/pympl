@@ -285,7 +285,7 @@ class SubmodMVPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, binary=False, i0=1):
+    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, binary=False, i0=0):
         """Evalutates CMD[zvar](*args)."""
         match = utils.parse_indexed(zvar, "{}")
         assert match is not None
