@@ -51,7 +51,7 @@ solve(){
     mv $TMP_DIR/vars.sol2 $TMP_DIR/vars.sol
 }
 
-options="Threads=1 Presolve=1 Method=2 MIPFocus=1 Heuristics=1 MIPGap=0 MIPGapAbs=0.99999"
+options="Threads=1 Presolve=1 Method=2 MIPFocus=1 Heuristics=1 MIPGap=0 Seed=1234"
 model_file=""
 model_file=""
 sol_file=""

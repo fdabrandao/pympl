@@ -67,7 +67,7 @@ solve(){
     awk '{ if ( $3 ~ /^[0-9][^\s]*$/  ){ print $2, $3 }else{ print $2, $4 } }' $TMP_DIR/sol.out > $TMP_DIR/vars.sol
 }
 
-options=""
+options="--seed 1234"
 model_file=""
 sol_file=""
 

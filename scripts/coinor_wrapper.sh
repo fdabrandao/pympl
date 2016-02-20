@@ -54,7 +54,7 @@ solve(){
     tail -n +2 $TMP_DIR/sol.out | awk '{ print $2, $3 }' > $TMP_DIR/vars.sol
 }
 
-options="-cuts off"
+options="-cuts off -randomSeed 1234 -randomCbcSeed 1234"
 model_file=""
 sol_file=""
 
