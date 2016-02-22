@@ -87,10 +87,10 @@ C = _params["C"]
 demand = _params["d"]
 if DISCRETE is False:
     for i in mrange(1, NI):
-        s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        x = ["x[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        s = ["s[{},{}]".format(i, t) for t in mrange(1, NT)]
+        x = ["x[{},{}]".format(i, t) for t in mrange(1, NT)]
+        y = ["y[{},{}]".format(i, t) for t in mrange(1, NT)]
+        z = ["z[{},{}]".format(i, t) for t in mrange(1, NT)]
         d = [demand[i, t] for t in mrange(1, NT)]
         if BACKLOG is False:
             #WW_U(s, y, d, NT)
@@ -100,8 +100,8 @@ if DISCRETE is False:
             #LS_U_SC(s, x, y, z, d, NT) # Not compatible with LB?
             pass
         else:
-            r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
-            w = ["w[%d,%d]"%(i, t) for t in mrange(1, NT)]
+            r = ["r[{},{}]".format(i, t) for t in mrange(1, NT)]
+            w = ["w[{},{}]".format(i, t) for t in mrange(1, NT)]
             #WW_U_B(s, r, y, d, NT)
             #LS_U_B(s, r, x, y, d, NT)
             WW_U_SCB(s, r, y, z, w, d, NT, Tk=15)
@@ -110,18 +110,16 @@ if DISCRETE is False:
 else:
    for i in mrange(1, NI):
         s0 = 0
-        s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
-        z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
+        s = ["s[{},{}]".format(i, t) for t in mrange(1, NT)]
+        y = ["y[{},{}]".format(i, t) for t in mrange(1, NT)]
+        z = ["z[{},{}]".format(i, t) for t in mrange(1, NT)]
         d = [demand[i, t] for t in mrange(1, NT)]
         if BACKLOG is False:
             DLSI_CC(s0, y, d, C, NT)
             #DLS_CC_SC(s, y, z, d, C, NT)
         else:
-            r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
+            r = ["r[{},{}]".format(i, t) for t in mrange(1, NT)]
             #DLSI_CC_B(s0, r, y, d, C, NT)
             DLS_CC_B(r, y, d, C, NT)
 };
-
 end;
-solve;

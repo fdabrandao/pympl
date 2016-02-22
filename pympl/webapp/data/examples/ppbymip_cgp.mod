@@ -68,15 +68,13 @@ NT = _params["NT"]
 C = _params["C"]
 demand = _params["d"]
 for i in mrange(1, NI):
-    s0 = "s[%d,%d]"%(i, 0)
-    s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    y = ["y[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    z = ["z[%d,%d]"%(i, t) for t in mrange(1, NT)]
+    s0 = "s[{},{}]".format(i, 0)
+    s = ["s[{},{}]".format(i, t) for t in mrange(1, NT)]
+    y = ["y[{},{}]".format(i, t) for t in mrange(1, NT)]
+    z = ["z[{},{}]".format(i, t) for t in mrange(1, NT)]
     d = [demand[i, t] for t in mrange(1, NT)]
-    r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
+    r = ["r[{},{}]".format(i, t) for t in mrange(1, NT)]
     #DLSI_CC_B(s0, r, y, d, C, NT)
     DLS_CC_B(r, y, d, C, NT)
 };
-
 end;
-solve;

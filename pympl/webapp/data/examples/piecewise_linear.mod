@@ -11,8 +11,4 @@ $PWL[x,y]{zip(xvalues, yvalues)};
 maximize obj: 2*x + 15*y;
 s.t. A: 3*x + 4*y <= 250;
 s.t. B: 7*x - 2*y + 3*u <= 170;
-
 end;
-solve;
-display x, y, u;
-display "Objective:", 2*x + 15*y;

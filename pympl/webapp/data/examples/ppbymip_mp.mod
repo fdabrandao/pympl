@@ -172,20 +172,20 @@ D = _params["D"]
 SUCC = _params["SUCC"]
 NH, PPR = _params["NH"], _params["PPR"]
 for i in IBULK:
-    s = ["es[%d,%d]"%(i, t) for t in mrange(0, NT)]
-    r = ["er[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    x = ["ax[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    y = ["ay[%d,%d]"%(i, t) for t in mrange(1, NT)]
+    s = ["es[{},{}]".format(i, t) for t in mrange(0, NT)]
+    r = ["er[{},{}]".format(i, t) for t in mrange(1, NT)]
+    x = ["ax[{},{}]".format(i, t) for t in mrange(1, NT)]
+    y = ["ay[{},{}]".format(i, t) for t in mrange(1, NT)]
     d = [
         sum(D[j, t] for j in IEND if SUCC[i, j] == 1)
         for t in mrange(1, NT)
     ]
     WW_U_B(s, r, y, d, NT, Tk=4)
 for i in IEND:
-    s = ["s[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    r = ["r[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    x = ["ax[%d,%d]"%(i, t) for t in mrange(1, NT)]
-    y = ["ay[%d,%d]"%(i, t) for t in mrange(1, NT)]
+    s = ["s[{},{}]".format(i, t) for t in mrange(1, NT)]
+    r = ["r[{},{}]".format(i, t) for t in mrange(1, NT)]
+    x = ["ax[{},{}]".format(i, t) for t in mrange(1, NT)]
+    y = ["ay[{},{}]".format(i, t) for t in mrange(1, NT)]
     d = [
         D[i, t]
         for t in mrange(1, NT)
@@ -194,6 +194,4 @@ for i in IEND:
     WW_U_B(s, r, y, d, NT, Tk=8)
     #WW_CC_B(s, r, y, d, C, NT, Tk=6)
 };
-
 end;
-solve;
