@@ -5,7 +5,7 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ---
 
-[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modelling language that adds new [statements](https://github.com/fdabrandao/pympl/wiki/STMTS) for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modelling [piecewise linear functions](https://github.com/fdabrandao/pympl/wiki/STMTS_SOS), [compressed arc-flow graphs](https://github.com/fdabrandao/pympl/wiki/STMTS_VPSolver) for vector packing, [sub-tour elimination constraints](https://github.com/fdabrandao/pympl/wiki/STMTS_TSP) for TSP, and [lot-sizing reformulations](https://github.com/fdabrandao/pympl/wiki/STMTS_LSLIB) (LS-LIB). PyMPL is fully compatible with both python 2 and 3.
+[PyMPL](https://github.com/fdabrandao/pympl) is a python extension to the AMPL modeling language that adds new [statements](https://github.com/fdabrandao/pympl/wiki/STMTS) for evaluating python code within AMPL/GMPL models. PyMPL also includes, among others, procedures for modeling [piecewise linear functions](https://github.com/fdabrandao/pympl/wiki/STMTS_SOS), [compressed arc-flow graphs](https://github.com/fdabrandao/pympl/wiki/STMTS_VPSolver) for vector packing, [sub-tour elimination constraints](https://github.com/fdabrandao/pympl/wiki/STMTS_TSP) for TSP, and [lot-sizing reformulations](https://github.com/fdabrandao/pympl/wiki/STMTS_LSLIB) (LS-LIB). PyMPL is fully compatible with both python 2 and 3.
 
 ![](https://img.shields.io/badge/license-AGPLv3+-blue.svg)
 [![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
@@ -105,5 +105,4 @@ Advanced features:
   * If any command used implements cut generators you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
-Copyright © Filipe Brandão. All rights reserved.  
-E-mail: <fdabrandao@dcc.fc.up.pt>. [[Homepage](http://www.dcc.fc.up.pt/~fdabrandao/)]
+Copyright © 2015-2016 [Filipe Brandão](http://www.dcc.fc.up.pt/~fdabrandao/) <<fdabrandao@dcc.fc.up.pt>>. All rights reserved.
