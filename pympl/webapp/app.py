@@ -128,7 +128,9 @@ def pympl(example):
     """Renders the input page."""
     title = "PyMPL: AMPL extension"
 
-    example_folder = os.path.join(os.path.dirname(__file__), "data/examples/")
+    example_folder = os.path.join(
+        os.path.dirname(__file__), "data", "examples"
+    )
     examples = {
         "/pympl/": ("", "", None, []),
         "/pympl/vbp": (
@@ -149,24 +151,29 @@ def pympl(example):
         ),
         "/pympl/ppbymip_cgp": (
             "PPbyMIP: Consumer Goods Production",
-            ("ppbymip_cgp.mod", "ppbymip.py", ["data/cgpdemand.dat"])
+            ("ppbymip_cgp.mod", "ppbymip.py", [
+                os.path.join("data", "cgpdemand.dat"),
+            ])
         ),
         "/pympl/ppbymip_clb": (
             "PPbyMIP: Cleaning Liquids Bottling Line",
-            ("ppbymip_clb.mod", "ppbymip.py", ["data/cldemand.dat"])
+            ("ppbymip_clb.mod", "ppbymip.py", [
+                os.path.join("data", "cldemand.dat"),
+            ])
         ),
         "/pympl/ppbymip_ps": (
             "PPbyMIP: Pigment Sequencing",
             ("ppbymip_ps.mod", "ppbymip.py", [
-                "data/pigment_dem.dat", "data/pigment_q.dat"
+                os.path.join("data", "pigment_dem.dat"),
+                os.path.join("data", "pigment_q.dat"),
             ])
         ),
         "/pympl/ppbymip_mp": (
             "PPbyMIP: Making and Packing",
             ("ppbymip_mp.mod", "ppbymip.py", [
-                "data/mp_daily_demand.dat",
-                "data/mp_making_production_rate.dat",
-                "data/mp_packing_production_rate.dat"
+                os.path.join("data", "mp_daily_demand.dat"),
+                os.path.join("data", "mp_making_production_rate.dat"),
+                os.path.join("data", "mp_packing_production_rate.dat"),
             ])
         ),
     }
@@ -181,11 +188,11 @@ def pympl(example):
         if example is not None:
             modelf, codef, flist = examples["/pympl/"+example][1]
             if modelf is not None:
-                pympl_model = open(example_folder+modelf).read()
+                pympl_model = open(os.path.join(example_folder, modelf)).read()
             if codef is not None:
-                python_code = open(example_folder+codef).read()
+                python_code = open(os.path.join(example_folder, codef)).read()
             for ind, fname in enumerate(flist):
-                content = open(example_folder+fname).read()
+                content = open(os.path.join(example_folder, fname)).read()
                 files.append((ind+1, fname, content))
 
     return render_template(
