@@ -40,12 +40,6 @@ USERNAME = "PyMPL"
 PASSWORD = "Password"
 
 if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
-        __file__ = os.path.basename(__file__)
-        sys.argv[0] = __file__
-
     if len(sys.argv) >= 2 and sys.argv[1].isdigit():
         PORT = int(sys.argv[1])
 
@@ -134,7 +128,7 @@ def pympl(example):
     """Renders the input page."""
     title = "PyMPL: AMPL extension"
 
-    example_folder = "data/examples/"
+    example_folder = os.path.join(os.path.dirname(__file__), "data/examples/")
     examples = {
         "/pympl/": ("", "", None, []),
         "/pympl/vbp": (
