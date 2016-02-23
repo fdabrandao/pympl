@@ -3,10 +3,15 @@ PyMPL Changelog
 
 Here you can see the full list of changes between each PyMPL release.
 
-Version 1.0
------------
+Version 1.0.0
+-------------
 
-(release date to be announced, codename to be selected)
+Released on February 23th 2016, codename Exotic Volcano
+
+- First stable release.
+- Various bugfixes.
+- Replaced GPLv3+ license by AGPLv3+.
+- Updated VPSolver statements (compatible with VPSolver 3.0.0 or superior).
 
 Version 0.8.2
 -------------
