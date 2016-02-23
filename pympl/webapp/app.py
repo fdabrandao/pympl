@@ -207,7 +207,7 @@ def pympl(example):
     )
 
 
-class StringStream:
+class StringStream(object):
     """Simple string stream."""
     def __init__(self):
         self.data = ""
