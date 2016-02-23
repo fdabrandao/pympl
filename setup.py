@@ -64,7 +64,7 @@ setup(
     platforms="any",
     install_requires=open("requirements.txt").read().split("\n"),
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Science/Research",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
