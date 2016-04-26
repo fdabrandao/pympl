@@ -22,23 +22,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 from __future__ import division
-from builtins import zip
 from builtins import range
-
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
+from builtins import zip
 
 
 def equivknapsack(a, a0, bounds=None):
     """
     Computes minimal equivalent knapsack inequalities using 'equivknapsack.mod'
     """
+    from pympl import PyMPL, Tools, glpkutils
+
     if bounds is None:
         bounds = [a0]*len(a)
     for i in range(len(a)):
@@ -105,7 +98,12 @@ def main():
             "{0:2g} x{1:d}".format(b[i], i+1) for i in range(len(b))
         ), "<=", b0, bounds[:-1])
 
+
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

@@ -21,7 +21,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
-import os
 import sys
 import wolsey
 import equivknapsack01
@@ -35,15 +34,9 @@ import sos
 import pwl
 import lslib_test
 
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
-
 
 def main():
     """Runs PyMPL examples."""
-
     try:
         print("equivknapsack:")
         equivknapsack.main()
@@ -104,5 +97,10 @@ def main():
         except Exception as e:
             print(repr(e))
 
+
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     main()

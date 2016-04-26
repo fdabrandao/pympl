@@ -24,21 +24,14 @@ from __future__ import division
 from builtins import range
 from builtins import str
 
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
-
 
 def equivknapsack01(a, a0):
     """
     Computes minimal equivalent knapsack inequalities
     using 'equivknapsack01.mod'
     """
+    from pympl import PyMPL, Tools, glpkutils
+
     aS = abs(2*a0+1-sum(a))
     if a0 < (sum(a)-1)//2:
         a0 += aS
@@ -108,7 +101,12 @@ def main():
             "{0:2g} x{1:d}".format(b[i], i+1) for i in range(len(b))
         ), "<=", b0)
 
+
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

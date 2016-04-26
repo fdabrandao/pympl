@@ -19,18 +19,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
-
-import os
-import sys
 import unittest
 from pympl import PyMPL
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
-    if "quick_test" in sys.argv:
-        sys.argv.remove("quick_test")
 
 
 class TestPyMPL(unittest.TestCase):
@@ -194,4 +184,11 @@ class TestPyMPL(unittest.TestCase):
 
 
 if __name__ == "__main__":
+    import os
+    import sys
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
+    if "quick_test" in sys.argv:
+        sys.argv.remove("quick_test")
     unittest.main()

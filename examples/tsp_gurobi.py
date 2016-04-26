@@ -20,17 +20,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-from builtins import map
 from builtins import range
-
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
+from builtins import map
 
 
 def read_tsp(fname):
@@ -47,6 +38,7 @@ def read_tsp(fname):
 
 def main():
     """Parses 'tsp.mod' and tests cut generators."""
+    from pympl import PyMPL, Tools, glpkutils
     from gurobipy import GRB, LinExpr, read
 
     mod_in = "tsp.mod"
@@ -104,6 +96,10 @@ def main():
     print("Objective:", m.ObjVal)
 
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

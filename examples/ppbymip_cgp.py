@@ -20,17 +20,8 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-from builtins import map
 from builtins import range
-
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
+from builtins import map
 
 
 def read_table(fname, index1, index2, transpose=False):
@@ -53,6 +44,7 @@ def read_table(fname, index1, index2, transpose=False):
 
 def main():
     """Parses 'ppbymip_cgp.mod'"""
+    from pympl import PyMPL, Tools, glpkutils
 
     mod_in = "ppbymip_cgp.mod"
     mod_out = "tmp/cgp.out.mod"
@@ -64,12 +56,18 @@ def main():
     try:
         out, varvalues = Tools.script(
             "gurobi_wrapper.sh", lp_out,
-            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0", verbose=True
+            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
+            verbose=True
         )
     except RuntimeError as e:
         print(repr(e))
 
-    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    # print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+
 
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     main()

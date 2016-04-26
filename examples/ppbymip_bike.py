@@ -21,18 +21,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
-
 
 def main():
     """Parses 'ppbymip_bike.mod'"""
+    from pympl import PyMPL, Tools, glpkutils
 
     mod_in = "ppbymip_bike.mod"
     mod_out = "tmp/bike.out.mod"
@@ -45,7 +37,11 @@ def main():
         "glpk_wrapper.sh", lp_out, verbose=True
     )
 
-    #print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    # print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
 
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     main()

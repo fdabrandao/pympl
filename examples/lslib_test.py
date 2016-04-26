@@ -20,17 +20,9 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-from builtins import map
 from builtins import range
+from builtins import map
 
-import os
-import sys
-from pympl import PyMPL, Tools, glpkutils
-
-if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
 
 inf = float("inf")
 TESTS = {
@@ -60,6 +52,8 @@ TESTS = {
 
 def solve(mod_in, prob, relax, xform, test_seed):
     """Parses LS-LIB test files."""
+    from pympl import PyMPL, Tools, glpkutils
+
     mod_out = "tmp/lstlib_test.out.mod"
     TEST_PROB = prob  # pass the problem name to the model
     parser = PyMPL(locals_=locals(), globals_=globals())
@@ -122,6 +116,10 @@ def main(prob_prefix="", approx=False):
 
 
 if __name__ == "__main__":
+    import os
+    sdir = os.path.dirname(__file__)
+    if sdir != "":
+        os.chdir(sdir)
     if len(sys.argv) >= 2:
         prefix = sys.argv[1]
         if len(sys.argv) == 3:
