@@ -95,6 +95,7 @@ def main():
 
     print("Objective:", m.ObjVal)
 
+
 if __name__ == "__main__":
     import os
     sdir = os.path.dirname(__file__)

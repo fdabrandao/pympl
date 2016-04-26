@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
+import os
 import sys
 import wolsey
 import equivknapsack01
@@ -83,14 +84,12 @@ def main():
         print("tsp:")
         tsp.main()
 
-    if "quick_test" not in sys.argv:
         print("tsp_gurobi:")
         try:
             tsp_gurobi.main()
         except ImportError as e:
             print(repr(e))
 
-    if "quick_test" not in sys.argv:
         print("lslib_test:")
         try:
             lslib_test.main()
@@ -99,7 +98,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
     sdir = os.path.dirname(__file__)
     if sdir != "":
         os.chdir(sdir)

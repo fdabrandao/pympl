@@ -21,6 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
 
+import os
 import sys
 import ppbymip_bike as bike
 import ppbymip_cgp as cgp
@@ -39,24 +40,20 @@ def main():
         print("ppbymip_cgp:")
         cgp.main()
 
-    if "quick_test" not in sys.argv:
         print("ppbymip_clb:")
         clb.main()
 
-    if "quick_test" not in sys.argv:
         print("ppbymip_clb:")
         clb.main()
 
-    if "quick_test" not in sys.argv:
         print("ppbymip_mp:")
         mp.main()
 
-    if "quick_test" not in sys.argv:
         print("ppbymip_ps:")
         ps.main()
 
+
 if __name__ == "__main__":
-    import os
     sdir = os.path.dirname(__file__)
     if sdir != "":
         os.chdir(sdir)
