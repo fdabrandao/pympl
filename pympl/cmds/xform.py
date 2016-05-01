@@ -36,15 +36,11 @@ from .xformutils import XFormLSU2
 from .xformutils import XFormLSU
 from .xformutils import XFormLSUSC
 from .xformutils import XFormLSUSCB
-from .xformutils import XFormLSUSL
-from .xformutils import XFormLSUSCSL
-from .xformutils import XFormLSUSCBSL
 from .xformutils import XFormLSUB
 from .xformutils import XFormDLSICC
 from .xformutils import XFormDLSICCB
 from .xformutils import XFormDLSCCB
 from .xformutils import XFormDLSCCSC
-from .xformutils import XFormDLSCCSCU
 
 
 class SubmodWWU(SubmodBase):
@@ -534,137 +530,6 @@ class SubmodLSUSCB(SubmodBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
 
-class SubmodLSUSL(SubmodBase):
-    """Command for creating LS-U-SL extended formulations."""
-
-    def _evalcmd(self, arg1, s, x, y, v, d, u, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
-        assert arg1 is None
-        prefix = self._new_prefix()
-
-        assert isinstance(s, list) and len(s) in (NT, NT+1)
-        assert isinstance(x, list) and len(x) == NT
-        assert isinstance(y, list) and len(y) == NT
-        assert isinstance(v, list) and len(v) == NT
-        assert isinstance(d, list) and len(d) == NT
-        assert isinstance(u, list) and len(u) == NT
-
-        varl = s + x + y + v
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        v = {i+1: v[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-        u = {i+1: u[i] for i in range(NT)}
-
-        if Tk is None:
-            Tk = NT
-
-        model = Model()
-        for var in varl:
-            model.add_var(name=var)
-        XFormLSUSL(model, s, x, y, v, d, u, NT, Tk, prefix)
-        model.rename_cons(lambda name: prefix+name)
-
-        declared_vars = set(varl)
-        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
-
-
-class SubmodLSUSCSL(SubmodBase):
-    """Command for creating LS-U-SC,SL extended formulations."""
-
-    def _evalcmd(self, arg1, s, x, y, z, v, d, u, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
-        assert arg1 is None
-        prefix = self._new_prefix()
-
-        assert isinstance(s, list) and len(s) in (NT, NT+1)
-        assert isinstance(x, list) and len(x) == NT
-        assert isinstance(y, list) and len(y) == NT
-        assert isinstance(z, list) and len(z) == NT
-        assert isinstance(v, list) and len(v) == NT
-        assert isinstance(d, list) and len(d) == NT
-        assert isinstance(u, list) and len(u) == NT
-
-        varl = s + x + y + z + v
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        v = {i+1: v[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-        u = {i+1: u[i] for i in range(NT)}
-
-        if Tk is None:
-            Tk = NT
-
-        model = Model()
-        for var in varl:
-            model.add_var(name=var)
-        XFormLSUSCSL(model, s, x, y, z, v, d, u, NT, Tk, prefix)
-        model.rename_cons(lambda name: prefix+name)
-
-        declared_vars = set(varl)
-        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
-
-
-class SubmodLSUSCBSL(SubmodBase):
-    """Command for creating LS-U-SC,B,SL extended formulations."""
-
-    def _evalcmd(self, arg1, s, r, x, y, z, w, v, d, u, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
-        assert arg1 is None
-        prefix = self._new_prefix()
-
-        assert isinstance(s, list) and len(s) in (NT, NT+1)
-        assert isinstance(r, list) and len(r) == NT
-        assert isinstance(x, list) and len(x) == NT
-        assert isinstance(y, list) and len(y) == NT
-        assert isinstance(z, list) and len(z) == NT
-        assert isinstance(w, list) and len(w) == NT
-        assert isinstance(v, list) and len(v) == NT
-        assert isinstance(d, list) and len(d) == NT
-        assert isinstance(u, list) and len(u) == NT
-
-        varl = s + r + x + y + z + w + v
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        r = {i+1: r[i] for i in range(NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        w = {i+1: w[i] for i in range(NT)}
-        v = {i+1: v[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-        u = {i+1: u[i] for i in range(NT)}
-
-        if Tk is None:
-            Tk = NT
-
-        model = Model()
-        for var in varl:
-            model.add_var(name=var)
-        XFormLSUSCBSL(model, s, r, x, y, z, w, v, d, u, NT, Tk, prefix)
-        model.rename_cons(lambda name: prefix+name)
-
-        declared_vars = set(varl)
-        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
-
-
 class SubmodDLSICC(SubmodBase):
     """Command for creating DLSI-CC extended formulations."""
 
@@ -787,40 +652,6 @@ class SubmodDLSCCSC(SubmodBase):
             model.add_var(name=var)
 
         XFormDLSCCSC(model, s, y, z, d, NT, Tk, prefix)
-        model.rename_cons(lambda name: prefix+name)
-
-        declared_vars = set(varl)
-        self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
-
-
-class SubmodDLSCCSCU(SubmodBase):
-    """Command for creating DLS-CC-SC-U extended formulations."""
-
-    def _evalcmd(self, arg1, s, y, z, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
-        assert arg1 is None
-        prefix = self._new_prefix()
-
-        assert isinstance(s, list) and len(s) == NT
-        assert isinstance(y, list) and len(y) == NT
-        assert isinstance(z, list) and len(z) == NT
-        assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y + z
-
-        s = {i+1: s[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
-        if Tk is None:
-            Tk = NT
-
-        model = Model()
-        for var in varl:
-            model.add_var(name=var)
-
-        XFormDLSCCSCU(model, s, y, z, d, NT, Tk, prefix)
         model.rename_cons(lambda name: prefix+name)
 
         declared_vars = set(varl)
