@@ -20,6 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import division
 from builtins import range
+import six
 
 from .base import SubmodBase
 from ..model import Model, writemod
@@ -43,6 +44,29 @@ from .xformutils import XFormDLSCCB
 from .xformutils import XFormDLSCCSC
 
 
+def list2dict(lst, i0, NT, align="r", default=0):
+    """Transform a list of variables/values into a i0..NT dictionary."""
+    assert align in ("l", "r")
+    missing = (NT-i0+1) - len(lst)
+    if missing == 0:
+        return {i0+i: lst[i] for i in range(len(lst))}
+    else:
+        if align == "r":
+            d = {i0+missing+i: lst[i] for i in range(len(lst))}
+            for i in range(missing):
+                d[i0+i] = default
+        else:
+            d = {i0+i: lst[i] for i in range(len(lst))}
+            for i in range(missing):
+                d[i0+len(lst)+i] = default
+        return d
+
+
+def filter_strings(lst):
+    """Extract the strings from a list."""
+    return [x for x in lst if isinstance(x, six.string_types)]
+
+
 class SubmodWWU(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
@@ -54,17 +78,10 @@ class SubmodWWU(SubmodBase):
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + y)
+        s = list2dict(s, 0, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -90,18 +107,11 @@ class SubmodWWUB(SubmodBase):
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + r + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        r = {i+1: r[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + r + y)
+        s = list2dict(s, 0, NT)
+        r = list2dict(r, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -127,18 +137,11 @@ class SubmodWWUSC(SubmodBase):
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(z, list) and len(z) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y + z
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + y + z)
+        s = list2dict(s, 0, NT)
+        y = list2dict(y, 1, NT)
+        z = list2dict(z, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -166,20 +169,13 @@ class SubmodWWUSCB(SubmodBase):
         assert isinstance(z, list) and len(z) == NT
         assert isinstance(w, list) and len(w) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + r + y + z + w
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        r = {i+1: r[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        w = {i+1: w[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + r + y + z + w)
+        s = list2dict(s, 0, NT)
+        r = list2dict(r, 1, NT)
+        y = list2dict(y, 1, NT)
+        z = list2dict(z, 1, NT)
+        w = list2dict(w, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -204,17 +200,10 @@ class SubmodWWULB(SubmodBase):
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + y)
+        s = list2dict(s, 0, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -239,17 +228,10 @@ class SubmodWWCC(SubmodBase):
         assert isinstance(s, list) and len(s) in (NT, NT+1)
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + y)
+        s = list2dict(s, 0, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -275,18 +257,11 @@ class SubmodWWCCB(SubmodBase):
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + r + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        r = {i+1: r[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + r + y)
+        s = list2dict(s, 0, NT)
+        r = list2dict(r, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -312,18 +287,11 @@ class SubmodLSU1(SubmodBase):
         assert isinstance(x, list) and len(x) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + x + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + x + y)
+        s = list2dict(s, 0, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -349,18 +317,11 @@ class SubmodLSU2(SubmodBase):
         assert isinstance(x, list) and len(x) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + x + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + x + y)
+        s = list2dict(s, 0, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -386,18 +347,11 @@ class SubmodLSU(SubmodBase):
         assert isinstance(x, list) and len(x) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + x + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + x + y)
+        s = list2dict(s, 0, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -424,19 +378,12 @@ class SubmodLSUB(SubmodBase):
         assert isinstance(x, list) and len(x) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + r + x + y
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        r = {i+1: r[i] for i in range(NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + r + x + y)
+        s = list2dict(s, 0, NT)
+        r = list2dict(r, 1, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -463,19 +410,12 @@ class SubmodLSUSC(SubmodBase):
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(z, list) and len(z) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + x + y + z
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + x + y + z)
+        s = list2dict(s, 0, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        z = list2dict(z, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -503,20 +443,13 @@ class SubmodLSUSCB(SubmodBase):
         assert isinstance(z, list) and len(z) == NT
         assert isinstance(w, list) and len(w) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + x + y + z + w
-
-        if len(s) == NT:
-            s = {i+1: s[i] for i in range(NT)}
-            s[0] = 0
-        else:
-            s = {i: s[i] for i in mrange(0, NT)}
-        x = {i+1: x[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
-        w = {i+1: w[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(s + x + y + z + w)
+        s = list2dict(s, 0, NT)
+        x = list2dict(x, 1, NT)
+        y = list2dict(y, 1, NT)
+        z = list2dict(z, 1, NT)
+        w = list2dict(w, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -540,12 +473,9 @@ class SubmodDLSICC(SubmodBase):
 
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = [s0] + y
-
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings([s0] + y)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -571,13 +501,10 @@ class SubmodDLSICCB(SubmodBase):
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = [s0] + r + y
-
-        r = {i+1: r[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings([s0] + r + y)
+        r = list2dict(r, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -603,13 +530,10 @@ class SubmodDLSCCB(SubmodBase):
         assert isinstance(r, list) and len(r) == NT
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = r + y
-
-        r = {i+1: r[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        d = {i+1: d[i] for i in range(NT)}
-
+        varl = filter_strings(r + y)
+        r = list2dict(r, 1, NT)
+        y = list2dict(y, 1, NT)
+        d = list2dict(d, 1, NT)
         if Tk is None:
             Tk = NT
 
@@ -636,14 +560,11 @@ class SubmodDLSCCSC(SubmodBase):
         assert isinstance(y, list) and len(y) == NT
         assert isinstance(z, list) and len(z) == NT
         assert isinstance(d, list) and len(d) == NT
-
-        varl = s + y + z
-
-        s = {i+1: s[i] for i in range(NT)}
-        y = {i+1: y[i] for i in range(NT)}
-        z = {i+1: z[i] for i in range(NT)}
+        varl = filter_strings(s + y + z)
+        s = list2dict(s, 1, NT)
+        y = list2dict(y, 1, NT)
+        z = list2dict(z, 1, NT)
         d = {i+1: d[i]/C for i in range(NT)}
-
         if Tk is None:
             Tk = NT
 
