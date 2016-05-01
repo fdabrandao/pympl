@@ -20,11 +20,13 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+import os
 
 
 def main():
     """Parses 'vpsolver_mvp.mod'"""
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_in = "vpsolver_mvp.mod"
     mod_out = "tmp/vpsolver_mvp.out.mod"
@@ -32,7 +34,7 @@ def main():
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/vpsolver_mvp.lp"
-    glpkutils.mod2lp(mod_out, lp_out, True)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
     )
@@ -52,10 +54,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

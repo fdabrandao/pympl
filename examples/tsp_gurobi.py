@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from builtins import range
 from builtins import map
+import os
 
 
 def read_tsp(fname):
@@ -40,6 +41,7 @@ def main():
     """Parses 'tsp.mod' and tests cut generators."""
     from pympl import PyMPL, Tools, glpkutils
     from gurobipy import GRB, LinExpr, read
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_in = "tsp.mod"
     mod_out = "tmp/tsp.out.mod"
@@ -48,7 +50,7 @@ def main():
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/tsp.lp"
-    glpkutils.mod2lp(mod_out, lp_out, True)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
 
     m = read(lp_out)
     m.params.LazyConstraints = 1
@@ -97,10 +99,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

@@ -186,9 +186,7 @@ class TestPyMPL(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
+    os.chdir(os.path.dirname(__file__) or os.curdir)
     if "quick_test" in sys.argv:
         sys.argv.remove("quick_test")
     unittest.main()

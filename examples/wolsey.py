@@ -22,11 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from __future__ import division
 from builtins import range
+import os
 
 
 def main():
     """Parses 'graph.mod'"""
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     a, a0 = [65, 64, 41, 22, 13, 12, 8, 2], 80
     aS = abs(2*a0+1-sum(a))
@@ -92,10 +94,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from builtins import range
 from builtins import map
+import os
 
 
 inf = float("inf")
@@ -53,6 +54,7 @@ TESTS = {
 def solve(mod_in, prob, relax, xform, test_seed):
     """Parses LS-LIB test files."""
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_out = "tmp/lstlib_test.out.mod"
     TEST_PROB = prob  # pass the problem name to the model
@@ -116,10 +118,6 @@ def main(prob_prefix="", approx=False):
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     if len(sys.argv) >= 2:
         prefix = sys.argv[1]
         if len(sys.argv) == 3:

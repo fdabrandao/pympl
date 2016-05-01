@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from builtins import range
 from builtins import map
+import os
 
 
 def read_table(fname, index1, index2, transpose=False):
@@ -45,6 +46,7 @@ def read_table(fname, index1, index2, transpose=False):
 def main():
     """Parses 'ppbymip_ps.mod'"""
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_in = "ppbymip_ps.mod"
     mod_out = "tmp/ps.out.mod"
@@ -52,7 +54,7 @@ def main():
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/ps.lp"
-    glpkutils.mod2lp(mod_out, lp_out, True)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     try:
         out, varvalues = Tools.script(
             "gurobi_wrapper.sh", lp_out,
@@ -66,8 +68,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     main()

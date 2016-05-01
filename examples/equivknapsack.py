@@ -23,6 +23,7 @@ from __future__ import print_function
 from __future__ import division
 from builtins import range
 from builtins import zip
+import os
 
 
 def equivknapsack(a, a0, bounds=None):
@@ -30,6 +31,7 @@ def equivknapsack(a, a0, bounds=None):
     Computes minimal equivalent knapsack inequalities using 'equivknapsack.mod'
     """
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     if bounds is None:
         bounds = [a0]*len(a)
@@ -54,7 +56,7 @@ def equivknapsack(a, a0, bounds=None):
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/equivknapsack.lp"
-    glpkutils.mod2lp(mod_out, lp_out)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     # exit_code = os.system("glpsol --math {0}".format(mod_out))
     # assert exit_code == 0
     out, varvalues = Tools.script(
@@ -99,10 +101,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     try:
         main()
     except ImportError as e:

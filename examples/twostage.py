@@ -22,6 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from builtins import range
 from builtins import map
+import os
 
 
 def read_twostage(fname):
@@ -42,6 +43,7 @@ def read_twostage(fname):
 def main():
     """Parses 'twostage.mod'."""
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_in = "twostage.mod"
     mod_out = "tmp/twostage.out.mod"
@@ -49,7 +51,7 @@ def main():
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/twostage.lp"
-    glpkutils.mod2lp(mod_out, lp_out, True)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
 
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
@@ -70,8 +72,4 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     main()

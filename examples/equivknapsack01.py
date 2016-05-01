@@ -23,6 +23,7 @@ from __future__ import print_function
 from __future__ import division
 from builtins import range
 from builtins import str
+import os
 
 
 def equivknapsack01(a, a0):
@@ -31,6 +32,7 @@ def equivknapsack01(a, a0):
     using 'equivknapsack01.mod'
     """
     from pympl import PyMPL, Tools, glpkutils
+    os.chdir(os.path.dirname(__file__) or os.curdir)
 
     aS = abs(2*a0+1-sum(a))
     if a0 < (sum(a)-1)//2:
@@ -49,7 +51,7 @@ def equivknapsack01(a, a0):
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/equivknapsack01.lp"
-    glpkutils.mod2lp(mod_out, lp_out)
+    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     # exit_code = os.system("glpsol --math {0}".format(mod_out))
     # assert exit_code == 0
     out, varvalues = Tools.script(
@@ -103,10 +105,6 @@ def main():
 
 
 if __name__ == "__main__":
-    import os
-    sdir = os.path.dirname(__file__)
-    if sdir != "":
-        os.chdir(sdir)
     try:
         main()
     except ImportError as e:
