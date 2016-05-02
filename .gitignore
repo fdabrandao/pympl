@@ -5,6 +5,8 @@
 *.pyo
 *.svg
 *.egg-info
+.coverage
+/.cache/
 /build/
 /dist/
 /venv*
