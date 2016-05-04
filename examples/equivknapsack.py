@@ -27,9 +27,7 @@ import os
 
 
 def equivknapsack(a, a0, bounds=None):
-    """
-    Computes minimal equivalent knapsack inequalities using 'equivknapsack.mod'
-    """
+    """Compute a minimal equivalent knapsack inequalitie."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -47,7 +45,7 @@ def equivknapsack(a, a0, bounds=None):
         fix_as = 0
         if aS > a0:
             return [0]*len(a), 0, bounds
-    a = a+[aS]
+    a = list(a)+[aS]
     bounds = bounds+[1]
 
     mod_in = "equivknapsack.mod"
@@ -72,21 +70,24 @@ def equivknapsack(a, a0, bounds=None):
     else:
         b = b[:-1]
 
-    return b, b0, bounds
+    return tuple(b), b0, tuple(bounds)
 
 
 def main():
-    """Tests equivknapsack"""
+    """Test equivknapsack."""
 
     kp_cons = [
-        ([3, 5], 17, None)
+        ((3, 5), 17, None)
+    ]
+    min_kp_cons = [
+        ((1, 2), 6)
     ]
 
     cons = set()
     for a, a0, bounds in kp_cons:
         b, b0, bounds = equivknapsack(a, a0, bounds)
         if sum(b) != 0:
-            cons.add((tuple(b), b0, tuple(bounds)))
+            cons.add((b, b0, bounds))
 
     print("Original knapsack inequalities:")
     for a, a0, bounds in sorted(kp_cons, key=lambda x: (x[1], x[0])):
@@ -98,10 +99,8 @@ def main():
         print(" + ".join(
             "{0:2g} x{1:d}".format(b[i], i+1) for i in range(len(b))
         ), "<=", b0, bounds[:-1])
+        assert (b, b0) in min_kp_cons
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except ImportError as e:
-        print(repr(e))
+    main()

@@ -24,16 +24,16 @@ import os
 
 
 def main():
-    """Parses 'sos.mod'."""
+    """Solve 'sos2.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
-    mod_in = "sos.mod"
-    mod_out = "tmp/sos.out.mod"
+    mod_in = "sos2.mod"
+    mod_out = "tmp/sos2.out.mod"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/sos.lp"
+    lp_out = "tmp/sos2.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
@@ -43,9 +43,6 @@ def main():
         (k, v)
         for k, v in sorted(varvalues.items()) if not k.startswith("_")
     ])
-
-    # exit_code = os.system("glpsol --math {0}".format(mod_out))
-    # assert exit_code == 0
 
 
 if __name__ == "__main__":

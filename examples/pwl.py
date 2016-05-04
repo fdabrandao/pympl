@@ -24,7 +24,7 @@ import os
 
 
 def main():
-    """Parses 'pwl.mod'."""
+    """Solve 'pwl.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -43,9 +43,6 @@ def main():
         (k, v)
         for k, v in sorted(varvalues.items()) if not k.startswith("_")
     ])
-
-    # exit_code = os.system("glpsol --math {0}".format(mod_out))
-    # assert exit_code == 0
 
 
 if __name__ == "__main__":

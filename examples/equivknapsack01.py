@@ -27,10 +27,7 @@ import os
 
 
 def equivknapsack01(a, a0):
-    """
-    Computes minimal equivalent knapsack inequalities
-    using 'equivknapsack01.mod'
-    """
+    """Compute a minimal equivalent 0-1 knapsack inequalitie."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -42,7 +39,7 @@ def equivknapsack01(a, a0):
         fix_as = 0
         if aS > a0:
             return [0]*len(a), 0
-    a = a+[aS]
+    a = list(a)+[aS]
 
     mod_in = "equivknapsack01.mod"
     mod_out = "tmp/equivknapsack01.out.mod"
@@ -67,30 +64,37 @@ def equivknapsack01(a, a0):
     else:
         b = b[:-1]
 
-    return b, b0
+    return tuple(b), b0
 
 
 def main():
-    """Tests equivknapsack01"""
+    """Test equivknapsack01."""
     kp_cons = [
-        ([8, 12, 13, 64, 22, 41], 80),
-        ([8, 12, 13, 75, 22, 41], 96),
-        ([3, 6, 4, 18, 6, 4], 20),
-        ([5, 10, 8, 32, 6, 12], 36),
-        ([5, 13, 8, 42, 6, 20], 44),
-        ([5, 13, 8, 48, 6, 20], 48),
-        ([0, 0, 0, 0, 8, 0], 10),
-        ([3, 0, 4, 0, 8, 0], 18),
-        ([3, 2, 4, 0, 8, 4], 22),
-        ([3, 2, 4, 8, 8, 4], 24),
-        # ([3, 3, 3, 3, 3, 5, 5, 5], 17),
+        ((8, 12, 13, 64, 22, 41), 80),
+        ((8, 12, 13, 75, 22, 41), 96),
+        ((3, 6, 4, 18, 6, 4), 20),
+        ((5, 10, 8, 32, 6, 12), 36),
+        ((5, 13, 8, 42, 6, 20), 44),
+        ((5, 13, 8, 48, 6, 20), 48),
+        ((0, 0, 0, 0, 8, 0), 10),
+        ((3, 0, 4, 0, 8, 0), 18),
+        ((3, 2, 4, 0, 8, 4), 22),
+        ((3, 2, 4, 8, 8, 4), 24),
+        # ((3, 3, 3, 3, 3, 5, 5, 5), 17),
+    ]
+    min_kp_cons = [
+        ((1, 1, 1, 4, 1, 1), 4),
+        ((1, 1, 1, 4, 2, 2), 5),
+        ((0, 1, 1, 5, 2, 2), 6),
+        ((1, 1, 1, 2, 2, 1), 6),
+        ((1, 2, 2, 6, 1, 2), 6),
     ]
 
     cons = set()
     for a, a0 in kp_cons:
         b, b0 = equivknapsack01(a, a0)
         if sum(b) != 0:
-            cons.add((tuple(b), b0))
+            cons.add((b, b0))
 
     print("Original knapsack inequalities:")
     for a, a0 in sorted(kp_cons, key=lambda x: (x[1], x[0])):
@@ -102,10 +106,8 @@ def main():
         print(" + ".join(
             "{0:2g} x{1:d}".format(b[i], i+1) for i in range(len(b))
         ), "<=", b0)
+        assert (b, b0) in min_kp_cons
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except ImportError as e:
-        print(repr(e))
+    main()

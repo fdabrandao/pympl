@@ -22,7 +22,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from __future__ import print_function
 from builtins import range
 from builtins import map
+
 import os
+import sys
+import pytest
+slow = pytest.mark.skipif(
+    not pytest.config.getoption("--runslow"),
+    reason="need --runslow option to run"
+)
 
 
 inf = float("inf")
@@ -33,9 +40,6 @@ TESTS = {
     "LS_U_B": ("lslib_ls.mod", True),
     "LS_U_SC": ("lslib_ls.mod", True),
     "LS_U_SCB": ("lslib_ls.mod", True),
-    # "LS_U_SL": ("lslib_ls.mod", True),
-    # "LS_U_SCSL": ("lslib_ls.mod", True),
-    # "LS_U_SCBSL": ("lslib_ls.mod", True),
     "WW_U": ("lslib_ww.mod", True),
     "WW_U_B": ("lslib_ww.mod", True),
     "WW_U_SC": ("lslib_ww.mod", True),
@@ -47,13 +51,12 @@ TESTS = {
     "DLSI_CC_B": ("lslib_dls.mod", True),
     "DLS_CC_B": ("lslib_dls.mod", True),
     "DLS_CC_SC": ("lslib_dls.mod", False),
-    # "DLS_CC_SCU": ("lslib_dls.mod", False),
 }
 
 
-def solve(mod_in, prob, relax, xform, test_seed):
-    """Parses LS-LIB test files."""
-    from pympl import PyMPL, Tools, glpkutils
+def parse(mod_in, prob, relax, xform, test_seed):
+    """Parse LS-LIB test files."""
+    from pympl import PyMPL, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
     mod_out = "tmp/lstlib_test.out.mod"
@@ -63,32 +66,45 @@ def solve(mod_in, prob, relax, xform, test_seed):
 
     lp_out = "tmp/lslib_test.out.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=False)
+    return lp_out
+
+
+def solve_gurobi(model):
+    """Solve a lot-sizing model using Gurobi."""
+    from pympl import Tools
     out, varvalues = Tools.script(
-        "gurobi_wrapper.sh", lp_out,
-        options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
-        verbose=False
+         "gurobi_wrapper.sh", model,
+         options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
+         verbose=False
     )
-    # if xform:
-    #     for var in varvalues:
-    #         if abs(varvalues[var]-round(varvalues[var])) > 1e-5:
-    #             if var[0] in ["y", "z", "w"]:
-    #                 print(var, varvalues[var])
     try:
         return varvalues["cost"]
     except:
         return inf
 
 
-def test(prob, approx=False):
-    """Tests LS-LIB routines."""
+def solve_glpk(model):
+    """Solve a lot-sizing model using GLPK."""
+    from pympl import Tools
+    out, varvalues = Tools.script("glpk_wrapper.sh", model, verbose=False)
+    try:
+        return varvalues["cost"]
+    except:
+        return inf
+
+
+def xtest(prob, solve, ntests, approx=False):
+    """Run LS-LIB routines."""
     fname, check_exact = TESTS[prob]
     if approx:
         check_exact = False
-    for ind in range(50):
-        z_lp1 = solve(fname, prob, relax=True, xform=False, test_seed=ind)
-        z_ip1 = solve(fname, prob, relax=False, xform=False, test_seed=ind)
-        z_lp2 = solve(fname, prob, relax=True, xform=True, test_seed=ind)
-        z_ip2 = solve(fname, prob, relax=False, xform=True, test_seed=ind)
+    for ind in range(ntests):
+        model1 = parse(fname, prob, relax=True, xform=False, test_seed=ind)
+        model2 = parse(fname, prob, relax=False, xform=False, test_seed=ind)
+        model3 = parse(fname, prob, relax=True, xform=True, test_seed=ind)
+        model4 = parse(fname, prob, relax=False, xform=True, test_seed=ind)
+        z_lp1, z_ip1 = solve(model1), solve(model2)
+        z_lp2, z_ip2 = solve(model3), solve(model4)
         print("---")
         print("test:", ind)
         print("z_ip1: {0:9.4f}\tz_ip2: {1:9.4f}\tdiff: {2:g}".format(
@@ -107,23 +123,37 @@ def test(prob, approx=False):
             assert abs(z_ip2-z_lp2) < 1e-5
 
 
-def main(prob_prefix="", approx=False):
-    """Runs all LS-LIB tests."""
+def test_lslib():
+    """Test LS_LIB reformulations."""
+    ntests = 1
+    approx = False
+    for prob_name in sorted(TESTS):
+        xtest(prob_name, solve_glpk, ntests, approx)
+
+
+@slow
+def test_lslib_slow():
+    """Test LS_LIB reformulations."""
+    ntests = 10
+    approx = False
+    for prob_name in sorted(TESTS):
+        xtest(prob_name, solve_gurobi, ntests, approx)
+
+
+def main(prob_prefix="", ntests=50, approx=False):
+    """Run all LS-LIB tests."""
     if prob_prefix in TESTS:
-        test(prob_prefix, approx)
+        xtest(prob_prefix, solve_gurobi, ntests, approx)
     else:
         for prob_name in sorted(TESTS):
             if prob_name.startswith(prob_prefix):
-                test(prob_name, approx)
+                xtest(prob_name, solve_gurobi, ntests, approx)
 
 
 if __name__ == "__main__":
     if len(sys.argv) >= 2:
         prefix = sys.argv[1]
-        if len(sys.argv) == 3:
-            approx = sys.argv[2] == "approx"
-        else:
-            approx = False
-        main(prefix, approx)
+        approx = len(sys.argv) == 3 and sys.argv[2] == "approx"
+        main(prefix, 50, approx)
     else:
         main()

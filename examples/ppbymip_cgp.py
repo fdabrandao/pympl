@@ -26,7 +26,7 @@ import os
 
 
 def read_table(fname, index1, index2, transpose=False):
-    """Reads a table from a file."""
+    """Read a table from a file."""
     if transpose:
         index1, index2 = index2, index1
     with open(fname) as f:
@@ -44,7 +44,7 @@ def read_table(fname, index1, index2, transpose=False):
 
 
 def main():
-    """Parses 'ppbymip_cgp.mod'"""
+    """Solve 'ppbymip_cgp.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -55,16 +55,16 @@ def main():
 
     lp_out = "tmp/cgp.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=True)
-    try:
-        out, varvalues = Tools.script(
-            "gurobi_wrapper.sh", lp_out,
-            options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
-            verbose=True
-        )
-    except RuntimeError as e:
-        print(repr(e))
+    out, varvalues = Tools.script(
+        "gurobi_wrapper.sh", lp_out,
+        options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
+        verbose=True
+    )
 
-    # print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    print("varvalues:", [
+        (k, v)
+        for k, v in sorted(varvalues.items()) if not k.startswith("_")
+    ])
 
 
 if __name__ == "__main__":

@@ -26,7 +26,7 @@ import os
 
 
 def read_tsp(fname):
-    """Loads TSP instances."""
+    """Load a TSP instance from a file."""
     xs, ys = [], []
     with open(fname) as f:
         lst = list(map(float, f.read().split()))
@@ -38,25 +38,18 @@ def read_tsp(fname):
 
 
 def main():
-    """Parses 'tsp.mod'."""
+    """Solve 'tsp.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
+    graph_size = "small"
     mod_in = "tsp.mod"
     mod_out = "tmp/tsp.out.mod"
-    graph_size = "small"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
     lp_out = "tmp/tsp.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=True)
-    try:
-        out, varvalues = Tools.script(
-            "vpsolver_gurobi.sh", lp_out, verbose=True
-        )
-    except RuntimeError as e:
-        print(repr(e))
-
     out, varvalues = Tools.script(
         "glpk_wrapper.sh", lp_out, verbose=True
     )

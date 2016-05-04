@@ -26,7 +26,7 @@ import os
 
 
 def read_tsp(fname):
-    """Loads TSP instances."""
+    """Load a TSP instance from a file."""
     xs, ys = [], []
     with open(fname) as f:
         lst = list(map(float, f.read().split()))
@@ -38,18 +38,18 @@ def read_tsp(fname):
 
 
 def main():
-    """Parses 'tsp.mod' and tests cut generators."""
+    """Solve 'tsp_gurobi.mod' using a cut generator."""
     from pympl import PyMPL, Tools, glpkutils
     from gurobipy import GRB, LinExpr, read
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
-    mod_in = "tsp.mod"
-    mod_out = "tmp/tsp.out.mod"
+    mod_in = "tsp_gurobi.mod"
+    mod_out = "tmp/tsp_gurobi.out.mod"
     graph_size = "large"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/tsp.lp"
+    lp_out = "tmp/tsp_gurobi.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=True)
 
     m = read(lp_out)
@@ -58,7 +58,7 @@ def main():
     m.params.MIPGapAbs = 1-1e-5
 
     def sep_callback(model, where):
-        """Gurobi callback function"""
+        """Gurobi callback function."""
         if where == GRB.callback.MIPNODE:
             model._cnt += 1
             if model._cnt - model._lastrun < 10:
@@ -99,7 +99,4 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except ImportError as e:
-        print(repr(e))
+    main()

@@ -20,45 +20,23 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
-from builtins import range
-from builtins import map
 import os
 
 
-def read_table(fname, index1, index2, transpose=False):
-    """Read a table from a file."""
-    if transpose:
-        index1, index2 = index2, index1
-    with open(fname) as f:
-        text = f.read().replace(",", "")
-        lst = list(map(float, text.split()))
-        demand = {}
-        for i1 in index1:
-            for i2 in index2:
-                if transpose:
-                    demand[i2, i1] = lst.pop(0)
-                else:
-                    demand[i1, i2] = lst.pop(0)
-        assert lst == []
-        return demand
-
-
 def main():
-    """Solve 'ppbymip_ps.mod'."""
+    """Solve 'sos1.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
-    mod_in = "ppbymip_ps.mod"
-    mod_out = "tmp/ps.out.mod"
+    mod_in = "sos1.mod"
+    mod_out = "tmp/sos1.out.mod"
     parser = PyMPL(locals_=locals(), globals_=globals())
     parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/ps.lp"
+    lp_out = "tmp/sos1.lp"
     glpkutils.mod2lp(mod_out, lp_out, verbose=True)
     out, varvalues = Tools.script(
-        "gurobi_wrapper.sh", lp_out,
-        options="Threads=1 Presolve=0 Heuristics=0.25 MIPGap=0",
-        verbose=True
+        "glpk_wrapper.sh", lp_out, verbose=True
     )
 
     print("varvalues:", [

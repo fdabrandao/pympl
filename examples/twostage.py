@@ -26,7 +26,7 @@ import os
 
 
 def read_twostage(fname):
-    """Loads two-stage instances."""
+    """Load a two-stage instance from a file."""
     with open(fname) as f:
         lst = list(map(int, f.read().split()))
         W = lst.pop(0)
@@ -41,7 +41,7 @@ def read_twostage(fname):
 
 
 def main():
-    """Parses 'twostage.mod'."""
+    """Solve 'twostage.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 

@@ -24,37 +24,35 @@ import os
 
 
 def main():
-    """Parses 'vpsolver_vbp.mod'"""
+    """Solve 'vpsolver_vbp_flow.mod' and 'vpsolver_vbp_graph.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
-    mod_in = "vpsolver_vbp.mod"
-    mod_out = "tmp/vpsolver_vbp.out.mod"
-    parser = PyMPL()
-    parser.parse(mod_in, mod_out)
+    for model in ["vpsolver_vbp_graph", "vpsolver_vbp_flow"]:
+        mod_in = "{}.mod".format(model)
+        mod_out = "tmp/{}.out.mod".format(model)
+        parser = PyMPL()
+        parser.parse(mod_in, mod_out)
 
-    lp_out = "tmp/vpsolver_vbp.lp"
-    glpkutils.mod2lp(mod_out, lp_out, verbose=True)
-    out, varvalues = Tools.script(
-        "glpk_wrapper.sh", lp_out, verbose=True
-    )
-    sol = parser["VBP_FLOW"].extract(
-        lambda varname: varvalues.get(varname, 0),
-        verbose=True
-    )
+        lp_out = "tmp/{}.lp".format(model)
+        glpkutils.mod2lp(mod_out, lp_out, verbose=True)
+        out, varvalues = Tools.script(
+            "glpk_wrapper.sh", lp_out, verbose=True
+        )
+        sol = parser["MVP_FLOW"].extract(
+            lambda varname: varvalues.get(varname, 0),
+            verbose=True
+        )
 
-    print("")
-    print("sol:", sol)
-    print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
-    print("")
-    assert varvalues["Z"] == 33  # check the solution objective value
-
-    # exit_code = os.system("glpsol --math {0}".format(mod_out))
-    # assert exit_code == 0
+        print("")
+        print("sol:", sol)
+        print("varvalues:", [
+            (k, v)
+            for k, v in sorted(varvalues.items()) if not k.startswith("_")
+        ])
+        print("")
+        assert varvalues["Z"] == 33  # check the solution objective value
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except ImportError as e:
-        print(repr(e))
+    main()

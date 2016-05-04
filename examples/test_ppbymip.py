@@ -20,37 +20,56 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+
 import sys
+import pytest
 
-import ppbymip_bike as bike
-import ppbymip_cgp as cgp
-import ppbymip_clb as clb
-import ppbymip_mp as mp
-import ppbymip_ps as ps
+slow = pytest.mark.skipif(
+    not pytest.config.getoption("--runslow"),
+    reason="need --runslow option to run"
+)
 
 
-def main():
-    """Runs all lot-sizing examples."""
-
+def test_ppbymip_bike():
+    """Test ppbymip_bike."""
+    import ppbymip_bike as bike
     print("ppbymip_bike:")
     bike.main()
 
-    if "quick_test" not in sys.argv:
-        print("ppbymip_cgp:")
-        cgp.main()
 
-        print("ppbymip_clb:")
-        clb.main()
+@slow
+def test_ppbymip_cgp():
+    """Test ppbymip_cgp."""
+    import ppbymip_cgp as cgp
+    print("ppbymip_cgp:")
+    cgp.main()
 
-        print("ppbymip_clb:")
-        clb.main()
 
-        print("ppbymip_mp:")
-        mp.main()
+@slow
+def test_ppybymip_clb():
+    """Test ppbymip_clb."""
+    import ppbymip_clb as clb
+    print("ppbymip_clb:")
+    clb.main()
 
-        print("ppbymip_ps:")
-        ps.main()
+@slow
+def test_mp():
+    """Test ppbymip_mp."""
+    import ppbymip_mp as mp
+    mp.main()
+
+
+@slow
+def test_ps():
+    """Test ppbymip_ps."""
+    import ppbymip_ps as ps
+    print("ppbymip_ps:")
+    ps.main()
 
 
 if __name__ == "__main__":
-    main()
+    test_ppbymip_bike()
+    test_ppbymip_cgp()
+    test_ppbymip_clb()
+    test_ppbymip_mp()
+    test_ppbymip_ps()

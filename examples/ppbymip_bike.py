@@ -24,7 +24,7 @@ import os
 
 
 def main():
-    """Parses 'ppbymip_bike.mod'"""
+    """Solve 'ppbymip_bike.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -39,7 +39,10 @@ def main():
         "glpk_wrapper.sh", lp_out, verbose=True
     )
 
-    # print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    print("varvalues:", [
+        (k, v)
+        for k, v in sorted(varvalues.items()) if not k.startswith("_")
+    ])
 
 
 if __name__ == "__main__":

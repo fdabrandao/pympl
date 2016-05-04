@@ -20,81 +20,121 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 from __future__ import print_function
+
 import sys
+import pytest
 
-import wolsey
-import equivknapsack01
-import equivknapsack
-import vpsolver_vbp
-import vpsolver_mvp
-import twostage
-import tsp_gurobi
-import tsp
-import sos
-import pwl
-import lslib_test
+slow = pytest.mark.skipif(
+    not pytest.config.getoption("--runslow"),
+    reason="need --runslow option to run"
+)
 
 
-def main():
-    """Runs PyMPL examples."""
+def test_equivknapsack():
+    """Test equivknapsack."""
+    import equivknapsack
     try:
         print("equivknapsack:")
         equivknapsack.main()
     except ImportError as e:
         print(repr(e))
 
+
+def test_equivknapsack01():
+    """Test equivknapsack01."""
+    import equivknapsack01
     try:
         print("equivknapsack01:")
         equivknapsack01.main()
     except ImportError as e:
         print(repr(e))
 
+
+def test_wolsey():
+    """Test wolsey."""
+    import wolsey
     try:
         print("wolsey:")
         wolsey.main()
     except ImportError as e:
         print(repr(e))
 
+
+def test_vpsolver_vbp():
+    """Test vpsolver_vbp."""
+    import vpsolver_vbp
     try:
         print("vpsolver_vbp:")
         vpsolver_vbp.main()
     except ImportError as e:
         print(repr(e))
 
+
+def test_vpsolver_mvp():
+    """Test vpsolver_mvp."""
+    import vpsolver_mvp
     try:
         print("vpsolver_mvp:")
         vpsolver_mvp.main()
     except ImportError as e:
         print(repr(e))
 
+
+def test_twostage():
+    """Test twostage."""
+    import twostage
     try:
         print("twostage:")
         twostage.main()
     except ImportError as e:
         print(repr(e))
 
-    print("sos:")
-    sos.main()
 
+def test_sos1():
+    """Test sos1."""
+    import sos1
+    print("sos1:")
+    sos1.main()
+
+
+def test_sos2():
+    """Test sos2."""
+    import sos2
+    print("sos2:")
+    sos2.main()
+
+
+def test_pwl():
+    """Test pwl."""
+    import pwl
     print("pwl:")
     pwl.main()
 
-    if "quick_test" not in sys.argv:
-        print("tsp:")
-        tsp.main()
 
-        print("tsp_gurobi:")
-        try:
-            tsp_gurobi.main()
-        except ImportError as e:
-            print(repr(e))
+def test_tsp():
+    """Test tsp."""
+    import tsp
+    tsp.main()
 
-        print("lslib_test:")
-        try:
-            lslib_test.main()
-        except Exception as e:
-            print(repr(e))
+
+@slow
+def test_tsp_gurobi():
+    """Test tsp_gurobi."""
+    import tsp_gurobi
+    try:
+        tsp_gurobi.main()
+    except ImportError as e:
+        print(repr(e))
 
 
 if __name__ == "__main__":
-    main()
+    test_wolsey()
+    test_equivknapsack01()
+    test_equivknapsack()
+    test_vpsolver_vbp()
+    test_vpsolver_mvp()
+    test_twostage()
+    test_tsp_gurobi()
+    test_tsp()
+    test_sos()
+    test_pwl()

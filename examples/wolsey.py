@@ -26,7 +26,7 @@ import os
 
 
 def main():
-    """Parses 'graph.mod'"""
+    """Solve 'wolseyR2network.mod' and 'wolseyR1gamma.mod'."""
     from pympl import PyMPL, Tools, glpkutils
     os.chdir(os.path.dirname(__file__) or os.curdir)
 
@@ -59,14 +59,14 @@ def main():
         "glpk_wrapper.sh", lp_out, verbose=False
     )
     print("")
-    print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    print("varvalues:", [
+        (k, v)
+        for k, v in sorted(varvalues.items()) if not k.startswith("_")
+    ])
     print("")
 
-    # Check the solution objective value:
+    # check the solution objective value:
     assert abs(varvalues["Z0"] - 9) < 1e-5
-
-    # exit_code = os.system("glpsol --math {0}".format(mod_out))
-    # assert exit_code == 0
 
     # wolseyR1gamma:
 
@@ -83,18 +83,15 @@ def main():
         "glpk_wrapper.sh", lp_out, verbose=False
     )
     print("")
-    print("varvalues:", [(k, v) for k, v in sorted(varvalues.items())])
+    print("varvalues:", [
+        (k, v)
+        for k, v in sorted(varvalues.items()) if not k.startswith("_")
+    ])
     print("")
 
-    # Check the solution objective value:
+    # check the solution objective value:
     assert abs(varvalues['theta(T)'] - 9) < 1e-5
-
-    # exit_code = os.system("glpsol --math {0}".format(mod_out))
-    # assert exit_code == 0
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except ImportError as e:
-        print(repr(e))
+    main()
