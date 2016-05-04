@@ -16,4 +16,8 @@ git:
 install:
   - pip install -r requirements.txt
   - pip install .
-script: bash test.sh --options quick_test
+script:
+  - cd examples
+  - py.test -v --cov pympl
+after_success:
+  - if [[ $TRAVIS_PYTHON_VERSION == 2.7 ]]; then coveralls || echo "failed"; fi

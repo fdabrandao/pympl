@@ -4,3 +4,6 @@ flask >= 0.10.1
 limits >= 1.0.8
 flask-limiter >= 0.8.2
 flask-basicauth >= 0.2.0
+pytest >= 2.9.1
+pytest-cov >= 2.2.1
+coveralls >= 1.1
