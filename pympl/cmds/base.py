@@ -37,29 +37,25 @@ class CmdBase(object):
         return "{}_{}_".format(self._prefix, self._count)
 
     def __call__(self, *args, **kwargs):
-        """Evalutates CMD()."""
+        """Evalutate CMD()."""
         self._evalcmd(None, *args, **kwargs)
 
     def __getitem__(self, arg1):
-        """Evalutates CMD[arg1]."""
+        """Evalutate CMD[arg1]."""
         return lambda *args, **kwargs: self._evalcmd(arg1, *args, **kwargs)
 
     def _evalcmd(self, arg1, *args, **kwargs):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         raise NotImplementedError("CMD[arg1](*args)")
-
-    def separate(self, get_var_value):
-        """Computes valid inequalities."""
-        pass
 
 
 class SubmodBase(CmdBase):
     """Base class for PyMPL submodels."""
 
     def separate(self, get_var_value, *args, **kwargs):
-        """Compute valid inequalities for the submodels."""
+        """Compute valid inequalities for the submodel."""
         pass
 
     def extract(self, get_var_value, *args, **kwargs):
-        """Extract solutions of submodels."""
+        """Extract the solution of the submodel."""
         pass

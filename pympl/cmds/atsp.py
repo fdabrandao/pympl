@@ -39,7 +39,7 @@ class SubmodATSPMTZ(SubmodBase):
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False, DL=False):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -61,7 +61,7 @@ class SubmodATSPMTZ(SubmodBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
     def separate(self, get_var_value):
-        """Computes valid inequalities for TSP submodels."""
+        """Compute valid inequalities for TSP submodels."""
         cuts = []
         for graph, cutvars in zip(self._graph_lst, self._cutvars_lst):
             cuts += tsp_cut_generator(graph, cutvars, get_var_value)
@@ -77,7 +77,7 @@ class SubmodATSPSCF(SubmodBase):
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -99,7 +99,7 @@ class SubmodATSPSCF(SubmodBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
     def separate(self, get_var_value):
-        """Computes valid inequalities for TSP submodels."""
+        """Compute valid inequalities for TSP submodels."""
         cuts = []
         for graph, cutvars in zip(self._graph_lst, self._cutvars_lst):
             cuts += tsp_cut_generator(graph, cutvars, get_var_value)
@@ -115,7 +115,7 @@ class SubmodATSPMCF(SubmodBase):
         self._cutvars_lst = []
 
     def _evalcmd(self, arg1, xvars, cuts=False):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -137,7 +137,7 @@ class SubmodATSPMCF(SubmodBase):
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
     def separate(self, get_var_value):
-        """Computes valid inequalities for TSP submodels."""
+        """Compute valid inequalities for TSP submodels."""
         cuts = []
         for graph, cutvars in zip(self._graph_lst, self._cutvars_lst):
             cuts += tsp_cut_generator(graph, cutvars, get_var_value)

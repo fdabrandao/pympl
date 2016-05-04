@@ -41,8 +41,9 @@ class Model(object):
         self.objdir = "min"
 
     def set_obj(self, objdir, lincomb):
-        """Set model objective."""
+        """Set the model objective."""
         assert objdir in ["min", "max"]
+        lincomb = linear_constraint(lincomb, "=", 0)[0]
         self.objdir = objdir
         for var, coef in lincomb:
             assert var in self.vars
@@ -50,13 +51,13 @@ class Model(object):
         self.obj = lincomb
 
     def new_con_name(self):
-        """Generate a new constraint name."""
+        """Generate a name for a new constraint."""
         name = "RC{0:x}".format(len(self.cons))
         assert name not in self.cons
         return name
 
     def new_var_name(self):
-        """Generate a new variable name."""
+        """Generate a name for a new variable."""
         name = "RV{0:x}".format(len(self.vars))
         assert name not in self.vars
         return name
@@ -100,7 +101,7 @@ class Model(object):
         self.cons[name] = (lincomb, sign, rhs)
 
     def rename_vars(self, var_name):
-        """Renames variables."""
+        """Rename variables."""
         self.vars_list = list(map(var_name, self.vars_list))
         oldvars = self.vars
         self.vars = {}
@@ -115,7 +116,7 @@ class Model(object):
             self.cons[name] = (lincomb, sign, rhs)
 
     def rename_cons(self, con_name):
-        """Renames constraints."""
+        """Rename constraints."""
         self.cons_list = list(map(con_name, self.cons_list))
         oldcons = self.cons
         self.cons = {}

@@ -33,7 +33,7 @@ FIELD_SIZE = [None, 2, 8, 8, 12, 8, 12]
 
 
 def mps_row(lst):
-    """Formats MPS rows."""
+    """Format a MPS row."""
     line = " "
     for (field, value) in lst:
         assert 1 <= field <= 6
@@ -46,7 +46,7 @@ def mps_row(lst):
 
 
 def write_mps(model, filename):
-    """Writes models to files in MPS format."""
+    """Write a model to a file in MPS format."""
     fout = open(filename, "w")
     print("NAME          MODEL", file=fout)
 

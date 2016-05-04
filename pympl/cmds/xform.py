@@ -71,7 +71,7 @@ class SubmodWWU(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def _evalcmd(self, arg1, s, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -99,7 +99,7 @@ class SubmodWWUB(SubmodBase):
     """Command for creating WW-U-B extended formulations."""
 
     def _evalcmd(self, arg1, s, r, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -129,7 +129,7 @@ class SubmodWWUSC(SubmodBase):
     """Command for creating WW-U-SC extended formulations."""
 
     def _evalcmd(self, arg1, s, y, z, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -159,7 +159,7 @@ class SubmodWWUSCB(SubmodBase):
     """Command for creating WW-U-SC,B extended formulations."""
 
     def _evalcmd(self, arg1, s, r, y, z, w, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -193,7 +193,7 @@ class SubmodWWULB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def _evalcmd(self, arg1, s, y, d, L, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -221,7 +221,7 @@ class SubmodWWCC(SubmodBase):
     """Command for creating WW-CC extended formulations."""
 
     def _evalcmd(self, arg1, s, y, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -249,7 +249,7 @@ class SubmodWWCCB(SubmodBase):
     """Command for creating WW-CC-B extended formulations."""
 
     def _evalcmd(self, arg1, s, r, y, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -279,7 +279,7 @@ class SubmodLSU1(SubmodBase):
     """Command for creating LS-U1 extended formulations."""
 
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -309,7 +309,7 @@ class SubmodLSU2(SubmodBase):
     """Command for creating LS-U1 extended formulations."""
 
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -339,7 +339,7 @@ class SubmodLSU(SubmodBase):
     """Command for creating LS-U extended formulations."""
 
     def _evalcmd(self, arg1, s, x, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -369,7 +369,7 @@ class SubmodLSUB(SubmodBase):
     """Command for creating LS-U-B extended formulations."""
 
     def _evalcmd(self, arg1, s, r, x, y, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -401,7 +401,7 @@ class SubmodLSUSC(SubmodBase):
     """Command for creating LS-U-SC extended formulations."""
 
     def _evalcmd(self, arg1, s, x, y, z, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -433,7 +433,7 @@ class SubmodLSUSCB(SubmodBase):
     """Command for creating LS-U-SC,B extended formulations."""
 
     def _evalcmd(self, arg1, s, x, y, z, w, d, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -467,7 +467,7 @@ class SubmodDLSICC(SubmodBase):
     """Command for creating DLSI-CC extended formulations."""
 
     def _evalcmd(self, arg1, s0, y, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -494,7 +494,7 @@ class SubmodDLSICCB(SubmodBase):
     """Command for creating DLSI-CC-B extended formulations."""
 
     def _evalcmd(self, arg1, s0, r, y, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -523,7 +523,7 @@ class SubmodDLSCCB(SubmodBase):
     """Command for creating DLS-CC-B extended formulations."""
 
     def _evalcmd(self, arg1, r, y, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 
@@ -552,7 +552,7 @@ class SubmodDLSCCSC(SubmodBase):
     """Command for creating DLS-CC-SC extended formulations."""
 
     def _evalcmd(self, arg1, s, y, z, d, C, NT, Tk=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         assert arg1 is None
         prefix = self._new_prefix()
 

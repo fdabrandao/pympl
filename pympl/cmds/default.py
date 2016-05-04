@@ -28,7 +28,7 @@ class CmdSet(CmdBase):
     """Command for creating a new AMPL set."""
 
     def _evalcmd(self, name, values):
-        """Evalutates CMD[name](*args)."""
+        """Evalutate CMD[name](*args)."""
         match = utils.parse_symbname(name)
         assert match is not None
         name = match
@@ -42,7 +42,7 @@ class CmdParam(CmdBase):
     """Command for creating a new AMPL parameter."""
 
     def _evalcmd(self, arg1, values, i0=None):
-        """Evalutates CMD[arg1](*args)."""
+        """Evalutate CMD[arg1](*args)."""
         match = utils.parse_indexed(arg1, "{}")
         assert match is not None
         name, index_list = match
@@ -89,7 +89,7 @@ class CmdVar(CmdBase):
     """Command for creating a new AMPL variable."""
 
     def _evalcmd(self, name, typ="", lb=None, ub=None, index_set=None):
-        """Evalutates CMD[name](*args)."""
+        """Evalutate CMD[name](*args)."""
         match = utils.parse_indexed(name, "{}")
         assert match is not None
         name, index = match
@@ -114,7 +114,7 @@ class CmdCon(CmdBase):
     """Command for creating a new AMPL constraint."""
 
     def _evalcmd(self, name, left, sign, right):
-        """Evalutates CMD[name](*args)."""
+        """Evalutate CMD[name](*args)."""
         match = utils.parse_symbname(name)
         assert match is not None
         name = match
@@ -126,6 +126,6 @@ class CmdStmt(CmdBase):
     """Command for creating new AMPL statements."""
 
     def _evalcmd(self, arg1, statement):
-        """Evalutates CMD(*args)."""
+        """Evalutate CMD(*args)."""
         assert arg1 is None
         self._pyvars["_model"] += str(statement)

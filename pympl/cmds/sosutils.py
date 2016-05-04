@@ -22,7 +22,7 @@ from builtins import range
 
 
 def add_sos1(model, varl, ub=1, prefix=""):
-    """Adds SOS1 constraints to model."""
+    """Add a SOS1 constraint to the model."""
     def yvar(i):
         return prefix+"y_{0}".format(i)
 
@@ -36,7 +36,7 @@ def add_sos1(model, varl, ub=1, prefix=""):
 
 
 def add_sos2(model, varl, ub=1, prefix=""):
-    """Adds SOS2 constraints to model."""
+    """Add a SOS2 constraints to the model."""
     def yvar(i):
         return prefix+"y_{0}".format(i)
 

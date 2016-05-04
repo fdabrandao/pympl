@@ -66,12 +66,12 @@ minor modifications.
 
 
 def mrange(a, b):
-    """Returns a range [a, b]."""
+    """Return a range [a, b]."""
     return range(a, b+1)
 
 
 def NetDemand(sinit, d, NT):
-    """Computes the net demand when s[0] != 0."""
+    """Compute the net demand when s[0] != 0."""
     if isinstance(sinit, str):
         netd = {}
         for t in mrange(1, NT):

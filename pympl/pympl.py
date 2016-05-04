@@ -122,7 +122,7 @@ class PyMPL(object):
         self.output = ""
 
     def add_cmd(self, cmd, cmdcls):
-        """Adds a new command to the parser."""
+        """Add a new command to the parser."""
         prefix = "_{}{}".format(cmd.lower(), len(self._locals))
         self._locals[cmd] = cmdcls(
             cmd, prefix, self._locals, self._sets, self._params
@@ -130,7 +130,7 @@ class PyMPL(object):
         self._cmds.append(cmd)
 
     def parse(self, mod_in=None, mod_out=None, comment_cmds=True):
-        """Parses the input file."""
+        """Parse the input file."""
         if mod_in is not None:
             self.read(mod_in)
         self.output = self.input
@@ -199,7 +199,7 @@ class PyMPL(object):
             self.write(mod_out)
 
     def _add_data(self, data):
-        """Adds data to the model."""
+        """Add data to the model."""
         if data != "":
             data_stmt = re.search("data\\s*;", self.output, re.DOTALL)
             end_stmt = re.search("end\\s*;", self.output, re.DOTALL)
@@ -216,23 +216,23 @@ class PyMPL(object):
                     )
 
     def read(self, mod_in):
-        """Reads the input file."""
+        """Read the input file."""
         with open(mod_in, "r") as fin:
             self.input = fin.read()
 
     def write(self, mod_out):
-        """Writes the output to a file."""
+        """Write the output to a file."""
         with open(mod_out, "w") as fout:
             print(self.output, file=fout)
 
     def submodels(self):
-        """Returns the names of submodels used."""
+        """Return the names of submodels used."""
         return self._submodels
 
     def __getitem__(self, varname):
-        """Returns the internal variable varname."""
+        """Get an internal variable."""
         return self._locals[varname]
 
     def __setitem__(self, varname, value):
-        """Sets the internal variable varname."""
+        """Set an internal variable."""
         self._locals[varname] = value

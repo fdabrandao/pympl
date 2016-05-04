@@ -41,23 +41,25 @@ class Tools(object):
 
     @staticmethod
     def set_verbose(verbose):
-        """Enables/disables verbose output."""
+        """Enable/disable verbose output."""
         if verbose is not None:
             Tools.VERBOSE = verbose
 
     @staticmethod
     def new_tmp_file(ext="tmp"):
-        """Creates temporary files."""
+        """Create temporary files."""
         if not ext.startswith("."):
             ext = ".{0}".format(ext)
         fname = "{0}/{1}{2}".format(Tools.TMP_DIR, Tools.TMP_CNT, ext)
         Tools.TMP_CNT += 1
+        if not os.path.exists(Tools.TMP_DIR):
+            os.makedirs(Tools.TMP_DIR)
         return fname
 
     @staticmethod
     @atexit.register
     def clear():
-        """Deletes temporary files and kills child processes."""
+        """Delete temporary files and kill child processes."""
         for p in Tools.PLIST:
             try:
                 os.killpg(p.pid, signal.SIGTERM)
@@ -78,7 +80,7 @@ class Tools(object):
 
     @staticmethod
     def run(cmd, tee=None, grep=None, grepv=None, verbose=None):
-        """Runs system commands."""
+        """Run a system command."""
         if verbose is None:
             verbose = Tools.VERBOSE
 
@@ -120,7 +122,7 @@ class Tools(object):
 
     @staticmethod
     def script(script_name, model, options=None, verbose=None):
-        """Calls solver scripts and returns the solutions."""
+        """Call a solver script and returns the solutions."""
         cmd = script_name
         if model.endswith(".mps"):
             cmd += " --mps {0}".format(model)

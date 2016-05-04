@@ -32,7 +32,7 @@ from ..utils import lincomb2str, ampl_var, ampl_con
 
 
 def write_mod(model, filename):
-    """Writes models to files in AMPL format."""
+    """Write a model to a file in AMPL format."""
     fout = open(filename, "w")
 
     # Variables:
@@ -66,7 +66,7 @@ def write_mod(model, filename):
 
 
 def model2ampl(model, declared_vars=None):
-    """Returns models as a string in AMPL format."""
+    """Transform a model into a string in AMPL format."""
     res = ""
 
     # Variables:

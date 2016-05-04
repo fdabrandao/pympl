@@ -24,7 +24,7 @@ from .tools import Tools
 
 
 def mod2lp(fname_mod, fname_lp, verbose=None):
-    """Converts a GMPL file into an LP file using GLPK."""
+    """Convert a GMPL file into a LP file using GLPK."""
     Tools.run(
         "glpsol --math {0} --check --wlp {1}".format(
             fname_mod, fname_lp
@@ -35,7 +35,7 @@ def mod2lp(fname_mod, fname_lp, verbose=None):
 
 
 def mod2mps(fname_mod, fname_mps, verbose=None):
-    """Converts a GMPL file into an MPS file using GLPK."""
+    """Convert a GMPL file into a MPS file using GLPK."""
     Tools.run(
         "glpsol --math {0} --check --wmps {1}".format(
             fname_mod, fname_mps

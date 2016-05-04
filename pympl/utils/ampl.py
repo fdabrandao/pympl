@@ -27,13 +27,8 @@ from .common import linear_constraint, lincomb2str
 DEBUG = False
 
 
-def tuple2str(tuple_):
-    """Converts a tuple to a AMPL tuple."""
-    return ",".join(repr(e) for e in tuple_)
-
-
 def ampl_set(name, values, sets, params):
-    """Generates the definition for an AMPL set."""
+    """Generate the definition of an AMPL set."""
     if name.startswith("^"):
         sets[name] = deepcopy(values)
         return "", ""
@@ -53,7 +48,7 @@ def ampl_set(name, values, sets, params):
 
 
 def ampl_param(name, index, value, sets, params):
-    """Generates the definition for an AMPL parameter."""
+    """Generate the definition of an AMPL parameter."""
     if name.startswith("^"):
         params[name] = deepcopy(value)
         return "", ""
@@ -91,7 +86,7 @@ def ampl_param(name, index, value, sets, params):
 
 
 def ampl_var(name, index=None, typ="", lb=None, ub=None):
-    """Generates the definition for an AMPL variable."""
+    """Generate the definition of an AMPL variable."""
     if name.startswith("^"):
         return ""
     if index is not None:
@@ -114,7 +109,7 @@ def ampl_var(name, index=None, typ="", lb=None, ub=None):
 
 
 def ampl_con(name, lincomb, sign, rhs):
-    """Generates the definition for an AMPL constraint."""
+    """Generate the definition of an AMPL constraint."""
     if name.startswith("^"):
         return ""
     if sign in (">", "<"):

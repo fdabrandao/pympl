@@ -24,14 +24,14 @@ import re
 t_SYMBNAME1 = r'[a-zA-Z_][a-zA-Z0-9_]*'
 t_SYMBNAME2 = r'\^[^,\[\]\{\}]*'
 t_SYMBNAME = r'(?:'+t_SYMBNAME1+r'|'+t_SYMBNAME2+r')'
-t_INDEX1 = r'(?:\s*\[[^\]]*\])?' # [] index
-t_INDEX2 = r'(?:\s*{[^}]*})?' # {} index
+t_INDEX1 = r'(?:\s*\[[^\]]*\])?'  # [] index
+t_INDEX2 = r'(?:\s*{[^}]*})?'  # {} index
 t_SYMBNAME_INDEX1 = t_SYMBNAME + t_INDEX1
 t_SYMBNAME_INDEX2 = t_SYMBNAME + t_INDEX2
 
 
 def parse_symbname(expr, allow_index=""):
-    """Matches and returns a symbolic name."""
+    """Match and return a symbolic name."""
     assert allow_index in ("", "[]", "{}")
     if allow_index == "[]":
         t_symb = t_SYMBNAME_INDEX1
@@ -47,7 +47,7 @@ def parse_symbname(expr, allow_index=""):
 
 
 def parse_symblist(expr, allow_index=""):
-    """Matches and returns a list of symbolic names."""
+    """Match and return a list of symbolic names."""
     assert allow_index in ("", "[]", "{}")
     if allow_index == "[]":
         t_symb = t_SYMBNAME_INDEX1
@@ -66,7 +66,7 @@ def parse_symblist(expr, allow_index=""):
 
 
 def parse_indexed(expr, index_type):
-    """Matches and returns an indexed symbolic name (i.e., name{index})."""
+    """Match and return an indexed symbolic name (i.e., name{index})."""
     assert index_type in ("[]", "{}")
     if index_type == "[]":
         match = re.match(

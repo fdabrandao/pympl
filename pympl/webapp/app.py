@@ -29,6 +29,8 @@ import string
 import random
 import flask
 import signal
+import shutil
+import tempfile
 from flask_limiter import Limiter
 from flask import Flask, Response
 from flask import render_template, json, request, redirect, url_for
@@ -57,7 +59,7 @@ limiter = Limiter(app, global_limits=["50/minute", "5/second"])
 
 @app.context_processor
 def inject_globals():
-    """Sends global data to templates."""
+    """Send global data to the template."""
     data = dict(
         app_name="PyMPL App",
         pages=[
@@ -84,13 +86,13 @@ def index():
 
 
 def load(fname):
-    """Loads a text file as a string."""
+    """Load a text file as a string."""
     with open(fname, "r") as f:
         return f.read().strip("\n")
 
 
 def request_data():
-    """Extracts request content."""
+    """Extract request info."""
     pympl_model = request.form["pympl_model"]
     python_code = request.form["python_code"]
     fnames = {}
@@ -125,7 +127,7 @@ def request_data():
 @app.route("/pympl/<example>", methods=["GET", "POST"])
 @basic_auth.required
 def pympl(example):
-    """Renders the input page."""
+    """Render the input page."""
     title = "PyMPL: AMPL extension"
 
     example_folder = os.path.join(
@@ -220,8 +222,7 @@ class StringStream(object):
 @limiter.limit("250/hour;50/minute;3/second")
 @basic_auth.required
 def evaluate():
-    """Renders the evaluation page."""
-    import tempfile, shutil
+    """Render the evaluation page."""
     from flask import make_response
     tmp_dir = tempfile.mkdtemp()
     try:
@@ -267,7 +268,7 @@ def evaluate():
 
 
 def get_ip_address():
-    """Returns 'eth0' ip address."""
+    """Return the ip address of 'eth0'."""
     import socket
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))

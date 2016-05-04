@@ -39,7 +39,7 @@ from ..utils import lincomb2str
 
 
 def write_lp(model, filename):
-    """Writes models to files in LP format."""
+    """Write a model to a file in LP format."""
     fout = open(filename, "w")
 
     # Objective:

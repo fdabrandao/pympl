@@ -38,7 +38,7 @@ class CmdVBPGraph(CmdBase):
     def _evalcmd(
             self, names, W, w, labels, bounds=None, binary=False,
             S="S", T="T", LOSS="LOSS"):
-        """Evalutates CMD[names](*args)."""
+        """Evalutate CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
@@ -57,7 +57,7 @@ class CmdVBPGraph(CmdBase):
         self._pyvars["_defs"] += defs
 
     def _generate_graph(self, W, w, labels, bounds, binary, S, T, LOSS):
-        """Generates an arc-flow graph."""
+        """Generate an arc-flow graph."""
         from pyvpsolver import VBP, AFG
         m = len(w)
         ndims = len(W)
@@ -83,7 +83,7 @@ class CmdMVPGraph(CmdBase):
     def _evalcmd(
             self, names, Ws, ws, labels, bounds=None, binary=False,
             S="S", Ts=None, LOSS="LOSS"):
-        """Evalutates CMD[names](*args)."""
+        """Evalutate CMD[names](*args)."""
         match = utils.parse_symblist(names)
         assert match is not None
         Vname, Aname = match
@@ -107,7 +107,7 @@ class CmdMVPGraph(CmdBase):
         self._pyvars["_defs"] += defs
 
     def _generate_graph(self, Ws, ws, labels, bounds, binary, S, Ts, LOSS):
-        """Generates an arc-flow graph."""
+        """Generate an arc-flow graph."""
         from pyvpsolver import MVP, AFG
         m = len(ws)
         ndims = len(Ws[0])
@@ -156,7 +156,7 @@ class SubmodVBPFlow(SubmodBase):
         self._prefixes = []
 
     def _evalcmd(self, zvar, W, w, b, bounds=None, binary=False):
-        """Evalutates CMD[zvar](*args)."""
+        """Evalutate CMD[zvar](*args)."""
         match = utils.parse_symbname(zvar, allow_index="[]")
         assert match is not None
         zvar = match
@@ -174,9 +174,9 @@ class SubmodVBPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(self, zvar, W, w, b, bounds=None, binary=False,
-            prefix=""):
-        """Generates a arc-flow model."""
+    def _generate_model(
+            self, zvar, W, w, b, bounds=None, binary=False, prefix=""):
+        """Generate an arc-flow model."""
         from pyvpsolver import VBP, AFG
         m = len(w)
         bb = [0]*m
@@ -253,7 +253,7 @@ class SubmodVBPFlow(SubmodBase):
         return graph, model, declared_vars
 
     def extract(self, get_var_value, verbose=None):
-        """Extracts arc-flow solutions."""
+        """Extract arc-flow solutions."""
         lst_sol = []
         for zvar, model, graph, prefix in zip(
                 self._zvars, self._models, self._graphs, self._prefixes):
@@ -286,7 +286,7 @@ class SubmodMVPFlow(SubmodBase):
         self._prefixes = []
 
     def _evalcmd(self, zvar, Ws, ws, b, bounds=None, binary=False, i0=0):
-        """Evalutates CMD[zvar](*args)."""
+        """Evalutate CMD[zvar](*args)."""
         match = utils.parse_indexed(zvar, "{}")
         assert match is not None
         zvar, index_list = match
@@ -328,9 +328,9 @@ class SubmodMVPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(self, zvars, Ws, ws, b, bounds=None, binary=False,
-            prefix=""):
-        """Generates a arc-flow model."""
+    def _generate_model(
+            self, zvars, Ws, ws, b, bounds=None, binary=False, prefix=""):
+        """Generate an arc-flow model."""
         from pyvpsolver import MVP, AFG
         ndims = len(Ws[0])
         m = len(ws)
@@ -419,7 +419,7 @@ class SubmodMVPFlow(SubmodBase):
         return graph, model, declared_vars
 
     def extract(self, get_var_value, verbose=None):
-        """Extracts arc-flow solutions."""
+        """Extract arc-flow solutions."""
         lst_sol = []
         for zvars, model, graph, prefix in zip(
                 self._zvars, self._models, self._graphs, self._prefixes):

@@ -26,7 +26,7 @@ from collections import defaultdict
 
 
 def linear_constraint(left, sign, right):
-    """Transforms (left, sign, right) constraints into (lincomb, sign, rhs)."""
+    """Transform a (left, sign, right) constraint into (lincomb, sign, rhs)."""
     assert (
         not isinstance(left, (int, float)) or
         not isinstance(right, (int, float))
@@ -78,7 +78,7 @@ def linear_constraint(left, sign, right):
 
 
 def lincomb2str(lincomb, mult="*"):
-    """Returns the linear combination as a string."""
+    """Convert a linear combination into a string."""
 
     def format_entry(var, coef):
         var = var.lstrip("^")  # PyMPL special marker
@@ -97,7 +97,7 @@ def lincomb2str(lincomb, mult="*"):
 
 
 def list2dict(lst, i0=0):
-    """Converts lists to dictionaries."""
+    """Convert a list into a dictionary."""
     dic = {}
 
     def conv_rec(key, lst):
@@ -139,7 +139,7 @@ class UnionFind(object):
         x = self.find(x)
         y = self.find(y)
         if x != y:
-            self.ngroups -= 1;
+            self.ngroups -= 1
             if self.rank[x] > self.rank[y]:
                 self.p[y] = x
             else:

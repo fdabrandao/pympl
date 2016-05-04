@@ -23,7 +23,7 @@ from ..utils.common import UnionFind
 
 
 def add_assign_constraints(model, xvars, graph):
-    """Adds TSP assignment constraints to model."""
+    """Add TSP assignment constraints to the model."""
     V, A, start = graph
 
     # var x{A}, binary;
@@ -40,7 +40,7 @@ def add_assign_constraints(model, xvars, graph):
 
 
 def add_cut_variables(model, xvars, graph, prefix=""):
-    """Adds variables for computing valid inequalities."""
+    """Add variables for computing valid inequalities."""
     V, A, start = graph
 
     def yvar(u, v):
@@ -64,7 +64,7 @@ def add_cut_variables(model, xvars, graph, prefix=""):
 
 
 def add_mtz_constraints(model, xvars, graph, DL=False, prefix=""):
-    """Adds MTZ constraints to model.
+    """Add a MTZ constraint to the model.
 
     Miller, Tucker and Zemlin (MTZ) (1960)
     var u{i in V: i != n}, >= 0;
@@ -104,7 +104,7 @@ def add_mtz_constraints(model, xvars, graph, DL=False, prefix=""):
 
 
 def add_scf_constraints(model, xvars, graph, prefix=""):
-    """Adds a Single-Commodity Flow Model to model.
+    """Add a Single-Commodity Flow Model to the model.
 
     Gavish and Graves (1978)
     var y{(i,j) in A}, >= 0;
@@ -147,7 +147,7 @@ def add_scf_constraints(model, xvars, graph, prefix=""):
 
 
 def add_mcf_constraints(model, xvars, graph, prefix=""):
-    """Adds a Multi-Commodity Flow Model to model.
+    """Add a Multi-Commodity Flow Model to the model.
 
     Wong (1980) and Claus (1984)
     var y{(i,j) in A, k in V: k != n}, >= 0, <= 1;
@@ -198,7 +198,7 @@ def add_mcf_constraints(model, xvars, graph, prefix=""):
 
 
 def tsp_cut_generator(graph, cutvars, get_var_value):
-    """Heuristic computing subtour elimination constraints."""
+    """Simple heuristic for computing subtour elimination constraints."""
     cuts = []
     V, A, start = graph
     ds = UnionFind(len(V))
