@@ -13,6 +13,7 @@ git:
   submodules: false
 install:
   - pip install -r requirements.txt
+  - pip install --upgrade --pre pyvpsolver
   - pip install .
 script:
   - cd examples
