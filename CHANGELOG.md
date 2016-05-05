@@ -7,8 +7,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - New unittests with `py.test` and `coverage`.
 
-### Removed 
-- Remove all experimental reformulations for lot-sizing.
+### Removed
+- Removed all experimental reformulations for lot-sizing.
 
 
 ## [1.0.0] - 2016-02-23
@@ -23,7 +23,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.8.2] - 2015-11-11
 
-### Added 
+### Added
 - Added tests for LS-LIB reformulations.
 
 ### Fixed
@@ -39,7 +39,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.8.0] - 2015-10-15
 
-### Added 
+### Added
 - Improved documentation.
 
 ### Changed
@@ -94,7 +94,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0] - 2015-08-27
 
-### Added 
+### Added
 - Full compatibility with both python 2 and 3.
 
 ### Fixed
