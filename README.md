@@ -9,6 +9,7 @@ Porto, Portugal. All rights reserved. E-mail: <fdabrandao@dcc.fc.up.pt>.
 
 ![](https://img.shields.io/badge/license-AGPLv3+-blue.svg)
 [![](https://travis-ci.org/fdabrandao/pympl.svg?branch=master)](https://travis-ci.org/fdabrandao/pympl)
+[![Coverage Status](https://coveralls.io/repos/github/fdabrandao/pympl/badge.svg?branch=experimental)](https://coveralls.io/github/fdabrandao/pympl)
 
 ### Useful links
 
@@ -30,7 +31,7 @@ Or build and install locally:
 ```
 $ pip install -r requirements.txt
 $ pip install . --upgrade
-$ bash test.sh
+$ cd examples; py.test -v --cov pympl
 ```
 
 PyMPL can also be used inside a [Docker container](https://github.com/fdabrandao/pympl/wiki/Docker-container) that includes a simple web app for an easy usage.
@@ -105,4 +106,4 @@ Advanced features:
   * If any command used implements cut generators you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
-Copyright © 2015-2016 [Filipe Brandão](http://www.dcc.fc.up.pt/~fdabrandao/) <<fdabrandao@dcc.fc.up.pt>>. All rights reserved.
+Copyright © 2015-2016 [Filipe Brandão](http://www.dcc.fc.up.pt/~fdabrandao/) <[fdabrandao@dcc.fc.up.pt](mailto:fdabrandao@dcc.fc.up.pt)>. All rights reserved.
