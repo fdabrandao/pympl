@@ -2,12 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.1] - 2015-05-20
+
+### Fixed
+- Improved the item labels in the solution extraction procedures of VPSolver submodels.
+
+
 ## [1.1.0] - 2016-05-05
 
 ### Added
 - New unittests with `py.test` and `coverage`.
 
-### Removed
+### Removed 
 - Removed all experimental reformulations for lot-sizing.
 
 
@@ -23,7 +29,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.8.2] - 2015-11-11
 
-### Added
+### Added 
 - Added tests for LS-LIB reformulations.
 
 ### Fixed
@@ -39,7 +45,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.8.0] - 2015-10-15
 
-### Added
+### Added 
 - Improved documentation.
 
 ### Changed
@@ -94,7 +100,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.5.0] - 2015-08-27
 
-### Added
+### Added 
 - Full compatibility with both python 2 and 3.
 
 ### Fixed
@@ -134,7 +140,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Initial version of PyMPL.
 
-[Unreleased]: https://github.com/fdabrandao/pympl/compare/v1.1.0...H
+[Unreleased]: https://github.com/fdabrandao/pympl/compare/v1.1.1...H
+[1.1.1]: https://github.com/fdabrandao/pympl/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/fdabrandao/pympl/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/fdabrandao/pympl/compare/v0.8.2...v1.0.0
 [0.8.2]: https://github.com/fdabrandao/pympl/compare/v0.8.1...v0.8.2

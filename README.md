@@ -25,7 +25,6 @@ Install from the [repository](https://pypi.python.org/pypi/PyMPL):
 ```bash
 $ pip install pympl
 ```
-Note: use `pip install pympl --pre` if you want to install the latest pre-release.
 
 Or build and install locally:
 ```
