@@ -155,7 +155,7 @@ class SubmodVBPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvar, W, w, b, bounds=None, binary=False):
+    def _evalcmd(self, zvar, W, w, b, bounds=None, labels=None, binary=False):
         """Evalutate CMD[zvar](*args)."""
         match = utils.parse_symbname(zvar, allow_index="[]")
         assert match is not None
@@ -164,7 +164,7 @@ class SubmodVBPFlow(SubmodBase):
         prefix = self._new_prefix()
 
         graph, model, declared_vars = self._generate_model(
-            zvar, W, w, b, bounds, binary, prefix
+            zvar, W, w, b, bounds, binary, labels, prefix
         )
 
         self._zvars.append(zvar.lstrip("^"))
@@ -174,8 +174,8 @@ class SubmodVBPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(
-            self, zvar, W, w, b, bounds=None, binary=False, prefix=""):
+    def _generate_model(self, zvar, W, w, b, bounds=None, binary=False,
+                        labels=None, prefix=""):
         """Generate an arc-flow model."""
         from pyvpsolver import VBP, AFG
         m = len(w)
@@ -203,12 +203,16 @@ class SubmodVBPFlow(SubmodBase):
         assocs = graph.get_assocs(vnames)
         graph.names = vnames
 
-        labels = {
-            (u, v, i): ["i={0}".format(i+1)]
+        if labels is None:
+            labels = {i: "i={0}".format(i+1) for i in instance.labels}
+            for i in range(m):
+                if isinstance(b[i], six.string_types):
+                    labels[i] = b[i]
+        graph.set_labels({
+            (u, v, i): [labels[i]]
             for (u, v, i) in graph.A
-            if isinstance(i, int) and i < m
-        }
-        graph.set_labels(labels)
+            if i in labels
+        })
 
         for i in range(m):
             if i not in assocs:
@@ -285,7 +289,8 @@ class SubmodMVPFlow(SubmodBase):
         self._graphs = []
         self._prefixes = []
 
-    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, binary=False, i0=0):
+    def _evalcmd(self, zvar, Ws, ws, b, bounds=None, binary=False,
+                 labels=None, i0=0):
         """Evalutate CMD[zvar](*args)."""
         match = utils.parse_indexed(zvar, "{}")
         assert match is not None
@@ -318,7 +323,7 @@ class SubmodMVPFlow(SubmodBase):
 
         zvars = ["^{}[{}]".format(zvar, i0+i) for i in range(len(Ws))]
         graph, model, declared_vars = self._generate_model(
-            zvars, Ws, ws, b, bounds, binary, prefix
+            zvars, Ws, ws, b, bounds, binary, labels, prefix
         )
 
         self._zvars.append([zvar.lstrip("^") for zvar in zvars])
@@ -328,8 +333,8 @@ class SubmodMVPFlow(SubmodBase):
 
         self._pyvars["_model"] += writemod.model2ampl(model, declared_vars)
 
-    def _generate_model(
-            self, zvars, Ws, ws, b, bounds=None, binary=False, prefix=""):
+    def _generate_model(self, zvars, Ws, ws, b, bounds=None, binary=False,
+                        labels=None, prefix=""):
         """Generate an arc-flow model."""
         from pyvpsolver import MVP, AFG
         ndims = len(Ws[0])
@@ -366,12 +371,20 @@ class SubmodMVPFlow(SubmodBase):
 
         nopts = [len(ws[i]) for i in range(m)]
 
-        labels = {
-            (u, v, lbl): ["i={0} opt={1}".format(lbl[0]+1, lbl[1]+1)]
+        if labels is None:
+            names = ["i={}".format(i+1) for i in range(m)]
+            for i in range(m):
+                if isinstance(b[i], six.string_types):
+                    names[i] = b[i]
+            labels = {
+                (i, j): "{} opt={}".format(names[i], j+1)
+                for i, j in instance.labels
+            }
+        graph.set_labels({
+            (u, v, lbl): [labels[lbl]]
             for (u, v, lbl) in graph.A
-            if lbl != graph.LOSS
-        }
-        graph.set_labels(labels)
+            if lbl in labels
+        })
 
         for i in range(m):
             lincomb = []
