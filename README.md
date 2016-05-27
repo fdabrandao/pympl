@@ -105,4 +105,4 @@ Advanced features:
   * If any command used implements cut generators you can use `parser[command_name].separate(f)` to generate cutting planes.
 
 ***
-Copyright © 2015-2016 [Filipe Brandão](http://www.dcc.fc.up.pt/~fdabrandao/) <[fdabrandao@dcc.fc.up.pt](mailto:fdabrandao@dcc.fc.up.pt)>. All rights reserved.
+Copyright © 2015-2016 [Filipe Brandão](http://www.dcc.fc.up.pt/~fdabrandao/) < [fdabrandao@dcc.fc.up.pt](mailto:fdabrandao@dcc.fc.up.pt) >. All rights reserved.
