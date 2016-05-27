@@ -6,6 +6,7 @@
 *.svg
 *.egg-info
 .coverage
+docker.sh
 coverage_html
 /.cache/
 /build/
