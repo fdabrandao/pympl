@@ -208,6 +208,8 @@ class SubmodVBPFlow(SubmodBase):
             for i in range(m):
                 if isinstance(b[i], six.string_types):
                     labels[i] = b[i]
+        elif isinstance(labels, list):
+            labels = dict(enumerate(labels))
         graph.set_labels({
             (u, v, i): [labels[i]]
             for (u, v, i) in graph.A
@@ -270,7 +272,7 @@ class SubmodVBPFlow(SubmodBase):
             sol = graph.extract_solution(
                 graph.S, "<-", graph.Ts[0], flow_limit=total_flow
             )
-            lst_sol.append((zvar, varvalues.get(zvar, 0), sol))
+            lst_sol.append((zvar, total_flow, sol))
             Tools.log(
                 "Graph: {0} (flow={1:d})\n\t{2}".format(
                     zvar, total_flow, sol
@@ -380,6 +382,8 @@ class SubmodMVPFlow(SubmodBase):
                 (i, j): "{} opt={}".format(names[i], j+1)
                 for i, j in instance.labels
             }
+        elif isinstance(labels, list):
+            labels = dict(enumerate(labels))
         graph.set_labels({
             (u, v, lbl): [labels[lbl]]
             for (u, v, lbl) in graph.A
@@ -440,13 +444,13 @@ class SubmodMVPFlow(SubmodBase):
                 var.replace(prefix, "", 1): get_var_value(var)
                 for var in model.vars if var.startswith(prefix)
             }
-            for i, zvar, T in zip(range(len(zvars)), zvars, graph.Ts):
+            for i, (zvar, T) in enumerate(zip(zvars, graph.Ts)):
                 total_flow_i = varvalues.get("_total_flow_{}".format(i), 0)
                 graph.set_flow(varvalues)
                 sol = graph.extract_solution(
                     graph.S, "<-", T, flow_limit=total_flow_i
                 )
-                lst_sol.append((zvar, varvalues.get(zvar, 0), sol))
+                lst_sol.append((zvar, total_flow_i, sol))
                 Tools.log(
                     "Graph: {0} (flow={1:d})\n\t{2}".format(
                         zvar, total_flow_i, sol
