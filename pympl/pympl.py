@@ -129,17 +129,20 @@ class PyMPL(object):
         )
         self._cmds.append(cmd)
 
-    def parse(self, mod_in=None, mod_out=None, comment_cmds=True):
-        """Parse the input file."""
-        if mod_in is not None:
-            self.read(mod_in)
-        self.output = self.input
-
+    def translate(
+            self, inputstr, comment_cmds=True, inline_data=True, **kwargs):
+        """Parse and translate PyMPL string to AMPL/GMPL string."""
+        if 'locals_' in kwargs:
+            self.set_locals(kwargs['locals_'])
+        if 'globals_' in kwargs:
+            self.set_globals(kwargs['globals_'])
+        output = inputstr
+        output_data = ""
         rgx = re.compile(PyMPL.t_CMD, re.DOTALL)
-        for match in rgx.finditer(self.input):
+        for match in rgx.finditer(inputstr):
             comment, call, args1, args2, args3 = match.groups()
             assert call in self._cmds
-            strmatch = self.input[match.start():match.end()]
+            strmatch = inputstr[match.start():match.end()]
             clean_strmatch = strmatch.strip("/*#$; ")
 
             if PyMPL.DEBUG:
@@ -149,7 +152,7 @@ class PyMPL(object):
 
             if comment is not None:
                 if comment_cmds and comment.startswith("/*"):
-                    self.output = self.output.replace(
+                    output = output.replace(
                         strmatch, "/*IGNORED:{0}*/".format(clean_strmatch)
                     )
                 continue
@@ -175,15 +178,19 @@ class PyMPL(object):
                         self._locals
                     )
                     res = str(self._locals["_model"])
+
                 res = self._locals["_defs"]+res
-                self._add_data(self._locals["_data"])
+                if inline_data is True:
+                    res += 'data;' + self._locals["_data"] + 'model;'
+                else:
+                    output_data += self._locals["_data"]
             except Exception as e:
                 msg = "Exception occurred while evaluating {0}".format(
                     "$"+call+("[...]" if args1 is not None else "")+"{...}"
                 )
                 msg += " at line {0:d} col {1:d}".format(
-                    self.input[:match.start()].count("\n")+1,
-                    match.start()-self.input[:match.start()].rfind("\n"),
+                    inputstr[:match.start()].count("\n")+1,
+                    match.start()-inputstr[:match.start()].rfind("\n"),
                 )
                 e.args += (msg,)
                 raise
@@ -193,27 +200,38 @@ class PyMPL(object):
                     clean_strmatch, res
                 )
 
-            self.output = self.output.replace(strmatch, res, 1)
+            output = output.replace(strmatch, res, 1)
 
+        output = self._add_data(output, output_data)
+        return output
+
+    def parse(self, mod_in=None, mod_out=None, comment_cmds=True):
+        """Parse the input file."""
+        if mod_in is not None:
+            self.read(mod_in)
+        self.output = self.translate(
+            self.input, comment_cmds, inline_data=False
+        )
         if mod_out is not None:
             self.write(mod_out)
 
-    def _add_data(self, data):
+    def _add_data(self, output, data):
         """Add data to the model."""
         if data != "":
-            data_stmt = re.search("data\\s*;", self.output, re.DOTALL)
-            end_stmt = re.search("end\\s*;", self.output, re.DOTALL)
+            data_stmt = re.search("data\\s*;", output, re.DOTALL)
+            end_stmt = re.search("end\\s*;", output, re.DOTALL)
             if data_stmt is not None:
                 match = data_stmt.group(0)
-                self.output = self.output.replace(match, match+"\n"+data)
+                output = output.replace(match, match+"\n"+data)
             else:
                 if end_stmt is None:
-                    self.output += "data;\n" + data + "\nend;"
+                    output += "data;\n" + data + "\nend;"
                 else:
                     match = end_stmt.group(0)
-                    self.output = self.output.replace(
+                    output = output.replace(
                         match, "data;\n" + data + "\nend;"
                     )
+        return output
 
     def read(self, mod_in):
         """Read the input file."""
@@ -228,6 +246,17 @@ class PyMPL(object):
     def submodels(self):
         """Return the names of submodels used."""
         return self._submodels
+
+    def set_locals(self, locals_):
+        """Update local variables."""
+        for var in locals_:
+            self._locals[var] = locals_[var]
+
+    def set_globals(self, globals_):
+        """Update global variables."""
+        for var in globals_:
+            if var not in self._locals:
+                self._locals[var] = globals_[var]
 
     def __getitem__(self, varname):
         """Get an internal variable."""
