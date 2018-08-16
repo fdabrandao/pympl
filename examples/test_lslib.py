@@ -26,10 +26,11 @@ from builtins import map
 import os
 import sys
 import pytest
-slow = pytest.mark.skipif(
-    not pytest.config.getoption("--runslow"),
-    reason="need --runslow option to run"
-)
+try:
+    runslow = pytest.config.getoption("--runslow")
+except:
+    runslow = False
+slow = pytest.mark.skipif(not runslow, reason="need --runslow option to run")
 
 
 inf = float("inf")

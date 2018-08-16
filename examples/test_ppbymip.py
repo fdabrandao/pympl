@@ -24,10 +24,11 @@ from __future__ import print_function
 import sys
 import pytest
 
-slow = pytest.mark.skipif(
-    not pytest.config.getoption("--runslow"),
-    reason="need --runslow option to run"
-)
+try:
+    runslow = pytest.config.getoption("--runslow")
+except:
+    runslow = False
+slow = pytest.mark.skipif(not runslow, reason="need --runslow option to run")
 
 
 def test_ppbymip_bike():
