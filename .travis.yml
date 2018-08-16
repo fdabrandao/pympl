@@ -22,6 +22,7 @@ before_install:
   - echo "CXX=$CXX"
   - echo "version `$CXX --version`"
 install:
+  - pip install pip --upgrade
   - pip install -r requirements.txt
   - pip install --upgrade --pre pyvpsolver
   - pip install --upgrade .
