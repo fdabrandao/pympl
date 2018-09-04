@@ -180,8 +180,8 @@ class PyMPL(object):
                     res = str(self._locals["_model"])
 
                 res = self._locals["_defs"]+res
-                if inline_data is True:
-                    res += 'data;' + self._locals["_data"] + 'model;'
+                if inline_data is True and self._locals["_data"] != "":
+                    res += ';data;' + self._locals["_data"] + 'model;'
                 else:
                     output_data += self._locals["_data"]
             except Exception as e:
@@ -203,6 +203,8 @@ class PyMPL(object):
             output = output.replace(strmatch, res, 1)
 
         output = self._add_data(output, output_data)
+        if kwargs.get('debug', False):
+            print('\n\n>>\n{}\n<<\n\n'.format(output))
         return output
 
     def parse(self, mod_in=None, mod_out=None, comment_cmds=True):
