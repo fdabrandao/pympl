@@ -36,6 +36,7 @@ from .cmds import SubmodLSU, SubmodLSU1, SubmodLSU2
 from .cmds import SubmodLSUB, SubmodLSUSC, SubmodLSUSCB
 from .cmds import SubmodDLSICC, SubmodDLSICCB
 from .cmds import SubmodDLSCCB, SubmodDLSCCSC
+from .cmds import SubmodWWU_AMPL, SubmodWWUB_AMPL
 
 
 class PyMPL(object):
@@ -74,7 +75,9 @@ class PyMPL(object):
         "SOS2": SubmodSOS2,
         "PWL": SubmodPWL,
         "WW_U": SubmodWWU,
+        "WW_U_AMPL": SubmodWWU_AMPL,
         "WW_U_B": SubmodWWUB,
+        "WW_U_B_AMPL": SubmodWWUB_AMPL,
         "WW_U_SC": SubmodWWUSC,
         "WW_U_SCB": SubmodWWUSCB,
         "WW_U_LB": SubmodWWULB,
@@ -130,7 +133,7 @@ class PyMPL(object):
         self._cmds.append(cmd)
 
     def translate(
-            self, inputstr, comment_cmds=True, inline_data=True, **kwargs):
+            self, inputstr, comment_cmds=False, inline_data=True, **kwargs):
         """Parse and translate PyMPL string to AMPL/GMPL string."""
         if 'locals_' in kwargs:
             self.set_locals(kwargs['locals_'])

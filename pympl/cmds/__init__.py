@@ -31,3 +31,4 @@ from .xform import SubmodLSU, SubmodLSU1, SubmodLSU2
 from .xform import SubmodLSUB, SubmodLSUSC, SubmodLSUSCB
 from .xform import SubmodDLSICC, SubmodDLSICCB
 from .xform import SubmodDLSCCB, SubmodDLSCCSC
+from .xform import SubmodWWU_AMPL, SubmodWWUB_AMPL
