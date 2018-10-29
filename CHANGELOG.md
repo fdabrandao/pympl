@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.2.0] - ###-##-##
 - Add method translate.
+- Add Add WW_U_AMPL and WW_U_B_AMPL.
 
 ## [1.1.2] - 2015-05-27
 
