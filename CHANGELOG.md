@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.1] - 2019-04-##
+- Fix "module 'signal' has no attribute 'SIGHUP'" on Windows.
+
 ## [1.2.0] - 2018-11-04
 - Add method translate.
 - Add Add WW_U_AMPL and WW_U_B_AMPL.
