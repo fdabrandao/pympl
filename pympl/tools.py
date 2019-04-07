@@ -165,8 +165,9 @@ def signal_handler(signal_, frame):
     Tools.clear()
     sys.exit(0)
 
-for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGHUP):
-    try:
-        signal.signal(sig, signal_handler)
-    except:
-        pass
+try:
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGHUP, signal_handler)
+except:
+    pass
